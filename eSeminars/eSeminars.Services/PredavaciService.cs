@@ -5,63 +5,40 @@ using System.Text;
 using System.Threading.Tasks;
 using eSeminars.Model;
 using eSeminars.Model.Requests;
+using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
 using Predavaci = eSeminars.Model.Predavaci;
+using System.Linq.Dynamic;
+
 
 namespace eSeminars.Services
 {
-    public class PredavaciService : IPredavaciService
+    public class PredavaciService : BaseService<Model.Predavaci,PredavaciSearchObject,Database.Predavaci>, IPredavaciService
     {
-        public ESeminarsContext Context { get; set; }
-        public IMapper Mapper { get; set; }
-        public PredavaciService(ESeminarsContext context, IMapper mapper)
+        public PredavaciService(ESeminarsContext context, IMapper mapper) : base(context,mapper)
         {
-            Context = context;
-            Mapper = mapper;
-        }
-
-        public virtual List<Model.Predavaci> GetList()
-        {
-            List<Model.Predavaci> result = new List<Model.Predavaci>();
-
-            var list = Context.Predavacis.ToList();
-            //list.ForEach(x => result.Add(new Model.Predavaci()
-            //{
-            //    PredavacId = x.PredavacId,
-            //    Ime = x.Ime,
-            //    Prezime = x.Prezime,
-            //    Biografija = x.Biografija,
-            //    Email = x.Email,
-            //    Telefon = x.Telefon
-            //}));
-
-            result = Mapper.Map(list, result);
-
-            return result;
-        }
-
-        public Predavaci Insert(PredavaciInsertRequest request)
-        {
-            Database.Predavaci entity = new Database.Predavaci();
-            Mapper.Map(request,entity);
-
-            Context.Add(entity);
-            Context.SaveChanges();
-
-            return Mapper.Map<Model.Predavaci>(entity);
 
         }
 
-        public Predavaci Update(int id, PredavaciUpdateRequest request)
+        public override IQueryable<Database.Predavaci> AddFilter(PredavaciSearchObject search, IQueryable<Database.Predavaci> query)
         {
-            var entity = Context.Predavacis.Find(id);
+            var filteredQuerry = base.AddFilter(search, query);
 
-            Mapper.Map(request, entity);
+            if (!string.IsNullOrWhiteSpace(search?.ImeGTE))
+            {
+                filteredQuerry = filteredQuerry.Where(x => x.Ime.StartsWith(search.ImeGTE));
+            }
+            if (!string.IsNullOrWhiteSpace(search?.PrezimeGTE))
+            {
+                filteredQuerry = filteredQuerry.Where(x => x.Prezime.StartsWith(search.PrezimeGTE));
+            }
+            if (!string.IsNullOrWhiteSpace(search?.Email))
+            {
+                filteredQuerry = filteredQuerry.Where(x => x.Email == search.Email);
+            }
 
-            Context.SaveChanges();
-
-            return Mapper.Map<Model.Predavaci>(entity);
+            return filteredQuerry;
         }
     }
 }
