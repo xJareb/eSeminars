@@ -12,7 +12,7 @@ using Predavaci = eSeminars.Model.Predavaci;
 
 namespace eSeminars.Services
 {
-    public interface IPredavaciService : IService<Predavaci,PredavaciSearchObject>
+    public interface IPredavaciService : ICRUDService<Predavaci, PredavaciSearchObject, PredavaciInsertRequest, PredavaciUpdateRequest>
     {
     }
 }

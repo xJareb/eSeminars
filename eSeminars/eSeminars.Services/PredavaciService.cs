@@ -14,11 +14,10 @@ using System.Linq.Dynamic;
 
 namespace eSeminars.Services
 {
-    public class PredavaciService : BaseService<Model.Predavaci,PredavaciSearchObject,Database.Predavaci>, IPredavaciService
+    public class PredavaciService : BaseCRUDService<Model.Predavaci, PredavaciSearchObject, Database.Predavaci, PredavaciInsertRequest, PredavaciUpdateRequest> , IPredavaciService
     {
-        public PredavaciService(ESeminarsContext context, IMapper mapper) : base(context,mapper)
+        public PredavaciService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
         {
-
         }
 
         public override IQueryable<Database.Predavaci> AddFilter(PredavaciSearchObject search, IQueryable<Database.Predavaci> query)
@@ -40,5 +39,6 @@ namespace eSeminars.Services
 
             return filteredQuerry;
         }
+
     }
 }

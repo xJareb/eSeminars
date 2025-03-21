@@ -10,7 +10,7 @@ using MapsterMapper;
 
 namespace eSeminars.Services
 {
-    public class BaseService<TModel, Tsearch, TDbEntity> : IService<TModel,Tsearch> where Tsearch : BaseSearchObject where TDbEntity:class where TModel :class 
+    public abstract class BaseService<TModel, Tsearch, TDbEntity> : IService<TModel,Tsearch> where Tsearch : BaseSearchObject where TDbEntity:class where TModel :class 
     {
         public ESeminarsContext Context { get; set; }
         public IMapper Mapper { get; set; }

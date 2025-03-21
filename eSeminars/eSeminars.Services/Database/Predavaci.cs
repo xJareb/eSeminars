@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using eSeminars.Model.Requests;
+using eSeminars.Model.SearchObjects;
 
 namespace eSeminars.Services.Database;
 
