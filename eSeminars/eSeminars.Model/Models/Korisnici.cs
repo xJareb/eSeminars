@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace eSeminars.Model
+namespace eSeminars.Model.Models
 {
     public class Korisnici
     {

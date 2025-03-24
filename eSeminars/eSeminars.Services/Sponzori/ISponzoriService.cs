@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 
-namespace eSeminars.Services
+namespace eSeminars.Services.Sponzori
 {
-    public interface IKorisniciService : ICRUDService<Model.Korisnici,KorisniciSearchObject,KorisniciInsertRequest, KorisniciUpdateRequest>
+    public interface ISponzoriService : ICRUDService<Model.Models.Sponzori,SponzoriSearchObject,SponzoriInsertRequest,SponzoriUpdateRequest>
     {
     }
 }

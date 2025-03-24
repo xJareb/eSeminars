@@ -1,16 +1,20 @@
-using eSeminars.Services;
 using eSeminars.Services.Database;
+using eSeminars.Services.Kategorije;
+using eSeminars.Services.Korisnici;
+using eSeminars.Services.Obavijesti;
+using eSeminars.Services.Predavaci;
+using eSeminars.Services.Sponzori;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddTransient<IProizvodiService, ProizvodiService>();
-//builder.Services.AddTransient<IProizvodiService, DummyProizvodiService>();
 builder.Services.AddTransient<IPredavaciService, PredavaciService>();
 builder.Services.AddTransient<IKategorijeService, KategorijeService>();
 builder.Services.AddTransient<IKorisniciService,KorisniciService>();
+builder.Services.AddTransient<IObavijestiService, ObavijestiService>();
+builder.Services.AddTransient<ISponzoriService, SponzoriService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

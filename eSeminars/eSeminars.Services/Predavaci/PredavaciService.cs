@@ -3,18 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
-using Predavaci = eSeminars.Model.Predavaci;
+using Predavaci = eSeminars.Model.Models.Predavaci;
 using System.Linq.Dynamic;
 
 
-namespace eSeminars.Services
+namespace eSeminars.Services.Predavaci
 {
-    public class PredavaciService : BaseCRUDService<Model.Predavaci, PredavaciSearchObject, Database.Predavaci, PredavaciInsertRequest, PredavaciUpdateRequest> , IPredavaciService
+    public class PredavaciService : BaseCRUDService<Model.Models.Predavaci, PredavaciSearchObject, Database.Predavaci, PredavaciInsertRequest, PredavaciUpdateRequest>, IPredavaciService
     {
         public PredavaciService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
         {

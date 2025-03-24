@@ -4,20 +4,22 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
+using Korisnici = eSeminars.Services.Database.Korisnici;
 
-namespace eSeminars.Services
+namespace eSeminars.Services.Korisnici
 {
-    public class KorisniciService : BaseCRUDService<Model.Korisnici,KorisniciSearchObject,Database.Korisnici,KorisniciInsertRequest,KorisniciUpdateRequest>, IKorisniciService
+    public class KorisniciService : BaseCRUDService<Model.Models.Korisnici, KorisniciSearchObject, Database.Korisnici, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
         public KorisniciService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
         {
         }
 
-        public override IQueryable<Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Korisnici> query)
+        public override IQueryable<Database.Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Database.Korisnici> query)
         {
             var filteredQuerry = base.AddFilter(search, query);
 
@@ -26,22 +28,22 @@ namespace eSeminars.Services
             if (!string.IsNullOrWhiteSpace(search?.ImePrezimeGTE))
             {
                 var trimmedStart = search?.ImePrezimeGTE.TrimStart();
-                filteredQuerry = filteredQuerry.Where(x => 
-                    ((x.Ime + ' ' + x.Prezime).ToLower().StartsWith(trimmedStart.ToLower())) || 
+                filteredQuerry = filteredQuerry.Where(x =>
+                    (x.Ime + ' ' + x.Prezime).ToLower().StartsWith(trimmedStart.ToLower()) ||
                     (x.Prezime + ' ' + x.Ime).ToLower().StartsWith(trimmedStart.ToLower()));
             }
-            
+
             return filteredQuerry;
         }
 
-        public override void BeforeInsert(KorisniciInsertRequest request, Korisnici entity)
+        public override void BeforeInsert(KorisniciInsertRequest request, Database.Korisnici entity)
         {
             if (request.Lozinka != request.LozinkaPotvrda)
             {
                 throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
             }
 
-            var provjeraDuplikata = Context.Korisnicis.Where(k => k.Email == request.Email);
+            var provjeraDuplikata = Context.Korisnicis.FirstOrDefault(k => k.Email == request.Email);
             if (provjeraDuplikata != null)
             {
                 throw new Exception("Korisnik sa unesenim emailom već postoji");
@@ -52,9 +54,10 @@ namespace eSeminars.Services
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
             base.BeforeInsert(request, entity);
         }
+
         public static string GenerateSalt()
         {
-            var byteArray = RNGCryptoServiceProvider.GetBytes(16);
+            var byteArray = RandomNumberGenerator.GetBytes(16);
 
             return Convert.ToBase64String(byteArray);
         }
@@ -64,15 +67,15 @@ namespace eSeminars.Services
             byte[] bytes = Encoding.Unicode.GetBytes(password);
             byte[] dst = new byte[src.Length + bytes.Length];
 
-            System.Buffer.BlockCopy(src, 0, dst, 0, src.Length);
-            System.Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
+            Buffer.BlockCopy(src, 0, dst, 0, src.Length);
+            Buffer.BlockCopy(bytes, 0, dst, src.Length, bytes.Length);
 
             HashAlgorithm algorithm = HashAlgorithm.Create("SHA1");
             byte[] inArray = algorithm.ComputeHash(dst);
             return Convert.ToBase64String(inArray);
         }
 
-        public override void BeforeUpdate(KorisniciUpdateRequest request, Korisnici entity)
+        public override void BeforeUpdate(KorisniciUpdateRequest request, Database.Korisnici entity)
         {
             base.BeforeUpdate(request, entity);
             if (request.Lozinka != null)
