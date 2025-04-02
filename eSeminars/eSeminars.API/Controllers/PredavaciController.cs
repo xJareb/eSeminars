@@ -9,12 +9,12 @@ namespace eSeminars.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class PredavaciController : BaseCRUDController<Predavaci, PredavaciSearchObject, PredavaciInsertRequest,PredavaciUpdateRequest>
+    public class PredavaciController : BaseCRUDController<Predavaci, PredavaciSearchObject, PredavaciInsertRequest, PredavaciUpdateRequest>
     {
         public PredavaciController(IPredavaciService service) : base(service)
         {
-           
+
         }
-        
+
     }
 }

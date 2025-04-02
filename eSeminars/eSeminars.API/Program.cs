@@ -3,6 +3,8 @@ using eSeminars.Services.Kategorije;
 using eSeminars.Services.Korisnici;
 using eSeminars.Services.Obavijesti;
 using eSeminars.Services.Predavaci;
+using eSeminars.Services.SacuvaniSeminari;
+using eSeminars.Services.Seminari;
 using eSeminars.Services.Sponzori;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +17,8 @@ builder.Services.AddTransient<IKategorijeService, KategorijeService>();
 builder.Services.AddTransient<IKorisniciService,KorisniciService>();
 builder.Services.AddTransient<IObavijestiService, ObavijestiService>();
 builder.Services.AddTransient<ISponzoriService, SponzoriService>();
+builder.Services.AddTransient<ISeminariService, SeminariService>();
+builder.Services.AddTransient<ISacuvaniSeminariService, SacuvaniSeminariService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

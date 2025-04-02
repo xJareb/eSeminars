@@ -15,5 +15,7 @@ public partial class Sponzori
 
     public string KontaktOsoba { get; set; } = null!;
 
+    public bool? IsDeleted { get; set; }
+
     public virtual ICollection<SponzoriSeminari> SponzoriSeminaris { get; set; } = new List<SponzoriSeminari>();
 }

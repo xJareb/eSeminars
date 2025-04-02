@@ -15,5 +15,7 @@ public partial class Materijali
 
     public DateTime DatumDodavanja { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual Seminari? Seminar { get; set; }
 }

@@ -24,7 +24,7 @@ namespace eSeminars.Services
             Context.Add(entity);
             Context.SaveChanges();
 
-            return  Mapper.Map<TModel>(entity);
+            return Mapper.Map<TModel>(entity);
         }
 
         public virtual void BeforeInsert(TInsert request, TDbEntity entity) { }
@@ -37,7 +37,7 @@ namespace eSeminars.Services
 
             Mapper.Map(request, entity);
 
-            BeforeUpdate(request,entity);
+            BeforeUpdate(request, entity);
 
             Context.SaveChanges();
 

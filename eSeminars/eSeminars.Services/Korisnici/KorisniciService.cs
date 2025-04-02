@@ -23,7 +23,7 @@ namespace eSeminars.Services.Korisnici
         {
             var filteredQuerry = base.AddFilter(search, query);
 
-            filteredQuerry = filteredQuerry.Where(x => x.Uloga != "Administrator");
+            filteredQuerry = filteredQuerry.Where(x => x.Uloga == 2);
 
             if (!string.IsNullOrWhiteSpace(search?.ImePrezimeGTE))
             {
@@ -49,7 +49,7 @@ namespace eSeminars.Services.Korisnici
                 throw new Exception("Korisnik sa unesenim emailom već postoji");
             }
             //TODO:: change uloga later
-            entity.Uloga = "Korisnik";
+            entity.Uloga = 2;
             entity.LozinkaSalt = GenerateSalt();
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
             base.BeforeInsert(request, entity);

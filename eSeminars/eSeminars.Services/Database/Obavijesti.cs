@@ -15,5 +15,7 @@ public partial class Obavijesti
 
     public int? KorisnikId { get; set; }
 
+    public bool? IsDeleted { get; set; }
+
     public virtual Korisnici? Korisnik { get; set; }
 }

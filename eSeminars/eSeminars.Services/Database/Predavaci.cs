@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using eSeminars.Model.Requests;
-using eSeminars.Model.SearchObjects;
 
 namespace eSeminars.Services.Database;
 
@@ -18,6 +16,8 @@ public partial class Predavaci
     public string Email { get; set; } = null!;
 
     public string Telefon { get; set; } = null!;
+
+    public bool? IsDeleted { get; set; }
 
     public virtual ICollection<Seminari> Seminaris { get; set; } = new List<Seminari>();
 }

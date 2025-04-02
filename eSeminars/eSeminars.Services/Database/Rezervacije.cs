@@ -13,7 +13,11 @@ public partial class Rezervacije
 
     public string StatusRezervacije { get; set; } = null!;
 
+    public string? StateMachine { get; set; }
+
     public DateTime DatumRezervacije { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public virtual Korisnici? Korisnik { get; set; }
 

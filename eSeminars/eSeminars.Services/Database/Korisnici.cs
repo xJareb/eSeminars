@@ -17,9 +17,11 @@ public partial class Korisnici
 
     public string LozinkaSalt { get; set; } = null!;
 
-    public string Uloga { get; set; } = null!;
+    public int? Uloga { get; set; }
 
     public DateTime DatumRodjenja { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public virtual ICollection<Dojmovi> Dojmovis { get; set; } = new List<Dojmovi>();
 
@@ -30,4 +32,6 @@ public partial class Korisnici
     public virtual ICollection<SacuvaniSeminari> SacuvaniSeminaris { get; set; } = new List<SacuvaniSeminari>();
 
     public virtual ICollection<Seminari> Seminaris { get; set; } = new List<Seminari>();
+
+    public virtual Uloge? UlogaNavigation { get; set; }
 }

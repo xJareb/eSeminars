@@ -11,5 +11,7 @@ public partial class Kategorije
 
     public string Opis { get; set; } = null!;
 
+    public bool? IsDeleted { get; set; }
+
     public virtual ICollection<Seminari> Seminaris { get; set; } = new List<Seminari>();
 }

@@ -17,6 +17,8 @@ public partial class Seminari
 
     public int Kapacitet { get; set; }
 
+    public string? StateMachine { get; set; }
+
     public int? KorisnikId { get; set; }
 
     public int? PredavacId { get; set; }
@@ -24,6 +26,8 @@ public partial class Seminari
     public DateTime DatumKreiranja { get; set; }
 
     public int? KategorijaId { get; set; }
+
+    public bool? IsDeleted { get; set; }
 
     public virtual ICollection<Dojmovi> Dojmovis { get; set; } = new List<Dojmovi>();
 
