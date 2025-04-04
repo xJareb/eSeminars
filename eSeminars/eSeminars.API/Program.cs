@@ -9,6 +9,7 @@ using eSeminars.Services.Rezervacije;
 using eSeminars.Services.SacuvaniSeminari;
 using eSeminars.Services.Seminari;
 using eSeminars.Services.Sponzori;
+using eSeminars.Services.SponzoriSeminari;
 using Mapster;
 using Microsoft.EntityFrameworkCore;
 
@@ -25,6 +26,7 @@ builder.Services.AddTransient<ISacuvaniSeminariService, SacuvaniSeminariService>
 builder.Services.AddTransient<IMaterijalService, MaterijaliService>();
 builder.Services.AddTransient<IDojmoviService,DojmoviService>();
 builder.Services.AddTransient<IRezervacijeService, RezervacijeService>();
+builder.Services.AddTransient<ISponzoriSeminariService,SponzoriSeminariService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
