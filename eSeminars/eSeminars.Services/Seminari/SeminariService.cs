@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Azure.Core;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
+using eSeminars.Services.SeminariStateMachine;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,8 +16,10 @@ namespace eSeminars.Services.Seminari
 {
     public class SeminariService : BaseCRUDService<Model.Models.Seminari, SeminariSearchObject, Database.Seminari, SeminariInsertRequest, SeminariUpdateRequest>, ISeminariService
     {
-        public SeminariService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
+        public BaseSeminariState BaseSeminariState { get; set; }
+        public SeminariService(ESeminarsContext context, IMapper mapper, BaseSeminariState baseSeminariState) : base(context, mapper)
         {
+            BaseSeminariState = baseSeminariState;
         }
 
         public override IQueryable<Database.Seminari> AddFilter(SeminariSearchObject search, IQueryable<Database.Seminari> query)
@@ -43,6 +47,26 @@ namespace eSeminars.Services.Seminari
             entity.DatumKreiranja = DateTime.Now;
             //TODO:: Check role
             base.BeforeInsert(request, entity);
+        }
+
+        public override Model.Models.Seminari Insert(SeminariInsertRequest request)
+        {
+            var state = BaseSeminariState.CreateState("initial");
+            return state.Insert(request);
+        }
+
+        public override Model.Models.Seminari Update(int id, SeminariUpdateRequest request)
+        {
+            var entity = GetById(id);
+            var state = BaseSeminariState.CreateState(entity.StateMachine);
+            return state.Update(id, request);
+        }
+
+        public Model.Models.Seminari Activate(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseSeminariState.CreateState(entity.StateMachine);
+            return state.Activate(id);
         }
     }
 }

@@ -10,5 +10,6 @@ namespace eSeminars.Services.Seminari
 {
     public interface ISeminariService : ICRUDService<Model.Models.Seminari,SeminariSearchObject,SeminariInsertRequest,SeminariUpdateRequest>
     {
+        public Model.Models.Seminari Activate(int id);
     }
 }
