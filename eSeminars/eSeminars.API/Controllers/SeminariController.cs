@@ -18,5 +18,21 @@ namespace eSeminars.API.Controllers
         {
             return (_service as ISeminariService).Activate(id);
         }
+        [HttpPut("{id}/edit")]
+        public Seminari Edit(int id)
+        {
+            return (_service as ISeminariService).Edit(id);
+        }
+        [HttpPut("{id}/hide")]
+        public Seminari Hide(int id)
+        {
+            return (_service as ISeminariService).Hide(id);
+        }
+        [HttpGet("{id}/allowedActions")]
+        public List<string> AllowedActions(int id)
+        {
+            return (_service as ISeminariService).AllowedActions(id);
+        }
+
     }
 }

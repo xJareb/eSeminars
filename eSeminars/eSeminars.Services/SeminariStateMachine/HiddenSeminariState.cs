@@ -1,26 +1,26 @@
-﻿using eSeminars.Services.Database;
-using MapsterMapper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Services.Database;
+using MapsterMapper;
 
 namespace eSeminars.Services.SeminariStateMachine
 {
-    public class ActiveSeminariState : BaseSeminariState
+    public class HiddenSeminariState : BaseSeminariState
     {
-        public ActiveSeminariState(ESeminarsContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper, serviceProvider)
+        public HiddenSeminariState(ESeminarsContext context, IMapper mapper, IServiceProvider serviceProvider) : base(context, mapper, serviceProvider)
         {
         }
 
-        public override Model.Models.Seminari Hide(int id)
+        public override Model.Models.Seminari Edit(int id)
         {
             var set = Context.Set<Database.Seminari>();
 
             var entity = set.Find(id);
 
-            entity.StateMachine = "hidden";
+            entity.StateMachine = "draft";
 
             Context.SaveChanges();
 
@@ -29,7 +29,7 @@ namespace eSeminars.Services.SeminariStateMachine
 
         public override List<string> AllowedActions(Database.Seminari entity)
         {
-            return new List<string>() { nameof(Hide) };
+            return new List<string>() { nameof(Edit) };
         }
     }
 }

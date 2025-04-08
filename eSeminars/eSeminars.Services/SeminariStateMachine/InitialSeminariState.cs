@@ -26,5 +26,10 @@ namespace eSeminars.Services.SeminariStateMachine
 
             return Mapper.Map<Model.Models.Seminari>(entity);
         }
+
+        public override List<string> AllowedActions(Database.Seminari entity)
+        {
+            return new List<string>() {nameof(Insert)};
+        }
     }
 }

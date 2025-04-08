@@ -68,5 +68,34 @@ namespace eSeminars.Services.Seminari
             var state = BaseSeminariState.CreateState(entity.StateMachine);
             return state.Activate(id);
         }
+
+        public Model.Models.Seminari Edit(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseSeminariState.CreateState(entity.StateMachine);
+            return state.Edit(id);
+        }
+
+        public Model.Models.Seminari Hide(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseSeminariState.CreateState(entity.StateMachine);
+            return state.Hide(id);
+        }
+
+        public List<string> AllowedActions(int id)
+        {
+            if (id <= 0)
+            {
+                var state = BaseSeminariState.CreateState("initial");
+                return state.AllowedActions(null);
+            }
+            else
+            {
+                var entity = Context.Seminaris.Find(id);
+                var state = BaseSeminariState.CreateState(entity.StateMachine);
+                return state.AllowedActions(entity);
+            }
+        }
     }
 }

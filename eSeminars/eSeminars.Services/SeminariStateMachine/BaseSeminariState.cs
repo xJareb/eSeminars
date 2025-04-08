@@ -35,6 +35,15 @@ namespace eSeminars.Services.SeminariStateMachine
             throw new Exception("Method not allowed");
         }
 
+        public virtual Model.Models.Seminari Edit(int id)
+        {
+            throw new Exception("Method not allowed");
+        }
+
+        public virtual List<string> AllowedActions(Database.Seminari entity)
+        {
+            throw new Exception("Method not allowed");
+        }
         public BaseSeminariState CreateState(string stateName)
         {
             switch (stateName)
@@ -45,6 +54,8 @@ namespace eSeminars.Services.SeminariStateMachine
                     return ServiceProvider.GetService<DraftSeminariState>();
                 case "active":
                     return ServiceProvider.GetService<ActiveSeminariState>();
+                case "hidden":
+                    return ServiceProvider.GetService<HiddenSeminariState>();
                 default: throw new Exception("State not recognized");
             }
         }

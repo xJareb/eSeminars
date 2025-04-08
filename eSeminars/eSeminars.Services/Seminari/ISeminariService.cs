@@ -11,5 +11,8 @@ namespace eSeminars.Services.Seminari
     public interface ISeminariService : ICRUDService<Model.Models.Seminari,SeminariSearchObject,SeminariInsertRequest,SeminariUpdateRequest>
     {
         public Model.Models.Seminari Activate(int id);
+        public Model.Models.Seminari Edit(int id);
+        public Model.Models.Seminari Hide(int id);
+        public List<string> AllowedActions(int id);
     }
 }

@@ -41,5 +41,23 @@ namespace eSeminars.Services.SeminariStateMachine
 
             return Mapper.Map<Model.Models.Seminari>(entity);
         }
+
+        public override Model.Models.Seminari Hide(int id)
+        {
+            var set = Context.Set<Database.Seminari>();
+
+            var entity = set.Find(id);
+
+            entity.StateMachine = "hidden";
+
+            Context.SaveChanges();
+
+            return Mapper.Map<Model.Models.Seminari>(entity);
+        }
+
+        public override List<string> AllowedActions(Database.Seminari entity)
+        {
+            return new List<string>() {nameof(Activate),nameof(Update), nameof(Hide)};
+        }
     }
 }

@@ -33,6 +33,7 @@ builder.Services.AddTransient<BaseSeminariState>();
 builder.Services.AddTransient<InitialSeminariState>();
 builder.Services.AddTransient<DraftSeminariState>();
 builder.Services.AddTransient<ActiveSeminariState>();
+builder.Services.AddTransient<HiddenSeminariState>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
