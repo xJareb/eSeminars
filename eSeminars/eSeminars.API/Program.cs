@@ -1,3 +1,4 @@
+using eSeminars.API.Filters;
 using eSeminars.Services.Database;
 using eSeminars.Services.Dojmovi;
 using eSeminars.Services.Kategorije;
@@ -35,7 +36,9 @@ builder.Services.AddTransient<DraftSeminariState>();
 builder.Services.AddTransient<ActiveSeminariState>();
 builder.Services.AddTransient<HiddenSeminariState>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(
+    x=> x.Filters.Add<ExceptionFilter>()
+    );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

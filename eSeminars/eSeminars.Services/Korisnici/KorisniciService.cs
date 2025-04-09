@@ -9,14 +9,17 @@ using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
+using Microsoft.Extensions.Logging;
 using Korisnici = eSeminars.Services.Database.Korisnici;
 
 namespace eSeminars.Services.Korisnici
 {
     public class KorisniciService : BaseCRUDService<Model.Models.Korisnici, KorisniciSearchObject, Database.Korisnici, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
-        public KorisniciService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
+        public ILogger<KorisniciService> _logger { get; set; }
+        public KorisniciService(ESeminarsContext context, IMapper mapper,ILogger<KorisniciService> logger) : base(context, mapper)
         {
+            _logger = logger;
         }
 
         public override IQueryable<Database.Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Database.Korisnici> query)
@@ -38,6 +41,7 @@ namespace eSeminars.Services.Korisnici
 
         public override void BeforeInsert(KorisniciInsertRequest request, Database.Korisnici entity)
         {
+            _logger.LogInformation($"Adding user: {entity.Ime}");
             if (request.Lozinka != request.LozinkaPotvrda)
             {
                 throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");

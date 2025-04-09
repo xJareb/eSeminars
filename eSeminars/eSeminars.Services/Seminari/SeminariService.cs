@@ -11,15 +11,18 @@ using eSeminars.Services.Database;
 using eSeminars.Services.SeminariStateMachine;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace eSeminars.Services.Seminari
 {
     public class SeminariService : BaseCRUDService<Model.Models.Seminari, SeminariSearchObject, Database.Seminari, SeminariInsertRequest, SeminariUpdateRequest>, ISeminariService
     {
         public BaseSeminariState BaseSeminariState { get; set; }
-        public SeminariService(ESeminarsContext context, IMapper mapper, BaseSeminariState baseSeminariState) : base(context, mapper)
+        public ILogger<SeminariService> _logger { get; set; }
+        public SeminariService(ESeminarsContext context, IMapper mapper, BaseSeminariState baseSeminariState, ILogger<SeminariService> logger) : base(context, mapper)
         {
             BaseSeminariState = baseSeminariState;
+            _logger = logger;
         }
 
         public override IQueryable<Database.Seminari> AddFilter(SeminariSearchObject search, IQueryable<Database.Seminari> query)
@@ -85,6 +88,7 @@ namespace eSeminars.Services.Seminari
 
         public List<string> AllowedActions(int id)
         {
+            _logger.LogInformation($"Allowed actions called for: {id}");
             if (id <= 0)
             {
                 var state = BaseSeminariState.CreateState("initial");
