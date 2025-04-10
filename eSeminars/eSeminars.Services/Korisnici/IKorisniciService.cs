@@ -11,5 +11,6 @@ namespace eSeminars.Services.Korisnici
 {
     public interface IKorisniciService : ICRUDService<Model.Models.Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
+        Model.Models.Korisnici Login(string username,string password);
     }
 }

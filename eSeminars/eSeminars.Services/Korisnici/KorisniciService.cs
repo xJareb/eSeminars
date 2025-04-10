@@ -9,6 +9,7 @@ using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Korisnici = eSeminars.Services.Database.Korisnici;
 
@@ -91,6 +92,24 @@ namespace eSeminars.Services.Korisnici
             }
             entity.LozinkaSalt = GenerateSalt();
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
+        }
+
+        public Model.Models.Korisnici Login(string username, string password)
+        {
+            var entity = Context.Korisnicis.FirstOrDefault(x => x.Email == username);
+            if (entity == null)
+            {
+                return null;
+            }
+
+            var hash = GenerateHash(entity.LozinkaSalt, password);
+
+            if (hash != entity.LozinkaHash)
+            {
+                return null;
+            }
+
+            return Mapper.Map<Model.Models.Korisnici>(entity);
         }
     }
 }

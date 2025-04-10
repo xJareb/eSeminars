@@ -1,3 +1,4 @@
+using eSeminars.API;
 using eSeminars.API.Filters;
 using eSeminars.Services.Database;
 using eSeminars.Services.Dojmovi;
@@ -13,7 +14,9 @@ using eSeminars.Services.SeminariStateMachine;
 using eSeminars.Services.Sponzori;
 using eSeminars.Services.SponzoriSeminari;
 using Mapster;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,13 +44,32 @@ builder.Services.AddControllers(
     );
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.AddSecurityDefinition("basicAuth", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+    {
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.Http,
+        Scheme = "basic"
+    });
+
+    c.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement()
+    {
+    {
+        new OpenApiSecurityScheme
+        {
+            Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id = "basicAuth"}
+        },
+        new string[]{}
+    } });
+
+});
 
 var connectionString = builder.Configuration.GetConnectionString("eSeminarsConnection");
 builder.Services.AddDbContext<ESeminarsContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddMapster();
+builder.Services.AddAuthentication("BasicAuthentication").AddScheme<AuthenticationSchemeOptions,BasicAuthenticationHandler>("BasicAuthentication",null);
 
 var app = builder.Build();
 
