@@ -1,8 +1,10 @@
-﻿using eSeminars.Model.Models;
+﻿using eSeminars.Model;
+using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services;
 using eSeminars.Services.Seminari;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace eSeminars.API.Controllers
@@ -34,5 +36,28 @@ namespace eSeminars.API.Controllers
             return (_service as ISeminariService).AllowedActions(id);
         }
 
+        [AllowAnonymous]
+        public override PagedResult<Seminari> GetList(SeminariSearchObject searchObject)
+        {
+            return base.GetList(searchObject);
+        }
+
+        [AllowAnonymous]
+        public override Seminari GetById(int id)
+        {
+            return base.GetById(id);
+        }
+
+        [Authorize(Roles = "Administrator,Organizator")]
+        public override Seminari Insert(SeminariInsertRequest request)
+        {
+            return base.Insert(request);
+        }
+
+        [Authorize(Roles = "Administrator,Organizator")]
+        public override Seminari Update(int id, SeminariUpdateRequest request)
+        {
+            return base.Update(id, request);
+        }
     }
 }

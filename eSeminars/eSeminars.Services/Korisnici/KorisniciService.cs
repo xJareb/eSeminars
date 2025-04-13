@@ -27,7 +27,7 @@ namespace eSeminars.Services.Korisnici
         {
             var filteredQuerry = base.AddFilter(search, query);
 
-            filteredQuerry = filteredQuerry.Where(x => x.Uloga == 2);
+            filteredQuerry = filteredQuerry.Include(y => y.UlogaNavigation);
 
             if (!string.IsNullOrWhiteSpace(search?.ImePrezimeGTE))
             {
@@ -96,7 +96,7 @@ namespace eSeminars.Services.Korisnici
 
         public Model.Models.Korisnici Login(string username, string password)
         {
-            var entity = Context.Korisnicis.FirstOrDefault(x => x.Email == username);
+            var entity = Context.Korisnicis.Include(y=>y.UlogaNavigation).FirstOrDefault(x => x.Email == username);
             if (entity == null)
             {
                 return null;

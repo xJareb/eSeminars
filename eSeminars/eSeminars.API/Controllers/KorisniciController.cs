@@ -1,4 +1,5 @@
-﻿using eSeminars.Model.Models;
+﻿using eSeminars.Model;
+using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Korisnici;
@@ -17,6 +18,26 @@ namespace eSeminars.API.Controllers
         public Model.Models.Korisnici Login(string username, string password)
         {
             return (_service as IKorisniciService).Login(username, password);
+        }
+        [AllowAnonymous]
+        public override PagedResult<Korisnici> GetList(KorisniciSearchObject searchObject)
+        {
+            return base.GetList(searchObject);
+        }
+        [Authorize(Roles = "Administrator,Korisnik")]
+        public override Korisnici Update(int id, KorisniciUpdateRequest request)
+        {
+            return base.Update(id, request);
+        }
+        [AllowAnonymous]
+        public override Korisnici Insert(KorisniciInsertRequest request)
+        {
+            return base.Insert(request);
+        }
+        [AllowAnonymous]
+        public override Korisnici GetById(int id)
+        {
+            return base.GetById(id);
         }
     }
 }

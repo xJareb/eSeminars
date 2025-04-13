@@ -11,5 +11,6 @@ namespace eSeminars.Model.Models
         public string Prezime { get; set; }
         public string Email { get; set; }
         public DateTime DatumRodjenja { get; set; }
+        public Uloge UlogaNavigation { get; set; }
     }
 }

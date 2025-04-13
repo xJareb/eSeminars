@@ -1,8 +1,10 @@
-﻿using eSeminars.Model.Models;
+﻿using eSeminars.Model;
+using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services;
 using eSeminars.Services.SacuvaniSeminari;
+using Microsoft.AspNetCore.Authorization;
 
 namespace eSeminars.API.Controllers
 {
@@ -10,6 +12,26 @@ namespace eSeminars.API.Controllers
     {
         public SacuvaniSeminariController(ISacuvaniSeminariService service) : base(service)
         {
+        }
+        [Authorize(Roles = "Administrator,Korisnik")]
+        public override PagedResult<SacuvaniSeminari> GetList(SacuvaniSeminariSearchObject searchObject)
+        {
+            return base.GetList(searchObject);
+        }
+        [Authorize(Roles = "Administrator,Korisnik")]
+        public override SacuvaniSeminari Insert(SacuvaniSeminariInsertRequest request)
+        {
+            return base.Insert(request);
+        }
+        [Authorize(Roles = "Administrator,Korisnik")]
+        public override SacuvaniSeminari Update(int id, SacuvaniSeminariUpdateRequest request)
+        {
+            return base.Update(id, request);
+        }
+        [Authorize(Roles = "Administrator,Korisnik")]
+        public override SacuvaniSeminari GetById(int id)
+        {
+            return base.GetById(id);
         }
     }
 }

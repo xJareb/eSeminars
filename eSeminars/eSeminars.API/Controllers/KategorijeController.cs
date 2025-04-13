@@ -23,5 +23,15 @@ namespace eSeminars.API.Controllers
         {
             return base.GetList(searchObject);
         }
+        [Authorize(Roles = "Administrator")]
+        public override Kategorije Update(int id, KategorijeUpdateRequest request)
+        {
+            return base.Update(id, request);
+        }
+        [AllowAnonymous]
+        public override Kategorije GetById(int id)
+        {
+            return base.GetById(id);
+        }
     }
 }

@@ -44,6 +44,7 @@ namespace eSeminars.API
                     new Claim(ClaimTypes.NameIdentifier, user.Email)
                 };
                 
+                claims.Add(new Claim(ClaimTypes.Role,user.UlogaNavigation.Naziv));
 
                 var identity = new ClaimsIdentity(claims, Scheme.Name);
                 var principal = new ClaimsPrincipal(identity);
