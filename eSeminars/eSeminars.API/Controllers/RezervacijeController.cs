@@ -38,5 +38,20 @@ namespace eSeminars.API.Controllers
         {
             return base.Update(id, request);
         }
+        [HttpPut("{id}/allow")]
+        public Rezervacije Allow(int id)
+        {
+            return (_service as IRezervacijeService).Allow(id);
+        }
+        [HttpPut("{id}/reject")]
+        public Rezervacije Reject(int id)
+        {
+            return (_service as IRezervacijeService).Reject(id);
+        }
+        [HttpGet("{id}/allowedActions")]
+        public List<string> AllowedActions(int id)
+        {
+            return (_service as IRezervacijeService).AllowedActions(id);
+        }
     }
 }

@@ -8,6 +8,7 @@ using eSeminars.Services.Materijali;
 using eSeminars.Services.Obavijesti;
 using eSeminars.Services.Predavaci;
 using eSeminars.Services.Rezervacije;
+using eSeminars.Services.RezervacijeStateMachine;
 using eSeminars.Services.SacuvaniSeminari;
 using eSeminars.Services.Seminari;
 using eSeminars.Services.SeminariStateMachine;
@@ -38,6 +39,13 @@ builder.Services.AddTransient<InitialSeminariState>();
 builder.Services.AddTransient<DraftSeminariState>();
 builder.Services.AddTransient<ActiveSeminariState>();
 builder.Services.AddTransient<HiddenSeminariState>();
+
+builder.Services.AddTransient<BaseRezervacijeState>();
+builder.Services.AddTransient<InitialRezervacijeState>();
+builder.Services.AddTransient<PendingRezervacijeState>();
+builder.Services.AddTransient<ApprovedRezervacijeState>();
+builder.Services.AddTransient<RejectedRezervacijeState>();
+
 
 builder.Services.AddControllers(
     x=> x.Filters.Add<ExceptionFilter>()

@@ -7,15 +7,22 @@ using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
+using eSeminars.Services.RezervacijeStateMachine;
+using eSeminars.Services.SeminariStateMachine;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace eSeminars.Services.Rezervacije
 {
     public class RezervacijeService : BaseCRUDService<Model.Models.Rezervacije, RezervacijeSearchObject, Database.Rezervacije, RezervacijeInsertRequest, RezervacijeUpdateRequest>, IRezervacijeService
     {
-        public RezervacijeService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
+        public BaseRezervacijeState BaseRezervacijeState { get; set; }
+        public ILogger<RezervacijeService> _logger { get; set; }
+        public RezervacijeService(ESeminarsContext context, IMapper mapper, BaseRezervacijeState baseRezervacijeState, ILogger<RezervacijeService> logger) : base(context, mapper)
         {
+            _logger = logger;
+            BaseRezervacijeState = baseRezervacijeState;
         }
 
         public override IQueryable<Database.Rezervacije> AddFilter(RezervacijeSearchObject search, IQueryable<Database.Rezervacije> query)
@@ -46,6 +53,42 @@ namespace eSeminars.Services.Rezervacije
         {
             entity.DatumRezervacije = DateTime.Now;
             base.BeforeUpdate(request, entity);
+        }
+
+        public override Model.Models.Rezervacije Insert(RezervacijeInsertRequest request)
+        {
+            var state = BaseRezervacijeState.CreateState("initial");
+            return state.Insert(request);
+        }
+
+        public Model.Models.Rezervacije Allow(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRezervacijeState.CreateState(entity.StateMachine);
+            return state.Allow(id);
+        }
+
+        public Model.Models.Rezervacije Reject(int id)
+        {
+            var entity = GetById(id);
+            var state = BaseRezervacijeState.CreateState(entity.StateMachine);
+            return state.Reject(id);
+        }
+
+        public List<string> AllowedActions(int id)
+        {
+            _logger.LogInformation($"Allowed actions called for: {id}");
+            if (id <= 0)
+            {
+                var state = BaseRezervacijeState.CreateState("initial");
+                return state.AllowedActions(null);
+            }
+            else
+            {
+                var entity = Context.Rezervacijes.Find(id);
+                var state = BaseRezervacijeState.CreateState(entity.StateMachine);
+                return state.AllowedActions(entity);
+            }
         }
     }
 }
