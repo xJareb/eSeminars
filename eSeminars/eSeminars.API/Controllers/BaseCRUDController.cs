@@ -22,5 +22,11 @@ namespace eSeminars.API.Controllers
         {
             return _service.Update(id,request);
         }
+
+        [HttpPut("delete")]
+        public virtual TModel Delete(int id)
+        {
+            return _service.Delete(id);
+        }
     }
 }

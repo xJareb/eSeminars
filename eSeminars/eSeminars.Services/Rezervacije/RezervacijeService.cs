@@ -40,7 +40,7 @@ namespace eSeminars.Services.Rezervacije
                 .Where(r => r.KorisnikId == request.KorisnikId && r.SeminarId == request.SeminarId).FirstOrDefault();
             if (checkDuplicates != null)
             {
-                throw new Exception("Zapis postoji u bazi");
+                throw new UserException("Record already exists in the database");
             }
 
             entity.DatumRezervacije = DateTime.Now;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.SearchObjects;
 
 namespace eSeminars.Services
@@ -14,7 +15,6 @@ namespace eSeminars.Services
         protected BaseCRUDService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
         {
         }
-
         public virtual TModel Insert(TInsert request)
         {
             TDbEntity entity = Mapper.Map<TDbEntity>(request);
@@ -44,5 +44,27 @@ namespace eSeminars.Services
             return Mapper.Map<TModel>(entity);
         }
         public virtual void BeforeUpdate(TUpdate request, TDbEntity entity) { }
+        public virtual TModel Delete(int id)
+        {
+            var set = Context.Set<TDbEntity>();
+            var entity = set.Find(id);
+            if (entity == null)
+            {
+                throw new UserException("Record does not exist");
+            }
+
+            var property = entity.GetType().GetProperty("IsDeleted");
+            if (property != null)
+            {
+                property.SetValue(entity, true);
+            }
+            else
+            {
+                Context.Remove(entity);
+            }
+            Context.SaveChanges();
+            return Mapper.Map<TModel>(entity);
+
+        }
     }
 }

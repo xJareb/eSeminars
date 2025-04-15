@@ -34,10 +34,10 @@ namespace eSeminars.Services.Sponzori
 
         public override void BeforeInsert(SponzoriInsertRequest request, Database.Sponzori entity)
         {
-            var provjeraDuplikata = Context.Sponzoris.FirstOrDefault(s => s.Email == request.Email);
-            if (provjeraDuplikata != null)
+            var checkDuplicates = Context.Sponzoris.FirstOrDefault(s => s.Email == request.Email);
+            if (checkDuplicates != null)
             {
-                throw new Exception("Sponzor sa unesenim emailom već postoji");
+                throw new Exception($"Sponsor with ${checkDuplicates.Email} already exists");
             }
             base.BeforeInsert(request, entity);
         }

@@ -7,9 +7,10 @@ using eSeminars.Model.SearchObjects;
 
 namespace eSeminars.Services
 {
-    public interface ICRUDService<TModel,Tsearch, TInsert, TUpdate> : IService<TModel,Tsearch> where TModel : class where Tsearch : BaseSearchObject
+    public interface ICRUDService<TModel, Tsearch, TInsert, TUpdate> : IService<TModel, Tsearch> where TModel : class where Tsearch : BaseSearchObject
     {
         TModel Insert(TInsert request);
-        TModel Update(int id , TUpdate request);
+        TModel Update(int id, TUpdate request);
+        TModel Delete(int id);
     }
 }

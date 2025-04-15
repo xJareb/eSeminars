@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
@@ -45,13 +46,13 @@ namespace eSeminars.Services.Korisnici
             _logger.LogInformation($"Adding user: {entity.Ime}");
             if (request.Lozinka != request.LozinkaPotvrda)
             {
-                throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
+                throw new UserException("Password and confirmation password must be the same");
             }
 
-            var provjeraDuplikata = Context.Korisnicis.FirstOrDefault(k => k.Email == request.Email);
-            if (provjeraDuplikata != null)
+            var checkDuplicates = Context.Korisnicis.FirstOrDefault(k => k.Email == request.Email);
+            if (checkDuplicates != null)
             {
-                throw new Exception("Korisnik sa unesenim emailom već postoji");
+                throw new UserException($"User with {checkDuplicates.Email} already exist ");
             }
             //TODO:: change uloga later
             entity.Uloga = 2;
@@ -87,7 +88,7 @@ namespace eSeminars.Services.Korisnici
             {
                 if (request.Lozinka != request.LozinkaPotvrda)
                 {
-                    throw new Exception("Lozinka i LozinkaPotvrda moraju biti iste");
+                    throw new UserException("Password and confirmation password must be the same");
                 }
             }
             entity.LozinkaSalt = GenerateSalt();

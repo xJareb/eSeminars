@@ -22,7 +22,7 @@ namespace eSeminars.Services.SponzoriSeminari
                 .Where(ss => ss.SponzorId == request.SponzorId && ss.SeminarId == request.SeminarId).FirstOrDefault();
             if (checkDuplicates != null)
             {
-                throw new Exception("Postoji u bazi");
+                throw new Exception("Record already exists in the database");
             }
 
             base.BeforeInsert(request, entity);

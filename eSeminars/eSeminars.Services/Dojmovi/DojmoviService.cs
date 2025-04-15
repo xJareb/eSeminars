@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
@@ -32,7 +33,7 @@ namespace eSeminars.Services.Dojmovi
                 .Where(d => d.KorisnikId == request.KorisnikId && d.SeminarId == request.SeminarId).FirstOrDefault();
             if (checkDuplicates != null)
             {
-                throw new Exception("Zapis u bazi podataka već postoji");
+                throw new UserException("Record exist in the database");
             }
             entity.DatumKreiranjaDojma = DateTime.Now;
 

@@ -38,6 +38,5 @@ namespace eSeminars.Services.Predavaci
 
             return filteredQuerry;
         }
-
     }
 }

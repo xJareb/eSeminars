@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
@@ -32,7 +33,7 @@ namespace eSeminars.Services.Obavijesti
             var provjeraKorisnika = Context.Korisnicis.FirstOrDefault(k => k.KorisnikId == request.KorisnikId);
             if (provjeraKorisnika == null)
             {
-                throw new Exception("Korisnik sa " + request.KorisnikId + " nije pronađen");
+                throw new UserException("User with " + request.KorisnikId + " not found");
             }
 
             entity.DatumObavijesti = DateTime.Now;
@@ -44,7 +45,7 @@ namespace eSeminars.Services.Obavijesti
             var provjeraKorisnika = Context.Korisnicis.FirstOrDefault(k => k.KorisnikId == request.KorisnikId);
             if (provjeraKorisnika == null)
             {
-                throw new Exception("Korisnik sa " + request.KorisnikId + " nije pronađen");
+                throw new UserException("User with " + request.KorisnikId + " not found");
             }
             entity.DatumObavijesti = DateTime.Now;
             base.BeforeUpdate(request, entity);
