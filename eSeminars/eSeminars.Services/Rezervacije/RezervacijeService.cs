@@ -44,8 +44,6 @@ namespace eSeminars.Services.Rezervacije
             }
 
             entity.DatumRezervacije = DateTime.Now;
-            //TODO :: remove attribute
-            entity.StatusRezervacije = "x";
             base.BeforeInsert(request, entity);
         }
 

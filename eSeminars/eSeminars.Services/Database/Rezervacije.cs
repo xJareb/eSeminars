@@ -11,8 +11,6 @@ public partial class Rezervacije
 
     public int? KorisnikId { get; set; }
 
-    public string StatusRezervacije { get; set; } = null!;
-
     public string? StateMachine { get; set; }
 
     public DateTime DatumRezervacije { get; set; }

@@ -206,9 +206,6 @@ public partial class ESeminarsContext : DbContext
             entity.Property(e => e.StateMachine)
                 .HasMaxLength(100)
                 .IsUnicode(false);
-            entity.Property(e => e.StatusRezervacije)
-                .HasMaxLength(50)
-                .IsUnicode(false);
 
             entity.HasOne(d => d.Korisnik).WithMany(p => p.Rezervacijes)
                 .HasForeignKey(d => d.KorisnikId)

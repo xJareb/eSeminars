@@ -20,7 +20,6 @@ namespace eSeminars.Services.RezervacijeStateMachine
             var set = Context.Set<Database.Rezervacije>();
             var entity = Mapper.Map<Database.Rezervacije>(request);
             entity.StateMachine = "pending";
-            entity.StatusRezervacije = "x";
             entity.DatumRezervacije = DateTime.Now;
             set.Add(entity);
             Context.SaveChanges();
