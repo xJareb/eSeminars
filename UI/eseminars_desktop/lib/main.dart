@@ -1,5 +1,10 @@
+import 'package:eseminars_desktop/layouts/master_screen.dart';
+import 'package:eseminars_desktop/providers/auth_provider.dart';
+import 'package:eseminars_desktop/providers/korisnici_provider.dart';
+import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -32,13 +37,16 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.grey),
         useMaterial3: true,
       ),
-      home: const LoginPage(),
+      home:  LoginPage(),
     );
   }
 }
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+   LoginPage({super.key});
+
+  TextEditingController _emailController = new TextEditingController();
+  TextEditingController _passwordController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -70,19 +78,27 @@ class LoginPage extends StatelessWidget {
                   textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 16),
-                  const TextField(decoration: InputDecoration(
+                  TextField(controller: _emailController,decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    labelText: "Email address"
+                    labelText: "Email address",
                   ),
                   ),
                   const SizedBox(height: 16),
-                  const TextField(decoration: InputDecoration(
+                  TextField(controller: _passwordController,obscureText: true,decoration: InputDecoration(
                     border: OutlineInputBorder(),
                     labelText: "Password"
                   ),),
                   const SizedBox(height: 16),
-                  ElevatedButton(onPressed: () {
-                    print("Login");
+                  ElevatedButton(onPressed: () async {
+                    KorisniciProvider provider = new KorisniciProvider();
+                    AuthProvider.email = _emailController.text;
+                    AuthProvider.password = _passwordController.text;
+                    try{
+                      var data=await provider.get();
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserListScreen()));
+                    } on Exception catch (e){
+                      showDialog(context: context, builder: (context) => AlertDialog(title: Text("Error"),actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))], content: Text(e.toString()),));
+                    }
                   }, child: const Text("Login"))
                 ],
               ),
@@ -90,7 +106,7 @@ class LoginPage extends StatelessWidget {
           )
           ),
           Expanded(child: 
-          Image.network("https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+          Image.asset("assets/images/login-background.jpg",
           fit: BoxFit.cover,height: double.infinity,))
         ],
       ),

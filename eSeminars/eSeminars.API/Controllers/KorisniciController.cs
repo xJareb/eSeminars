@@ -19,7 +19,7 @@ namespace eSeminars.API.Controllers
         {
             return (_service as IKorisniciService).Login(username, password);
         }
-        [AllowAnonymous]
+        [Authorize(Roles = "Administrator")]
         public override PagedResult<Korisnici> GetList(KorisniciSearchObject searchObject)
         {
             return base.GetList(searchObject);
