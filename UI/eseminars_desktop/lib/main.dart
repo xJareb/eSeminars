@@ -1,13 +1,18 @@
 import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/providers/auth_provider.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
+import 'package:eseminars_desktop/providers/logged_korisnici_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:provider/provider.dart';
 
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(providers:[
+    ChangeNotifierProvider<KorisniciProvider>(create: (_) => LoggedKorisniciProvider()),
+  ], 
+  child: const MyApp(), ));
 }
 
 class MyApp extends StatelessWidget {

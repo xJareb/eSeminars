@@ -37,12 +37,31 @@ class _MasterScreenState extends State<MasterScreen> {
                   onTap: (){
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ReservationListScreen()));
                   } ,
-                  
+
                 )
               ],
             ),
           )),
-          Expanded(flex:4,child: widget.child)
+          Expanded(flex:4,child: Center(
+              child: Container(
+                constraints: BoxConstraints(maxHeight: 600,maxWidth: 900),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  boxShadow:[
+                   BoxShadow(
+                    color: Colors.black12,
+                    blurRadius: 16,
+                    spreadRadius: 4
+                  )
+                ]
+                ),
+                padding: EdgeInsets.all(32),
+                child: widget.child,
+              ),
+              
+          )
+          )
         ],
       ),
     );
