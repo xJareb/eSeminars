@@ -5,6 +5,7 @@ import 'package:eseminars_desktop/main.dart';
 import 'package:eseminars_desktop/models/korisnik.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
+import 'package:eseminars_desktop/screens/user_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -89,7 +90,9 @@ class _UserListScreenState extends State<UserListScreen> {
                 )
                 ),
             SizedBox(width: 10,),
-            ElevatedButton(onPressed: (){}, child: Text("Dodaj",style: TextStyle(fontSize: 15),))
+            ElevatedButton(onPressed: (){
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen()));
+            }, child: Text("Dodaj",style: TextStyle(fontSize: 15),))
           ],
         ),
         )
@@ -104,6 +107,7 @@ class _UserListScreenState extends State<UserListScreen> {
   return Expanded(
     child: SingleChildScrollView(
       child: DataTable(
+        showCheckboxColumn: false,
         columns: [
         DataColumn(label: Text("Ime")),
         DataColumn(label: Text("Prezime")),
@@ -111,12 +115,21 @@ class _UserListScreenState extends State<UserListScreen> {
         DataColumn(label: Text("Datum rođenja")),
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) =>
-          DataRow(cells: [
+          DataRow(
+            onSelectChanged: (selected) =>{
+              if(selected == true){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: e,)))
+              }
+            },
+            cells: [
             DataCell(Text(e.ime ?? "")),
             DataCell(Text(e.prezime ?? "")),
             DataCell(Text(e.email ?? "")),
             DataCell(Text(e.datumRodjenja ?? "")),
-            DataCell(ElevatedButton(child: Text("Obriši"),onPressed: (){},))
+            DataCell(ElevatedButton(child: Text("Obriši"),onPressed: () async{
+              await provider.softDelete(e.korisnikId!);
+              await _loadData();
+            },))
           ])
       ).toList().cast<DataRow>() ?? [],
       ),

@@ -30,6 +30,10 @@ namespace eSeminars.Services.Korisnici
 
             filteredQuerry = filteredQuerry.Include(y => y.UlogaNavigation);
 
+            filteredQuerry = filteredQuerry.Where(k => k.IsDeleted == false);
+
+            filteredQuerry = filteredQuerry.Where(u => u.UlogaNavigation.UlogaId == 2);
+
             if (!string.IsNullOrWhiteSpace(search?.ImePrezimeGTE))
             {
                 var trimmedStart = search?.ImePrezimeGTE.TrimStart();
@@ -84,15 +88,6 @@ namespace eSeminars.Services.Korisnici
         public override void BeforeUpdate(KorisniciUpdateRequest request, Database.Korisnici entity)
         {
             base.BeforeUpdate(request, entity);
-            if (request.Lozinka != null)
-            {
-                if (request.Lozinka != request.LozinkaPotvrda)
-                {
-                    throw new UserException("Password and confirmation password must be the same");
-                }
-            }
-            entity.LozinkaSalt = GenerateSalt();
-            entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
         }
 
         public Model.Models.Korisnici Login(string username, string password)

@@ -14,5 +14,4 @@ class KorisniciProvider extends BaseProvider<Korisnik> {
   Korisnik fromJson(data) {
     return Korisnik.fromJson(data);
   }
-
 }

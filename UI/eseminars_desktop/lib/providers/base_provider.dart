@@ -80,6 +80,17 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
   }
 
+  Future<void> softDelete(int id) async {
+  final url = Uri.parse("$_baseUrl$_endpoint/delete?id=$id");
+  final headers = createHeaders();
+
+  final response = await http.put(url, headers: headers);
+
+  if (!isValidResponse(response)) {
+    throw Exception("Soft delete failed");
+  }
+  } 
+
   T fromJson(data) {
     throw Exception("Method not implemented");
   }
