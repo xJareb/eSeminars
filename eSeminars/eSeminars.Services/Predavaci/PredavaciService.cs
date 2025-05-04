@@ -23,13 +23,13 @@ namespace eSeminars.Services.Predavaci
         {
             var filteredQuerry = base.AddFilter(search, query);
 
-            if (!string.IsNullOrWhiteSpace(search?.ImeGTE))
+            filteredQuerry = filteredQuerry.Where(p => p.IsDeleted == false);
+            if (!string.IsNullOrWhiteSpace(search?.ImePrezimeGTE))
             {
-                filteredQuerry = filteredQuerry.Where(x => x.Ime.StartsWith(search.ImeGTE));
-            }
-            if (!string.IsNullOrWhiteSpace(search?.PrezimeGTE))
-            {
-                filteredQuerry = filteredQuerry.Where(x => x.Prezime.StartsWith(search.PrezimeGTE));
+                var trimmedStart = search?.ImePrezimeGTE.TrimStart();
+                filteredQuerry = filteredQuerry.Where(x =>
+                    (x.Ime + ' ' + x.Prezime).ToLower().StartsWith(trimmedStart.ToLower()) ||
+                    (x.Prezime + ' ' + x.Ime).ToLower().StartsWith(trimmedStart.ToLower()));
             }
             if (!string.IsNullOrWhiteSpace(search?.Email))
             {

@@ -1,6 +1,8 @@
 import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/providers/auth_provider.dart';
+import 'package:eseminars_desktop/providers/categories_provider.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
+import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/providers/logged_korisnici_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,8 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers:[
     ChangeNotifierProvider<KorisniciProvider>(create: (_) => LoggedKorisniciProvider()),
+    ChangeNotifierProvider<LecturersProvider>(create: (_) => LecturersProvider()),
+    ChangeNotifierProvider<CategoriesProvider>(create: (_) => CategoriesProvider())
   ], 
   child: const MyApp(), ));
 }

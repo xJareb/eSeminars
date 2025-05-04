@@ -1,3 +1,5 @@
+import 'package:eseminars_desktop/screens/categories_list_screen.dart';
+import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
 import 'package:eseminars_desktop/screens/reservation_list_screen.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -37,8 +39,20 @@ class _MasterScreenState extends State<MasterScreen> {
                   onTap: (){
                     Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ReservationListScreen()));
                   } ,
-
-                )
+                ),
+                ListTile(
+                  leading: Icon(Icons.person_pin),
+                  title: Text("Lecturers"),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersListScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.category),
+                  title: Text("Categories"),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesListScreen()));
+                  },)
               ],
             ),
           )),

@@ -106,6 +106,6 @@ namespace eSeminars.Services.Korisnici
             }
 
             return Mapper.Map<Model.Models.Korisnici>(entity);
-        }
+        } 
     }
 }

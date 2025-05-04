@@ -22,6 +22,8 @@ namespace eSeminars.Services.Kategorije
         {
             var filteredQuerry = base.AddFilter(search, query);
 
+            filteredQuerry = filteredQuerry.Where(k => k.IsDeleted == false);
+
             if (!string.IsNullOrWhiteSpace(search?.NazivGTE))
             {
                 filteredQuerry = filteredQuerry.Where(x => x.Naziv.StartsWith(search.NazivGTE));
