@@ -2,6 +2,7 @@ import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/models/categories.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/categories_provider.dart';
+import 'package:eseminars_desktop/screens/categories_details_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -82,6 +83,8 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
                 ),
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen()));
+              await _loadData();
             }, child: Text("Dodaj",style: TextStyle(fontSize: 15),))
           ],
         ),
@@ -93,11 +96,20 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
   Widget _buildForm(){
     return Expanded(
       child: SingleChildScrollView(
-        child: DataTable(columns: [
+        child: DataTable(
+          showCheckboxColumn: false,
+          columns: [
           DataColumn(label: Text("Naziv")),
+          DataColumn(label: Text("Opis")),
           DataColumn(label: Text(""))
-        ], rows: result?.result.map((e) => DataRow(cells: [
+        ], rows: result?.result.map((e) => DataRow(onSelectChanged: (selected) async{
+          if(selected == true){
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
+            await _loadData();
+          }
+        },cells: [
           DataCell(Text(e.naziv ?? "")),
+          DataCell(Text(e.opis ?? "")),
           DataCell(ElevatedButton(onPressed: () async{
             await provider.softDelete(e.kategorijaId!);
             await _loadData();
