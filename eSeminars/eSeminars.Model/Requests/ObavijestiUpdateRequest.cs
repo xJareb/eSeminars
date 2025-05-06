@@ -8,6 +8,5 @@ namespace eSeminars.Model.Requests
     {
         public string Naslov { get; set; }
         public string Sadrzaj { get; set; }
-        public int? KorisnikId { get; set; }
     }
 }

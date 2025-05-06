@@ -21,6 +21,8 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor();
+
 // Add services to the container.
 builder.Services.AddTransient<IPredavaciService, PredavaciService>();
 builder.Services.AddTransient<IKategorijeService, KategorijeService>();

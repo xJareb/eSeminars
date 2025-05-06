@@ -1,0 +1,93 @@
+import 'package:eseminars_desktop/layouts/master_screen.dart';
+import 'package:eseminars_desktop/models/notifications.dart';
+import 'package:eseminars_desktop/providers/korisnici_provider.dart';
+import 'package:eseminars_desktop/providers/notifications_provider.dart';
+import 'package:eseminars_desktop/utils/custom_form_builder_text_field.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
+import 'package:provider/provider.dart';
+
+class NotificationsDetailsScreen extends StatefulWidget {
+  Notifications? notifications;
+  NotificationsDetailsScreen({super.key,this.notifications});
+
+  @override
+  State<NotificationsDetailsScreen> createState() => _NotificationsDetailsScreenState();
+}
+
+class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen> {
+
+  Map<String, dynamic> _initialValue = {};
+  final _formKey = GlobalKey<FormBuilderState>();
+  late NotificationsProvider provider;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    provider = context.read<NotificationsProvider>();
+  }
+  @override
+  void initState() {
+    super.initState();
+    _initialValue = {
+      'naslov' : widget.notifications?.naslov,
+      'sadrzaj' : widget.notifications?.sadrzaj,
+    };
+  }
+  @override
+  Widget build(BuildContext context) {
+    return MasterScreen('Notification details', Column(
+      children: [
+        _buildForm(),
+        const SizedBox(height: 20,),
+        _buildControls()
+      ],
+    ));
+  }
+  Widget _buildForm(){
+    return FormBuilder(key: _formKey,initialValue: _initialValue,
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(child: CustomFormBuilderTextField(name: 'naslov', label: "Naslov",validators: [
+                FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+              ],)),
+              const SizedBox(width: 40,),
+              Expanded(child: CustomFormBuilderTextField(name: 'sadrzaj', label: "Sadržaj",validators: [
+                FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+              ],))
+            ],
+          )
+        ],
+      ),
+    );
+  }
+  Widget _buildControls(){
+    return Center(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ElevatedButton(onPressed: (){
+            Navigator.pop(context);
+          }, child: Text("Poništi")),
+          const SizedBox(width: 10,),
+          ElevatedButton(onPressed: () async{
+            if(_formKey.currentState?.saveAndValidate() == true){
+              if(widget.notifications == null){
+                await provider.insert(_formKey.currentState?.value);
+                Navigator.pop(context);
+              }
+              else{
+                await provider.update(widget.notifications!.obavijestId!,_formKey.currentState?.value);
+                Navigator.pop(context);
+              }
+            }
+          }, child: Text("Dodaj"))
+        ],
+      ),
+    );
+  }
+}

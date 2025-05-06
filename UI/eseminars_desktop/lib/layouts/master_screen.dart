@@ -1,5 +1,6 @@
 import 'package:eseminars_desktop/screens/categories_list_screen.dart';
 import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
+import 'package:eseminars_desktop/screens/notifications_list_screen.dart';
 import 'package:eseminars_desktop/screens/reservation_list_screen.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +53,14 @@ class _MasterScreenState extends State<MasterScreen> {
                   title: Text("Categories"),
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesListScreen()));
-                  },)
+                  },),
+                ListTile(
+                  leading: Icon(Icons.notifications),
+                  title: Text("Notifications"),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsListScreen()));
+                  },
+                )
               ],
             ),
           )),
