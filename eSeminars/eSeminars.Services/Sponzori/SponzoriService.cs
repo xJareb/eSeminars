@@ -20,6 +20,8 @@ namespace eSeminars.Services.Sponzori
         {
             var filteredQuerry = base.AddFilter(search, query);
 
+            filteredQuerry = filteredQuerry.Where(s => s.IsDeleted == false);
+
             if (!string.IsNullOrWhiteSpace(search?.KompanijaGTE))
             {
                 filteredQuerry = filteredQuerry.Where(s => s.Naziv.StartsWith(search.KompanijaGTE));

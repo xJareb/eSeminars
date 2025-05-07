@@ -5,6 +5,7 @@ import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/providers/logged_korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/notifications_provider.dart';
+import 'package:eseminars_desktop/providers/sponsors_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -16,7 +17,8 @@ void main() {
     ChangeNotifierProvider<KorisniciProvider>(create: (_) => LoggedKorisniciProvider()),
     ChangeNotifierProvider<LecturersProvider>(create: (_) => LecturersProvider()),
     ChangeNotifierProvider<CategoriesProvider>(create: (_) => CategoriesProvider()),
-    ChangeNotifierProvider<NotificationsProvider>(create: (_) => NotificationsProvider())
+    ChangeNotifierProvider<NotificationsProvider>(create: (_) => NotificationsProvider()),
+    ChangeNotifierProvider<SponsorsProvider>(create: (_) => SponsorsProvider())
   ], 
   child: const MyApp(), ));
 }

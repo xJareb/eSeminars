@@ -2,6 +2,7 @@ import 'package:eseminars_desktop/screens/categories_list_screen.dart';
 import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
 import 'package:eseminars_desktop/screens/notifications_list_screen.dart';
 import 'package:eseminars_desktop/screens/reservation_list_screen.dart';
+import 'package:eseminars_desktop/screens/sponsors_list_screen.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -59,6 +60,13 @@ class _MasterScreenState extends State<MasterScreen> {
                   title: Text("Notifications"),
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsListScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.attach_money),
+                  title: Text("Sponsors"),
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsListScreen()));
                   },
                 )
               ],
