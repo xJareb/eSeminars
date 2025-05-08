@@ -2,6 +2,7 @@ import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/models/sponsors.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
+import 'package:eseminars_desktop/screens/sponsors_details_screen.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -20,6 +21,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
   int pageSize = 4;
   SearchResult<Sponsors>? result = null;
   late SponsorsProvider provider;
+  TextEditingController _filterSponsor = TextEditingController();
 
   @override
   void didChangeDependencies() {
@@ -38,6 +40,18 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
     result = await provider.get(filter: filter);
 
      setState((){         
+     });
+  }
+  Future<void> _filterData(String query) async{
+    _selectedIndex = 0;
+    var filter = {
+      'KompanijaGTE': _filterSponsor.text,
+      'Page' : _selectedIndex,
+      'PageSize': pageSize,
+    };
+    result = await provider.get(filter: filter);
+
+    setState((){         
      });
   }
 
@@ -60,7 +74,10 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
         Expanded(flex:1,child: Row(
           children: [
             Expanded(
-              child: TextField(decoration: 
+              child: TextField(controller: _filterSponsor,
+              onChanged: (value) {
+                _filterData(value);
+              },decoration: 
               InputDecoration(labelText: "Pretraži sponzora",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30)
@@ -68,7 +85,10 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
               ),
             ),
             const SizedBox(width: 10,),
-            ElevatedButton(onPressed: (){}, child: Text("Dodaj"))
+            ElevatedButton(onPressed: () async{
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen()));
+              await _loadData();
+            }, child: Text("Dodaj"))
           ],
         ))
       ],
@@ -76,14 +96,19 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
   }
   Widget _buildForm(){
     return Expanded(child: SingleChildScrollView(
-      child: DataTable(columns: [
-        DataColumn(label: Text("Kompanije")),
+      child: DataTable(showCheckboxColumn: false,columns: [
+        DataColumn(label: Text("Kompanija")),
         DataColumn(label: Text("Email")),
         DataColumn(label: Text("Telefon")),
         DataColumn(label: Text("Kontakt osoba")),
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) => 
-          DataRow(cells: [
+          DataRow(onSelectChanged: (selected) async{
+            if(selected == true){
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen(sponsors: e,)));
+              await _loadData();
+            }
+          },cells: [
             DataCell(Text(e.naziv ?? "")),
             DataCell(Text(e.email ?? "")),
             DataCell(Text(e.telefon ?? "")),
