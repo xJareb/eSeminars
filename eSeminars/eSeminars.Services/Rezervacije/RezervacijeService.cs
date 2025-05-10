@@ -29,7 +29,7 @@ namespace eSeminars.Services.Rezervacije
         {
             var filteredQuery = base.AddFilter(search, query);
 
-            filteredQuery = filteredQuery.Include(r => r.Korisnik).Where(s => s.SeminarId == search.SeminarId);
+            filteredQuery = filteredQuery.Include(r => r.Korisnik).Where(s => (s.SeminarId == search.SeminarId) && (s.StateMachine == search.StateMachine));
 
             return filteredQuery;
         }

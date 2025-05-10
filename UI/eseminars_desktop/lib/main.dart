@@ -1,10 +1,13 @@
 import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/providers/auth_provider.dart';
 import 'package:eseminars_desktop/providers/categories_provider.dart';
+import 'package:eseminars_desktop/providers/feedbacks_provider.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/providers/logged_korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/notifications_provider.dart';
+import 'package:eseminars_desktop/providers/reservations_provider.dart';
+import 'package:eseminars_desktop/providers/seminars_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +21,10 @@ void main() {
     ChangeNotifierProvider<LecturersProvider>(create: (_) => LecturersProvider()),
     ChangeNotifierProvider<CategoriesProvider>(create: (_) => CategoriesProvider()),
     ChangeNotifierProvider<NotificationsProvider>(create: (_) => NotificationsProvider()),
-    ChangeNotifierProvider<SponsorsProvider>(create: (_) => SponsorsProvider())
+    ChangeNotifierProvider<SponsorsProvider>(create: (_) => SponsorsProvider()),
+    ChangeNotifierProvider<FeedbacksProvider>(create: (_) => FeedbacksProvider()),
+    ChangeNotifierProvider<SeminarsProvider>(create: (_) => SeminarsProvider()),
+    ChangeNotifierProvider<ReservationsProvider>(create: (_) => ReservationsProvider())
   ], 
   child: const MyApp(), ));
 }
