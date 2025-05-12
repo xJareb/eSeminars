@@ -148,9 +148,14 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
         if(currentReservationState == reservationStates[0]) ... [
         DataCell(Row(children: [
           IconButton(onPressed: () async{
+            await reservationsProvider.allowReservation(e.rezervacijaId!);
+            await _filterData("", state: currentReservationState);
           }, icon: Icon(Icons.check,color: Colors.green,)),
           const SizedBox(width: 10,),
-          IconButton(onPressed: (){}, icon: Icon(Icons.close,color: Colors.red,)),
+          IconButton(onPressed: () async{
+            await reservationsProvider.rejectReservation(e.rezervacijaId!);
+            await _filterData("",state: currentReservationState);
+          }, icon: Icon(Icons.close,color: Colors.red,)),
         ],)),
         ]
       ])

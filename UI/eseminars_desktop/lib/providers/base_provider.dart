@@ -89,7 +89,27 @@ abstract class BaseProvider<T> with ChangeNotifier {
   if (!isValidResponse(response)) {
     throw Exception("Soft delete failed");
   }
-  } 
+  }
+  Future<void> allowReservation(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/allow");
+    final headers = createHeaders();
+
+    final response = await http.put(url,headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to allow reservation");
+  }
+  }
+  Future<void> rejectReservation(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/reject");
+    final headers = createHeaders();
+
+    final response = await http.put(url,headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to reject reservation");
+  }
+  }
 
   T fromJson(data) {
     throw Exception("Method not implemented");
