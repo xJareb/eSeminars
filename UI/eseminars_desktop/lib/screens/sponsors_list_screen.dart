@@ -78,7 +78,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
               onChanged: (value) {
                 _filterData(value);
               },decoration: 
-              InputDecoration(labelText: "Pretraži sponzora",
+              InputDecoration(labelText: "Search sponsor",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30)
               )),
@@ -88,7 +88,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
             ElevatedButton(onPressed: () async{
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen()));
               await _loadData();
-            }, child: Text("Dodaj"))
+            }, child: Text("Add"))
           ],
         ))
       ],
@@ -97,10 +97,10 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
   Widget _buildForm(){
     return Expanded(child: SingleChildScrollView(
       child: DataTable(showCheckboxColumn: false,columns: [
-        DataColumn(label: Text("Kompanija")),
+        DataColumn(label: Text("Company")),
         DataColumn(label: Text("Email")),
-        DataColumn(label: Text("Telefon")),
-        DataColumn(label: Text("Kontakt osoba")),
+        DataColumn(label: Text("Phone number")),
+        DataColumn(label: Text("Representative")),
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) => 
           DataRow(onSelectChanged: (selected) async{
@@ -113,7 +113,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
             DataCell(Text(e.email ?? "")),
             DataCell(Text(e.telefon ?? "")),
             DataCell(Text(e.kontaktOsoba ?? "")),
-            DataCell(ElevatedButton(child: Text("Obriši"),onPressed: () async{
+            DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
               await provider.softDelete(e.sponzorId!);
               await _loadData();
             },))

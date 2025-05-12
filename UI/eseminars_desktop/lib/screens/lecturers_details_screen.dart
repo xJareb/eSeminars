@@ -43,7 +43,7 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    return MasterScreen('Lecturers Details', Column(
+    return MasterScreen('Lecturer Details', Column(
       children: [
           _buildForm(),
           const SizedBox(height: 30,),
@@ -59,17 +59,17 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
         const SizedBox(height: 20,),
         Row(
           children: [
-            Expanded(child: CustomFormBuilderTextField(name: 'ime', label: "Ime",validators: [
+            Expanded(child: CustomFormBuilderTextField(name: 'ime', label: "Name",validators: [
               FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-                FormBuilderValidators.minLength(3,errorText: "Ovo polje mora sadržati minimalno tri karaktera"),
+                FormBuilderValidators.required(errorText: "This field is required."),
+                FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
               ])
             ],)),
             const SizedBox(width: 40,),
-            Expanded(child: CustomFormBuilderTextField(name: 'prezime', label: "Prezime",validators: [
+            Expanded(child: CustomFormBuilderTextField(name: 'prezime', label: "Surname",validators: [
               FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-                FormBuilderValidators.minLength(3,errorText: "Ovo polje mora sadržati minimalno tri karaktera"),
+                FormBuilderValidators.required(errorText: "This field is required."),
+                FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
               ])
             ],)),
           ],
@@ -77,15 +77,15 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
         const SizedBox(height: 20,),
         Row(
           children: [
-            Expanded(child: CustomFormBuilderTextField(name: 'biografija', label: "Biografija",validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
+            Expanded(child: CustomFormBuilderTextField(name: 'biografija', label: "Biography",validators: [
+              FormBuilderValidators.required(errorText: "This field is required."),
             ],)),
             const SizedBox(width: 40,),
             if(widget.lecturers == null) ... [
             Expanded(child: CustomFormBuilderTextField(name: 'email', label: "Email",validators: [
               FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-                FormBuilderValidators.email(errorText: "Unesite validan email"),
+                FormBuilderValidators.required(errorText: "This field is required."),
+                FormBuilderValidators.email(errorText: "Please enter a valid email format."),
               ])
             ],))] else ... [
               Expanded(child: Text(""))
@@ -95,10 +95,10 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
         const SizedBox(height: 20,),
         Row(children: [
           if(widget.lecturers == null) ... [
-          Expanded(child: CustomFormBuilderTextField(name: 'telefon', label: "Telefon",validators: [
+          Expanded(child: CustomFormBuilderTextField(name: 'telefon', label: "Phone number",validators: [
             FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-              FormBuilderValidators.match(phoneExp,errorText: "Broj telefona treba da sadži 9 ili 10 cifara")
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.match(phoneExp,errorText: "The phone number must contain 9 or 10 digits")
             ])
           ],))] else ... [
             Container()
@@ -117,26 +117,27 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
         children: [
           ElevatedButton(onPressed: (){
             Navigator.pop(context);
-          }, child: Text("Poništi")),
+          }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white
+          ),),
           const SizedBox(width: 10,),
           ElevatedButton(onPressed: (){
-            if(widget.lecturers != null){
-              if(_formKey.currentState?.saveAndValidate() == true){
-                provider.update(widget.lecturers!.predavacId!,_formKey.currentState?.value);
-                Navigator.pop(context);
-              }else{
-                print("Forma nije ispravna");
-              }
-            }else{
             if(_formKey.currentState?.saveAndValidate() == true){
-              provider.insert(_formKey.currentState?.value);
+            if(widget.lecturers != null){
+              provider.update(widget.lecturers!.predavacId!,_formKey.currentState?.value);
+              _formKey.currentState?.reset();
               Navigator.pop(context);
-            }else{
-              print("Forma nije ispravna");
+              }else{
+              provider.insert(_formKey.currentState?.value);
+              _formKey.currentState?.reset();
+              Navigator.pop(context);
             }
             }
-            
-          }, child: Text("Dodaj")),
+          }, child: Text("Confirm"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white
+          ),),
         ],
       ),
     );

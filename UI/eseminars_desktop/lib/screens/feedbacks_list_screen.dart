@@ -109,14 +109,14 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
     return Expanded(child: 
     SingleChildScrollView(child: 
     DataTable(columns: [
-      DataColumn(label: Text('Korisnik')),
-      DataColumn(label: Text('Ocjena')),
+      DataColumn(label: Text('User')),
+      DataColumn(label: Text('Rating')),
       DataColumn(label: Text(""))
     ]
     , rows: result?.result.map((e) => DataRow(cells: [
       DataCell(Text(e.korisnik?.ime ?? "")),
       DataCell(buildStars(e.ocjena ?? 0)),
-      DataCell(ElevatedButton(child: Text("Obriši"),onPressed: () async{
+      DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
       },
       )
       ),

@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/models/lecturers.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/screens/lecturers_details_screen.dart';
+import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,6 +18,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
   late LecturersProvider provider;
   int _selectedIndex = 0;
   int pageSize = 4;
+  int end = 17;
 
   @override
   void didChangeDependencies() {
@@ -34,6 +36,14 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
       'PageSize': pageSize
     };
     result = await provider.get(filter: filter);
+    final items = result?.result ?? [];
+
+    if(items.isEmpty && _selectedIndex > 0){
+      _selectedIndex--;
+      filter['Page'] = _selectedIndex;
+      result = await provider.get(filter: filter);
+    }
+
 
      setState((){         
      });
@@ -75,7 +85,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
               },
               controller: _nameSurnameGTE,
               decoration: InputDecoration(
-                labelText: "Pretraži predavača",
+                labelText: "Search lecturer",
                 labelStyle: TextStyle(fontSize: 15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30)
@@ -89,7 +99,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
                 _filterData(value);
               },
               decoration: InputDecoration(
-                labelText: "Pretraži email",
+                labelText: "Email address",
                 labelStyle: TextStyle(fontSize: 15),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(30)
@@ -100,7 +110,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
             ElevatedButton(onPressed: () async{
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen()));
               await _loadData();
-            }, child: Text("Dodaj",style: TextStyle(fontSize: 15),))
+            }, child: Text("Add",style: TextStyle(fontSize: 15),))
           ],
         ))
       ],
@@ -113,31 +123,33 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
     }
     return Expanded(
       child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
         child: DataTable(
           showCheckboxColumn: false,
           columns: [
-            DataColumn(label: Text("Ime")),
-            DataColumn(label: Text("Prezime")),
-            DataColumn(label: Text("Biografija")),
+            DataColumn(label: Text("Name")),
+            DataColumn(label: Text("Surname")),
+            DataColumn(label: Text("Biography")),
             DataColumn(label: Text("Email")),
-            DataColumn(label: Text("Telefon")),
+            DataColumn(label: Text("Phone number")),
             DataColumn(label: Text(""))
           ], rows: result?.result.map((e) =>
-              DataRow(onSelectChanged: (seleceted){
+              DataRow(onSelectChanged: (seleceted) async{
                 if(seleceted == true){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen(lecturers: e,)));
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen(lecturers: e,)));
+                  await _loadData();
                 }
               },
               cells: [
                 DataCell(Text(e.ime ?? "")),
                 DataCell(Text(e.prezime ?? "")),
-                DataCell(Text(e.biografija ?? "")),
+                DataCell(Text('${e.biografija!.substring(0,17 > e.biografija!.length ? e.biografija!.length : 17)}...' ?? "")),
                 DataCell(Container(width: 120,child: Text(e.email ?? "",),)),
-                DataCell(Text(e.telefon ?? "")),
+                DataCell(Text('${e.telefon}' ?? "")),
                 DataCell(ElevatedButton(onPressed: () async{
                   await provider.softDelete(e.predavacId!);
                   await _loadData();
-                },child: Text("Obriši"),))
+                },child: Text("Remove"),))
               ]
               )
           ).toList().cast<DataRow>() ?? [],
@@ -145,38 +157,17 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
       ),
     );
   }
-
-  Widget _buildPaging(){
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildPreviousPage(),
-          SizedBox(width: 10),
-          Text((_selectedIndex+1).toString(),style: TextStyle(fontSize: 16),),
-          SizedBox(width: 10),
-          _buildNextPage(),
-        ],
-      ),
-    );
-  }
-
-   Widget _buildPreviousPage(){
-    return ElevatedButton(onPressed: _selectedIndex > 0 ? () async{
-            setState(() {
-              _selectedIndex--;
-            });
-            await _loadData();
-          } : null, child: Icon(Icons.navigate_before));
-  }
-  Widget _buildNextPage(){
-    int totalItems = result?.count ?? 0;
-    int totalPages = (totalItems / pageSize).ceil();
-    return ElevatedButton(onPressed: (_selectedIndex + 1) <  totalPages ? () async{
-            setState(() {
-              _selectedIndex ++;
-            });
-            await _loadData();
-          }:null, child: Icon(Icons.navigate_next));
-  }
+  Widget _buildPaging() {
+  return PaginationControls(
+    currentPage: _selectedIndex,
+    totalItems: result?.count ?? 0,
+    pageSize: pageSize,
+    onPageChanged: (newPage) async {
+      setState(() {
+        _selectedIndex = newPage;
+      });
+      await _loadData();
+    },
+  );
+}
 }

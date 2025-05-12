@@ -44,7 +44,7 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen('Categories details', Column(
+    return MasterScreen('Category details', Column(
       children: [
         const SizedBox(height: 20,),
         _buildForm(),
@@ -58,12 +58,12 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
     return FormBuilder(key: _formKey,initialValue: _initialValue,child: 
     Row(
       children: [
-        Expanded(child: CustomFormBuilderTextField(name: 'naziv', label: "Naziv",validators: [
-          FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
+        Expanded(child: CustomFormBuilderTextField(name: 'naziv', label: "Title",validators: [
+          FormBuilderValidators.required(errorText: "This field is required."),
         ],)),
         const SizedBox(width: 40,),
-        Expanded(child: CustomFormBuilderTextField(name: 'opis', label: "Opis",validators: [
-          FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+        Expanded(child: CustomFormBuilderTextField(name: 'opis', label: "Description",validators: [
+          FormBuilderValidators.required(errorText: "This field is required.")
         ],))
       ],
     )
@@ -76,21 +76,29 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
       children: [
         ElevatedButton(onPressed: (){
           Navigator.pop(context);
-        }, child: Text("Poništi")),
+        }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.red,
+          foregroundColor: Colors.white
+        ),),
         const SizedBox(width: 10,),
         ElevatedButton(onPressed: (){
-         if(widget.categories == null){
           if(_formKey.currentState?.saveAndValidate() == true){
+         if(widget.categories == null){
             provider.insert(_formKey.currentState?.value);
+            _formKey.currentState?.reset();
             Navigator.pop(context);
-          }
-         }else{
+            
+          }else{
           if(_formKey.currentState?.saveAndValidate() == true){
             provider.update(widget.categories!.kategorijaId!,_formKey.currentState?.value);
             Navigator.pop(context);
           }
          }
-        }, child: Text("Dodaj")),
+         }
+        }, child: Text("Confirm"),style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.green,
+          foregroundColor: Colors.white
+        ),),
       ],
     ),);
   }

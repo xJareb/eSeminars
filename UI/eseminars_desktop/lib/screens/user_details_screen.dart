@@ -48,7 +48,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return MasterScreen('Detalji korisnika', Column(
+    return MasterScreen('User Details', Column(
       children: [
         _buildForm(),
         const SizedBox(height: 30,),
@@ -63,15 +63,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         const SizedBox(height: 20,),
         Row(
           children: [
-            Expanded(child: CustomFormBuilderTextField(name: "ime", label: "Ime", validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-              FormBuilderValidators.minLength(3,errorText: "Ovo polje mora sadržati minimalno tri karaktera"),
+            Expanded(child: CustomFormBuilderTextField(name: "ime", label: "Name", validators: [
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
             ],
             )),
             const SizedBox(width: 40,),
-            Expanded(child: CustomFormBuilderTextField(name: "prezime", label: "Prezime", validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-              FormBuilderValidators.minLength(3,errorText: "Ovo polje mora sadržati minimalno tri karaktera"),
+            Expanded(child: CustomFormBuilderTextField(name: "prezime", label: "Surname", validators: [
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
             ],))
           ],
         ),
@@ -79,12 +79,12 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         Row(
           children: [
             Expanded(child: CustomFormBuilderTextField(name: "email", label: "Email",validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-              FormBuilderValidators.email(errorText: "Unesite validan email")
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.email(errorText: "Please enter a valid email format.")
             ],)),
             const SizedBox(width: 40,),
-            Expanded(child: FormBuilderDateTimePicker(name: "datumRodjenja",decoration: InputDecoration(labelText: "Datum rođenja", 
-            border: OutlineInputBorder()),inputType: InputType.date,lastDate: DateTime.now(),validator: FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),))
+            Expanded(child: FormBuilderDateTimePicker(name: "datumRodjenja",decoration: InputDecoration(labelText: "Date of Birth", suffixIcon: Icon(Icons.date_range),
+            border: OutlineInputBorder()),inputType: InputType.date,lastDate: DateTime.now(),validator: FormBuilderValidators.required(errorText: "This field is required."),))
           ],
         ),
         const SizedBox(height: 20,),
@@ -94,14 +94,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       Expanded(
         child: CustomFormBuilderTextField(
           name: "lozinka",
-          label: "Lozinka",
+          label: "Password",
           obscureText: true,
           validators: [
             FormBuilderValidators.compose([
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-              FormBuilderValidators.minLength(7, errorText: "Ovo polje mora sadržati minimalno 7 karaktera"),
-              FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "Ovo polje mora sadržati numeričke karaktere"),
-              FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "Ovo polje mora sadržati veliko slovo")
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.minLength(7, errorText: "This field must contain at least 7 characters."),
+              FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "This field must contain numeric characters."),
+              FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "This field must contain an uppercase letter.")
             ]),
           ],
         ),
@@ -111,14 +111,14 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         child: CustomFormBuilderTextField(
           name: "lozinkaPotvrda",
           obscureText: true,
-          label: "Potvrdi lozinku",
+          label: "Confirm Password",
           validators: [
             (val) {
               final lozinka = _formKey.currentState?.fields['lozinka']?.value;
               if (val == null || val.isEmpty) {
-                return "Ovo polje je obavezno";
+                return "This field is required.";
               } else if (val != lozinka) {
-                return "Lozinke se ne poklapaju";
+                return "Passwords do not match.";
               }
               return null;
             }
@@ -142,26 +142,33 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         children: [
           ElevatedButton(onPressed: () async{
             Navigator.pop(context);
-          }, child: Text("Poništi")),
+          }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white
+          )),
           const SizedBox(width: 10,),
           ElevatedButton(onPressed: (){
              if (_formKey.currentState?.saveAndValidate() ?? false) {
-                final formValues = Map<String, dynamic>.from(_formKey.currentState?.value ?? {});
+              final formValues = Map<String, dynamic>.from(_formKey.currentState?.value ?? {});
 
              if (formValues != null) {
              formValues['datumRodjenja'] = formValues['datumRodjenja']?.toIso8601String();
              }
-            if(widget.user == null){
+             if(widget.user == null){
               userProdiver.insert(formValues);
+              _formKey.currentState?.reset();
               Navigator.pop(context);
             }else{
               var korisnikId = widget.user!.korisnikId;
               userProdiver.update(korisnikId!,formValues);
+               _formKey.currentState?.reset();
+              Navigator.pop(context);
             }
-          } else {
-            print('Forma nije validna');
           }
-          }, child: Text("Potvrdi"))
+          }, child: Text("Confirm"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white
+          ))
         ],
       ),
     );

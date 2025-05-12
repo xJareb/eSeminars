@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/models/notifications.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/notifications_provider.dart';
 import 'package:eseminars_desktop/screens/notifications_details_screen.dart';
+import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -59,7 +60,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
         Expanded(flex:1,child: Row(
           children: [
             Expanded(child: TextField(decoration: InputDecoration(
-            labelText: "Pretraži obavijest",
+            labelText: "Search notification",
             labelStyle: TextStyle(fontSize: 15),
             border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(30)),
@@ -70,7 +71,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
             ElevatedButton(onPressed: () async{
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsDetailsScreen()));
               await _loadData();
-            }, child: Text("Dodaj",style: TextStyle(fontSize: 15)))
+            }, child: Text("Add",style: TextStyle(fontSize: 15)))
           ],
         ))
       ],
@@ -85,9 +86,9 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
     DataTable(
       showCheckboxColumn: false,
       columns: [
-      DataColumn(label: Text("Naslov")),
-      DataColumn(label: Text("Sadržaj")),
-      DataColumn(label: Text("Datum objave")),
+      DataColumn(label: Text("Title")),
+      DataColumn(label: Text("Content")),
+      DataColumn(label: Text("Publication date")),
       DataColumn(label: Text("")),
     ], 
     rows: result?.result.map((e)=>
@@ -99,8 +100,9 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
     },cells: [
       DataCell(Text(e.naslov ?? "")),
       DataCell(Text(e.sadrzaj ?? "")),
-      DataCell(Text(e.datumObavijesti ?? "")),
-      DataCell(ElevatedButton(child: Text("Obriši"),onPressed: () async{
+      DataCell(Text('${e.datumObavijesti!.substring(0,e.datumObavijesti!.indexOf("T"))} ${e.datumObavijesti!.
+      substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
+      DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
         await provider.softDelete(e.obavijestId!);
         await _loadData();
       },))
@@ -109,38 +111,17 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
     )
     );
   }
-  Widget _buildPaging(){
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildPreviousPage(),
-          SizedBox(width: 10),
-          Text((_selectedIndex+1).toString(),style: TextStyle(fontSize: 16),),
-          SizedBox(width: 10),
-          _buildNextPage(),
-        ],
-      ),
-    );
+  Widget _buildPaging() {
+  return PaginationControls(
+    currentPage: _selectedIndex,
+    totalItems: result?.count ?? 0,
+    pageSize: pageSize,
+    onPageChanged: (newPage) async {
+      setState(() {
+        _selectedIndex = newPage;
+      });
+      await _loadData();
+    },
+  );
   }
-
-   Widget _buildPreviousPage(){
-    return ElevatedButton(onPressed: _selectedIndex > 0 ? () async{
-            setState(() {
-              _selectedIndex--;
-            });
-            await _loadData();
-          } : null, child: Icon(Icons.navigate_before));
-  }
-  Widget _buildNextPage(){
-    int totalItems = result?.count ?? 0;
-    int totalPages = (totalItems / pageSize).ceil();
-    return ElevatedButton(onPressed: (_selectedIndex + 1) <  totalPages ? () async{
-            setState(() {
-              _selectedIndex ++;
-            });
-            await _loadData();
-          }:null, child: Icon(Icons.navigate_next));
-  }
-  
 }

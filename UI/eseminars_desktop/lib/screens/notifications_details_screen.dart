@@ -52,12 +52,12 @@ class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen>
         children: [
           Row(
             children: [
-              Expanded(child: CustomFormBuilderTextField(name: 'naslov', label: "Naslov",validators: [
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+              Expanded(child: CustomFormBuilderTextField(name: 'naslov', label: "Title",validators: [
+                FormBuilderValidators.required(errorText: "This field is required.")
               ],)),
               const SizedBox(width: 40,),
-              Expanded(child: CustomFormBuilderTextField(name: 'sadrzaj', label: "Sadržaj",validators: [
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+              Expanded(child: CustomFormBuilderTextField(name: 'sadrzaj', label: "Content",validators: [
+                FormBuilderValidators.required(errorText: "This field is required.")
               ],))
             ],
           )
@@ -72,20 +72,29 @@ class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen>
         children: [
           ElevatedButton(onPressed: (){
             Navigator.pop(context);
-          }, child: Text("Poništi")),
+          }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white
+          ),),
           const SizedBox(width: 10,),
           ElevatedButton(onPressed: () async{
             if(_formKey.currentState?.saveAndValidate() == true){
               if(widget.notifications == null){
                 await provider.insert(_formKey.currentState?.value);
+                _formKey.currentState?.reset();
                 Navigator.pop(context);
               }
               else{
                 await provider.update(widget.notifications!.obavijestId!,_formKey.currentState?.value);
+                _formKey.currentState?.reset();
                 Navigator.pop(context);
               }
             }
-          }, child: Text("Dodaj"))
+          }, child: Text("Dodaj"), style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white
+          ),
+          )
         ],
       ),
     );

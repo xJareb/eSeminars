@@ -6,6 +6,7 @@ import 'package:eseminars_desktop/models/korisnik.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/screens/user_details_screen.dart';
+import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -38,7 +39,13 @@ class _UserListScreenState extends State<UserListScreen> {
       'PageSize': pageSize
     };
     result = await provider.get(filter: filter);
+    final items = result?.result ?? [];
 
+    if(items.isEmpty && _selectedIndex > 0){
+      _selectedIndex--;
+      filter['Page'] = _selectedIndex;
+      result = await provider.get(filter: filter);
+    }
      setState((){         
      });
   }
@@ -82,7 +89,7 @@ class _UserListScreenState extends State<UserListScreen> {
               },
               controller: _userController,
               decoration: InputDecoration(
-              labelText: "Pretraga korisnika",
+              labelText: "Search user",
               labelStyle: TextStyle(fontSize: 15),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(30)),
@@ -93,7 +100,7 @@ class _UserListScreenState extends State<UserListScreen> {
             ElevatedButton(onPressed: () async{
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen()));
               await _loadData();
-            }, child: Text("Dodaj",style: TextStyle(fontSize: 15),))
+            }, child: Text("Add",style: TextStyle(fontSize: 15),))
           ],
         ),
         )
@@ -110,10 +117,10 @@ class _UserListScreenState extends State<UserListScreen> {
       child: DataTable(
         showCheckboxColumn: false,
         columns: [
-        DataColumn(label: Text("Ime")),
-        DataColumn(label: Text("Prezime")),
+        DataColumn(label: Text("Name")),
+        DataColumn(label: Text("Surname")),
         DataColumn(label: Text("Email")),
-        DataColumn(label: Text("Datum rođenja")),
+        DataColumn(label: Text("Date of Birth")),
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) =>
           DataRow(
@@ -126,10 +133,13 @@ class _UserListScreenState extends State<UserListScreen> {
             DataCell(Text(e.ime ?? "")),
             DataCell(Text(e.prezime ?? "")),
             DataCell(Text(e.email ?? "")),
-            DataCell(Text(e.datumRodjenja ?? "")),
-            DataCell(ElevatedButton(child: Text("Obriši"),onPressed: () async{
+            DataCell(Text((e.datumRodjenja!).substring(0,(e.datumRodjenja!).indexOf("T")) ?? "")),
+            DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
               await provider.softDelete(e.korisnikId!);
               await _loadData();
+              setState(() {
+                
+              });
             },))
           ])
       ).toList().cast<DataRow>() ?? [],
@@ -137,37 +147,17 @@ class _UserListScreenState extends State<UserListScreen> {
     ),
   );
 }
-  Widget _buildPaging(){
-    return Center(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _buildPreviousPage(),
-          SizedBox(width: 10),
-          Text((_selectedIndex + 1).toString(),style: TextStyle(fontSize: 16),),
-          SizedBox(width: 10),
-          _buildNextPage(),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildPreviousPage(){
-    return ElevatedButton(onPressed: _selectedIndex > 0 ? () async{
-            setState(() {
-              _selectedIndex--;
-            });
-            await _loadData();
-          } : null, child: Icon(Icons.navigate_before));
-  }
-  Widget _buildNextPage(){
-    int totalItems = result?.count ?? 0;
-    int totalPages = (totalItems / pageSize).ceil();
-    return ElevatedButton(onPressed: (_selectedIndex + 1) <  totalPages ? () async{
-            setState(() {
-              _selectedIndex ++;
-            });
-            await _loadData();
-          }:null, child: Icon(Icons.navigate_next));
-  }
+  Widget _buildPaging() {
+  return PaginationControls(
+    currentPage: _selectedIndex,
+    totalItems: result?.count ?? 0,
+    pageSize: pageSize,
+    onPageChanged: (newPage) async {
+      setState(() {
+        _selectedIndex = newPage;
+      });
+      await _loadData();
+    },
+  );
+}
 }

@@ -60,29 +60,29 @@ class _SponsorsDetailsScreenState extends State<SponsorsDetailsScreen> {
       children: [
         Row(
           children: [
-            Expanded(child: CustomFormBuilderTextField(name: 'naziv', label: "Kompanija",validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+            Expanded(child: CustomFormBuilderTextField(name: 'naziv', label: "Company",validators: [
+              FormBuilderValidators.required(errorText: "This field is required.")
             ],)),
             const SizedBox(width: 40,),
             Expanded(child: CustomFormBuilderTextField(name: 'email', label: "Email",validators: [
               FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-                FormBuilderValidators.email(errorText: "Unesite validan format emaila")
+                FormBuilderValidators.required(errorText: "This field is required."),
+                FormBuilderValidators.email(errorText: "Please enter a valid email format.")
               ])
             ])),
           ],
         ),
         const SizedBox(height: 20,),
         Row(children: [
-            Expanded(child: CustomFormBuilderTextField(name: 'telefon', label: "Telefon",validators: [
+            Expanded(child: CustomFormBuilderTextField(name: 'telefon', label: "Phone number",validators: [
               FormBuilderValidators.compose([
-                FormBuilderValidators.required(errorText: "Ovo polje je obavezno"),
-                FormBuilderValidators.match(phoneExp,errorText: "Unesite ispravan format telefona")
+                FormBuilderValidators.required(errorText: "This field is required."),
+                FormBuilderValidators.match(phoneExp,errorText: "Please enter the correct phone format.")
               ])
             ],)),
             const SizedBox(width: 40,),
-            Expanded(child: CustomFormBuilderTextField(name: 'kontaktOsoba', label: "Kontakt osoba",validators: [
-              FormBuilderValidators.required(errorText: "Ovo polje je obavezno")
+            Expanded(child: CustomFormBuilderTextField(name: 'kontaktOsoba', label: "Representative person",validators: [
+              FormBuilderValidators.required(errorText: "This field is required.")
             ],)),
           ],)
       ],
@@ -95,19 +95,27 @@ class _SponsorsDetailsScreenState extends State<SponsorsDetailsScreen> {
         children: [
           ElevatedButton(onPressed: (){
             Navigator.pop(context);
-          }, child: Text("Poništi")),
+          }, child: Text("Cancel"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.red,
+            foregroundColor: Colors.white
+          ),),
           const SizedBox(width: 10,),
           ElevatedButton(onPressed: ()async{
             if(_formKey.currentState?.saveAndValidate() == true){
               if(widget.sponsors == null){
                 await provider.insert(_formKey.currentState?.value);
+                _formKey.currentState?.reset();
                 Navigator.pop(context);
               }else{
                 await provider.update(widget.sponsors!.sponzorId!,_formKey.currentState?.value);
+                _formKey.currentState?.reset();
                 Navigator.pop(context);
               }
             }
-          }, child: Text("Dodaj"))
+          }, child: Text("Confirm"),style: ElevatedButton.styleFrom(
+            backgroundColor: Colors.green,
+            foregroundColor: Colors.white
+          ),)
         ],
       ),
     );

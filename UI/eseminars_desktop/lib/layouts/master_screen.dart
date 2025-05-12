@@ -33,14 +33,14 @@ class _MasterScreenState extends State<MasterScreen> {
                   leading: Icon(Icons.person),
                   title: Text("Users"),
                   onTap: (){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserListScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.calendar_month),
                   title: Text("Reservations"),
                   onTap: (){
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ReservationListScreen()));
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReservationListScreen()));
                   } ,
                 ),
                 ListTile(

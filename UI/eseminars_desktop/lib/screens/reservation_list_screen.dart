@@ -101,14 +101,20 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
                 currentReservationState = reservationStates[1];
               });
               await _filterData("",state: currentReservationState);
-            }, child: Text("Approved")),
+            }, child: Text("Approved"),style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.green,
+              foregroundColor: Colors.white
+            ),),
             const SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
                setState(() {
                 currentReservationState = reservationStates[2];
               });
               await _filterData("",state: currentReservationState);
-            }, child: Text("Rejected"))
+            }, child: Text("Rejected"),style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white
+            ),)
           ],
         )),
         Expanded(flex: 1,child: 
@@ -133,9 +139,9 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     return Expanded(child: 
     SingleChildScrollView(child: DataTable(
       columns: [
-        DataColumn(label: Text("Ime")),
-        DataColumn(label: Text("Prezime")),
-        DataColumn(label: Text("Datum")),
+        DataColumn(label: Text("Name")),
+        DataColumn(label: Text("Surname")),
+        DataColumn(label: Text("Date")),
         if(currentReservationState == reservationStates[0]) ...[
           DataColumn(label: Text(""))
         ]
@@ -144,7 +150,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       DataRow(cells: [
         DataCell(Text(e.korisnik?.ime ?? "")),
         DataCell(Text(e.korisnik?.prezime ?? "")),
-        DataCell(Text(e.datumRezervacije ?? "")),
+        DataCell(Text(e.datumRezervacije!.substring(0,(e.datumRezervacije!.indexOf("T"))) ?? "")),
         if(currentReservationState == reservationStates[0]) ... [
         DataCell(Row(children: [
           IconButton(onPressed: () async{
