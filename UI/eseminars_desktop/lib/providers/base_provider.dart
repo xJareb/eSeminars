@@ -116,15 +116,19 @@ abstract class BaseProvider<T> with ChangeNotifier {
   }
 
   bool isValidResponse(Response response) {
-    if (response.statusCode < 299) {
-      return true;
-    } else if (response.statusCode == 401) {
-      throw new Exception("Unauthorized");
-    } else {
-      print(response.body);
-      throw new Exception("Something bad happened please try again");
+  if (response.statusCode < 299) {
+    return true;
+  } else if (response.statusCode == 401) {
+    throw Exception("Unauthorized");
+  } else {
+    var responseBody = jsonDecode(response.body);
+    if (responseBody['errors'] != null && responseBody['errors']['userError'] != null) {
+      throw Exception(responseBody['errors']['userError'].join(', '));
     }
+    print(response.body);
+    throw Exception("Something bad happened, please try again");
   }
+}
 
   Map<String, String> createHeaders() {
     String email = AuthProvider.email ?? "";

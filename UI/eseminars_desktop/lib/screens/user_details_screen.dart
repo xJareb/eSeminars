@@ -5,6 +5,7 @@ import 'package:eseminars_desktop/main.dart';
 import 'package:eseminars_desktop/models/korisnik.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -147,22 +148,32 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             foregroundColor: Colors.white
           )),
           const SizedBox(width: 10,),
-          ElevatedButton(onPressed: (){
-             if (_formKey.currentState?.saveAndValidate() ?? false) {
+          ElevatedButton(onPressed: () async{
+              if (_formKey.currentState?.saveAndValidate() ?? false) {
               final formValues = Map<String, dynamic>.from(_formKey.currentState?.value ?? {});
 
              if (formValues != null) {
              formValues['datumRodjenja'] = formValues['datumRodjenja']?.toIso8601String();
              }
              if(widget.user == null){
-              userProdiver.insert(formValues);
-              _formKey.currentState?.reset();
-              Navigator.pop(context);
+              try {
+                await userProdiver.insert(formValues);
+                showSuccessMessage(context,"User successfully added");
+                _formKey.currentState?.reset();
+              Navigator.pop(context,true);
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
             }else{
+              try {
               var korisnikId = widget.user!.korisnikId;
-              userProdiver.update(korisnikId!,formValues);
+              await userProdiver.update(korisnikId!,formValues);
+              showSuccessMessage(context,"User successfully edited");
                _formKey.currentState?.reset();
-              Navigator.pop(context);
+              Navigator.pop(context,true);
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
             }
           }
           }, child: Text("Confirm"),style: ElevatedButton.styleFrom(

@@ -2,6 +2,7 @@ import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/models/notifications.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/notifications_provider.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -80,14 +81,25 @@ class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen>
           ElevatedButton(onPressed: () async{
             if(_formKey.currentState?.saveAndValidate() == true){
               if(widget.notifications == null){
-                await provider.insert(_formKey.currentState?.value);
-                _formKey.currentState?.reset();
-                Navigator.pop(context);
+                try {
+                  await provider.insert(_formKey.currentState?.value);
+                  _formKey.currentState?.reset();
+                  showSuccessMessage(context, "Notification successfully addded");
+                  Navigator.pop(context,true);
+                } catch (e) {
+                  showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                }
               }
               else{
-                await provider.update(widget.notifications!.obavijestId!,_formKey.currentState?.value);
+                try {
+                  await provider.update(widget.notifications!.obavijestId!,_formKey.currentState?.value);
                 _formKey.currentState?.reset();
-                Navigator.pop(context);
+                showSuccessMessage(context, "Notification successfully edited");
+                Navigator.pop(context,true);
+                } catch (e) {
+                  showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                }
+                
               }
             }
           }, child: Text("Dodaj"), style: ElevatedButton.styleFrom(

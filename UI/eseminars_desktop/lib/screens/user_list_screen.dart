@@ -6,6 +6,7 @@ import 'package:eseminars_desktop/models/korisnik.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/screens/user_details_screen.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -98,8 +99,11 @@ class _UserListScreenState extends State<UserListScreen> {
                 ),
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen()));
-              await _loadData();
+              final result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen()));
+              if(result == true){
+                await _loadData();
+              }
+              
             }, child: Text("Add",style: TextStyle(fontSize: 15),))
           ],
         ),
@@ -135,11 +139,17 @@ class _UserListScreenState extends State<UserListScreen> {
             DataCell(Text(e.email ?? "")),
             DataCell(Text((e.datumRodjenja!).substring(0,(e.datumRodjenja!).indexOf("T")) ?? "")),
             DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-              await provider.softDelete(e.korisnikId!);
+              await buildAlertDiagram(context: context, onConfirmDelete: () async{
+              try{
+                await provider.softDelete(e.korisnikId!);
+                showSuccessMessage(context, "Record successfully removed");
+              } on Exception catch(e){
+                showErrorMessage(context,e.toString());
+              }
+              }
+              );
               await _loadData();
-              setState(() {
-                
-              });
+              setState(() {});
             },))
           ])
       ).toList().cast<DataRow>() ?? [],

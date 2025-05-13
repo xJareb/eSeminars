@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/models/sponsors.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
 import 'package:eseminars_desktop/screens/sponsors_details_screen.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -38,6 +39,13 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
       'PageSize': pageSize
     };
     result = await provider.get(filter: filter);
+    final items = result?.result ?? [];
+
+    if(items.isEmpty && _selectedIndex > 0){
+      _selectedIndex--;
+      filter['Page'] = _selectedIndex;
+      result = await provider.get(filter: filter);
+    }
 
      setState((){         
      });
@@ -86,8 +94,10 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
             ),
             const SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen()));
-              await _loadData();
+              var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen()));
+              if(result == true){
+                await _loadData();
+              }
             }, child: Text("Add"))
           ],
         ))
@@ -114,8 +124,16 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
             DataCell(Text(e.telefon ?? "")),
             DataCell(Text(e.kontaktOsoba ?? "")),
             DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-              await provider.softDelete(e.sponzorId!);
+              await buildAlertDiagram(context: context, onConfirmDelete: () async{
+                try {
+                  await provider.softDelete(e.sponzorId!);
+                } catch (e) {
+                  showErrorMessage(context, e.toString());
+                }
+              });
               await _loadData();
+              setState(() {
+              });
             },))
           ])
       ).toList().cast<DataRow>() ?? []

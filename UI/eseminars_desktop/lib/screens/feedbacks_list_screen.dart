@@ -7,6 +7,7 @@ import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/models/seminars.dart';
 import 'package:eseminars_desktop/providers/feedbacks_provider.dart';
 import 'package:eseminars_desktop/providers/seminars_provider.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -117,6 +118,9 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
       DataCell(Text(e.korisnik?.ime ?? "")),
       DataCell(buildStars(e.ocjena ?? 0)),
       DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
+        await buildAlertDiagram(context: context, onConfirmDelete: () async{
+
+        });
       },
       )
       ),

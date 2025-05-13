@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
@@ -39,7 +40,7 @@ namespace eSeminars.Services.Sponzori
             var checkDuplicates = Context.Sponzoris.FirstOrDefault(s => s.Email == request.Email);
             if (checkDuplicates != null)
             {
-                throw new Exception($"Sponsor with ${checkDuplicates.Email} already exists");
+                throw new UserException($"Sponsor with {checkDuplicates.Email} already exists");
             }
             base.BeforeInsert(request, entity);
         }
