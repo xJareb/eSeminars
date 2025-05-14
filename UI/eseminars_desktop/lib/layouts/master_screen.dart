@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/screens/feedbacks_list_screen.dart';
 import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
 import 'package:eseminars_desktop/screens/notifications_list_screen.dart';
 import 'package:eseminars_desktop/screens/reservation_list_screen.dart';
+import 'package:eseminars_desktop/screens/seminars_list_screen.dart';
 import 'package:eseminars_desktop/screens/sponsors_list_screen.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
@@ -42,6 +43,13 @@ class _MasterScreenState extends State<MasterScreen> {
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReservationListScreen()));
                   } ,
+                ),
+                ListTile(
+                  leading: Icon(Icons.cast_for_education),
+                  title: Text("Seminars"),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SeminarsListScreen()));
+                  },
                 ),
                 ListTile(
                   leading: Icon(Icons.person_pin),

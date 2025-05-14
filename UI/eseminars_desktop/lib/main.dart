@@ -9,6 +9,7 @@ import 'package:eseminars_desktop/providers/notifications_provider.dart';
 import 'package:eseminars_desktop/providers/reservations_provider.dart';
 import 'package:eseminars_desktop/providers/seminars_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
+import 'package:eseminars_desktop/providers/sponsors_seminars_provider.dart';
 import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -24,7 +25,8 @@ void main() {
     ChangeNotifierProvider<SponsorsProvider>(create: (_) => SponsorsProvider()),
     ChangeNotifierProvider<FeedbacksProvider>(create: (_) => FeedbacksProvider()),
     ChangeNotifierProvider<SeminarsProvider>(create: (_) => SeminarsProvider()),
-    ChangeNotifierProvider<ReservationsProvider>(create: (_) => ReservationsProvider())
+    ChangeNotifierProvider<ReservationsProvider>(create: (_) => ReservationsProvider()),
+    ChangeNotifierProvider<SponsorsSeminarsProvider>(create: (_) => SponsorsSeminarsProvider())
   ], 
   child: const MyApp(), ));
 }

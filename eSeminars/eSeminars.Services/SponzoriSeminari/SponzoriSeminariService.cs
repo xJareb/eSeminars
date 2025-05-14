@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
@@ -22,7 +23,7 @@ namespace eSeminars.Services.SponzoriSeminari
                 .Where(ss => ss.SponzorId == request.SponzorId && ss.SeminarId == request.SeminarId).FirstOrDefault();
             if (checkDuplicates != null)
             {
-                throw new Exception("Record already exists in the database");
+                throw new UserException("Sponsor already exists in seminar.");
             }
 
             base.BeforeInsert(request, entity);

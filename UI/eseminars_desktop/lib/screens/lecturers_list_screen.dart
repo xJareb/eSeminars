@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/models/lecturers.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/screens/lecturers_details_screen.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +44,6 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
       filter['Page'] = _selectedIndex;
       result = await provider.get(filter: filter);
     }
-
 
      setState((){         
      });
@@ -108,8 +108,11 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
             )),
             const SizedBox(width: 15,),
             ElevatedButton(onPressed: () async{
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen()));
-              await _loadData();
+              var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen()));
+              if(result == true){
+                await _loadData();
+              }
+              
             }, child: Text("Add",style: TextStyle(fontSize: 15),))
           ],
         ))
@@ -144,11 +147,19 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
                 DataCell(Text(e.ime ?? "")),
                 DataCell(Text(e.prezime ?? "")),
                 DataCell(Text('${e.biografija!.substring(0,17 > e.biografija!.length ? e.biografija!.length : 17)}...' ?? "")),
-                DataCell(Container(width: 120,child: Text(e.email ?? "",),)),
+                DataCell(Container(width: 100,child: Text(e.email ?? "",),)),
                 DataCell(Text('${e.telefon}' ?? "")),
                 DataCell(ElevatedButton(onPressed: () async{
-                  await provider.softDelete(e.predavacId!);
+                  await buildAlertDiagram(context: context, onConfirmDelete: () async{
+                    try {
+                    await provider.softDelete(e.predavacId!);
+                    showSuccessMessage(context, "Lecturer successfully removed");
+                    } catch (e) {
+                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                    }
+                  });
                   await _loadData();
+                  setState(() {});
                 },child: Text("Remove"),))
               ]
               )

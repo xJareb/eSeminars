@@ -2,6 +2,7 @@ import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/main.dart';
 import 'package:eseminars_desktop/models/lecturers.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -122,16 +123,26 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
             foregroundColor: Colors.white
           ),),
           const SizedBox(width: 10,),
-          ElevatedButton(onPressed: (){
+          ElevatedButton(onPressed: () async{
             if(_formKey.currentState?.saveAndValidate() == true){
             if(widget.lecturers != null){
-              provider.update(widget.lecturers!.predavacId!,_formKey.currentState?.value);
+              try {
+              await provider.update(widget.lecturers!.predavacId!,_formKey.currentState?.value);
               _formKey.currentState?.reset();
-              Navigator.pop(context);
+              showSuccessMessage(context, "Lecturer successfully edited");
+              Navigator.pop(context,true);
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
               }else{
-              provider.insert(_formKey.currentState?.value);
+              try {
+              await provider.insert(_formKey.currentState?.value);
               _formKey.currentState?.reset();
-              Navigator.pop(context);
+              showSuccessMessage(context, "Lecturer successfully added");
+              Navigator.pop(context,true);
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
             }
             }
           }, child: Text("Confirm"),style: ElevatedButton.styleFrom(

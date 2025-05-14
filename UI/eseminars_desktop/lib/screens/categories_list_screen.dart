@@ -3,6 +3,7 @@ import 'package:eseminars_desktop/models/categories.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/providers/categories_provider.dart';
 import 'package:eseminars_desktop/screens/categories_details_screen.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -112,15 +113,25 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
           DataColumn(label: Text(""))
         ], rows: result?.result.map((e) => DataRow(onSelectChanged: (selected) async{
           if(selected == true){
-            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
-            await _loadData();
+            var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
+            if(result == true){
+              await _loadData();
+            }
           }
         },cells: [
           DataCell(Text(e.naziv ?? "")),
           DataCell(Text(e.opis ?? "")),
           DataCell(ElevatedButton(onPressed: () async{
-            await provider.softDelete(e.kategorijaId!);
+            await buildAlertDiagram(context: context, onConfirmDelete: () async{
+              try {
+                await provider.softDelete(e.kategorijaId!);
+                showSuccessMessage(context, "Category successfully removed");
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
+            });
             await _loadData();
+            setState(() {});
           },child: Text("Remove"),))
         ])).toList().cast<DataRow>() ?? []
         ),

@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/models/categories.dart';
 import 'package:eseminars_desktop/providers/categories_provider.dart';
+import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -81,18 +82,27 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
           foregroundColor: Colors.white
         ),),
         const SizedBox(width: 10,),
-        ElevatedButton(onPressed: (){
+        ElevatedButton(onPressed: () async{
           if(_formKey.currentState?.saveAndValidate() == true){
          if(widget.categories == null){
-            provider.insert(_formKey.currentState?.value);
+            try {
+            await provider.insert(_formKey.currentState?.value);
             _formKey.currentState?.reset();
-            Navigator.pop(context);
+            showSuccessMessage(context, "Category successfully added");
+            Navigator.pop(context,true);
+            } catch (e) {
+            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+            }
             
           }else{
-          if(_formKey.currentState?.saveAndValidate() == true){
-            provider.update(widget.categories!.kategorijaId!,_formKey.currentState?.value);
-            Navigator.pop(context);
-          }
+            try {
+            await provider.update(widget.categories!.kategorijaId!,_formKey.currentState?.value);
+            _formKey.currentState?.reset();
+            showSuccessMessage(context, "Category successfully edited");
+            Navigator.pop(context,true);
+            } catch (e) {
+              showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+            }
          }
          }
         }, child: Text("Confirm"),style: ElevatedButton.styleFrom(
