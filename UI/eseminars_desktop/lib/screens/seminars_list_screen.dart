@@ -7,7 +7,9 @@ import 'package:eseminars_desktop/models/sponsorsSeminars.dart';
 import 'package:eseminars_desktop/providers/seminars_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_seminars_provider.dart';
+import 'package:eseminars_desktop/screens/seminars_details_screen.dart';
 import 'package:eseminars_desktop/utils/custom_dialogs.dart';
+import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
@@ -22,6 +24,7 @@ class SeminarsListScreen extends StatefulWidget {
 
 class _SeminarsListScreenState extends State<SeminarsListScreen> {
 
+  SearchResult<Seminars>? result = null;
   final _formKey = GlobalKey<FormBuilderState>();
   late SponsorsProvider sponsorsProvider;
   late SeminarsProvider seminarsProvider;
@@ -29,6 +32,8 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   SearchResult<Sponsors>? typeOfSponsorsResult;
   late SponsorsSeminarsProvider sponsorsSeminarsProvider;
   bool isLoading = true;
+  int _selectedIndex = 0;
+  int pageSize = 4;
 
   @override
   void didChangeDependencies() {
@@ -40,8 +45,10 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     sponsorsSeminarsProvider = context.read<SponsorsSeminarsProvider>();
 
     WidgetsBinding.instance.addPostFrameCallback((_){
-    initForm(); 
+    initForm();
     });
+
+    _loadData();
   }
   Future<void> initForm() async{
     typeOfSeminarsResult = await seminarsProvider.get();
@@ -52,12 +59,31 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
       isLoading = false;
     });
   }
+  Future<void> _loadData() async{
+    var filter = {
+      'Page' : _selectedIndex,
+      'PageSize': pageSize
+    };
+    result = await seminarsProvider.get(filter: filter);
+    final items = result?.result ?? [];
+
+    if(items.isEmpty && _selectedIndex > 0){
+      _selectedIndex--;
+      filter['Page'] = _selectedIndex;
+      result = await seminarsProvider.get(filter: filter);
+    }
+
+     setState((){         
+     });
+  }
 
   @override
   Widget build(BuildContext context) {
     return MasterScreen('Seminars', Column(children: [
       _buildFilter(),
-      const SizedBox(height: 55,)
+      const SizedBox(height: 55,),
+      _buildForm(),
+      _buildPaging()
     ],));
   }
 
@@ -76,7 +102,9 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               isLoading ? Container() : showCustomDialog(context);
             }, child: Text("Sponsor")),
             const SizedBox(width: 10,),
-            ElevatedButton(onPressed: (){}, child: Text("Add")),
+            ElevatedButton(onPressed: () async{
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen()));
+            }, child: Text("Add")),
           ],
         ))
       ],
@@ -146,4 +174,41 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
       ],
     );
   }
+  Widget _buildForm(){
+    return Expanded(child: 
+    SingleChildScrollView(
+    scrollDirection: Axis.vertical,
+    child: 
+    DataTable(columns: [
+      DataColumn(label: Text("Seminar")),
+      DataColumn(label: Text("Date")),
+      DataColumn(label: Text("Location")),
+      DataColumn(label: Text("Capacity")),
+      DataColumn(label: Text("Category")),
+      DataColumn(label: Text(""))
+    ], rows: result?.result.map((e) =>
+        DataRow(cells: [
+        DataCell(Text(e.naslov ?? "")),
+        DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
+        DataCell(Text(e.lokacija ?? "")),
+        DataCell(Text(e.kapacitet.toString() ?? "")),
+        DataCell(Text(e.kategorija!.naziv ?? "")),
+        DataCell(ElevatedButton(child: Text("Report"),onPressed: (){}))
+    ])
+    ).toList().cast<DataRow>() ?? [])
+    ,));
+  }
+  Widget _buildPaging() {
+  return PaginationControls(
+    currentPage: _selectedIndex,
+    totalItems: result?.count ?? 0,
+    pageSize: pageSize,
+    onPageChanged: (newPage) async {
+      setState(() {
+        _selectedIndex = newPage;
+      });
+      await _loadData();
+    },
+  );
+}
 }

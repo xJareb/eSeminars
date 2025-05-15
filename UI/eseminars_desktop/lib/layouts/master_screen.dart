@@ -89,23 +89,26 @@ class _MasterScreenState extends State<MasterScreen> {
             ),
           )),
           Expanded(flex:4,child: Center(
-              child: Container(
-                constraints: BoxConstraints(maxHeight: 600,maxWidth: 900),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow:[
-                   BoxShadow(
-                    color: Colors.black12,
-                    blurRadius: 16,
-                    spreadRadius: 4
-                  )
-                ]
+            child: FractionallySizedBox(
+              widthFactor: 0.9,
+              heightFactor: 0.9,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow:[
+                     BoxShadow(
+                      color: Colors.black12,
+                      blurRadius: 16,
+                      spreadRadius: 4
+                    )
+                  ]
+                  ),
+                  padding: EdgeInsets.all(32),
+                  child: widget.child,
                 ),
-                padding: EdgeInsets.all(32),
-                child: widget.child,
-              ),
-              
+                
+            ),
           )
           )
         ],
