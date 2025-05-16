@@ -110,7 +110,47 @@ abstract class BaseProvider<T> with ChangeNotifier {
     throw Exception("Failed to reject reservation");
   }
   }
+  Future<List<String>> allowedActions(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/allowedActions");
+    final headers = createHeaders();
 
+    final response = await http.get(url,headers: headers);
+    if(!isValidResponse(response)){
+      throw Exception("Failed to load allowedActions");
+    }
+     final List<dynamic> decoded = jsonDecode(response.body);
+      return decoded.map((e) => e.toString()).toList();
+  }
+  Future<void> activateSeminar(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/activate");
+    final headers = createHeaders();
+
+    final response = await http.put(url,headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to activate seminar");
+  }
+  }
+  Future<void> hideSeminar(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/hide");
+    final headers = createHeaders();
+
+    final response = await http.put(url,headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to hide seminar");
+  }
+  }
+  Future<void> editSeminar(int id) async{
+    final url = Uri.parse("$_baseUrl$_endpoint/$id/edit");
+    final headers = createHeaders();
+
+    final response = await http.put(url,headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to edit seminar");
+  }
+  }
   T fromJson(data) {
     throw Exception("Method not implemented");
   }

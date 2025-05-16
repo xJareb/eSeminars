@@ -11,7 +11,6 @@ namespace eSeminars.Model.Requests
         public DateTime DatumVrijeme { get; set; }
         public string Lokacija { get; set; }
         public int Kapacitet { get; set; }
-        public int KorisnikId { get; set; }
         public int PredavacId { get; set; }
         public int KategorijaId { get; set; }
     }
