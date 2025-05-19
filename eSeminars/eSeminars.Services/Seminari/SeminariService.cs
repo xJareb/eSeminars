@@ -37,7 +37,9 @@ namespace eSeminars.Services.Seminari
 
                 filteredQuerry = filteredQuerry.Include(s => s.Korisnik)
                     .Include(s => s.Predavac)
-                    .Include(s => s.Kategorija);
+                    .Include(s => s.Kategorija)
+                    .Include(s=>s.SponzoriSeminaris).ThenInclude(s=>s.Sponzor)
+                    .Include(s=>s.Dojmovis).ThenInclude(s=>s.Korisnik);
 
                 if (!string.IsNullOrWhiteSpace(search?.NaslovGTE))
                 {

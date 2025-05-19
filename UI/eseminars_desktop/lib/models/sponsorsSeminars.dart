@@ -1,3 +1,4 @@
+import 'package:eseminars_desktop/models/sponsors.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'sponsorsSeminars.g.dart';
@@ -7,8 +8,9 @@ class Sponsorsseminars {
   int? sponzoriSeminariId;
   int? seminarId;
   int? sponzorId;
+  Sponsors? sponzor;
 
-  Sponsorsseminars({this.sponzoriSeminariId,this.seminarId,this.sponzorId});
+  Sponsorsseminars({this.sponzoriSeminariId,this.seminarId,this.sponzorId,this.sponzor});
 
   factory Sponsorsseminars.fromJson(Map<String, dynamic> json) => _$SponsorsseminarsFromJson(json);
 

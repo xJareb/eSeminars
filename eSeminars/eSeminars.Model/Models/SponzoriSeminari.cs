@@ -9,5 +9,6 @@ namespace eSeminars.Model.Models
         public int SponzoriSeminariId { get; set; }
         public int? SeminarId { get; set; }
         public int? SponzorId { get; set; }
+        public virtual Sponzori? Sponzor { get; set; }
     }
 }

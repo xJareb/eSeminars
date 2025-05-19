@@ -16,6 +16,8 @@ namespace eSeminars.Model.Models
         public virtual Korisnici? Korisnik { get; set; }
         public virtual Predavaci? Predavac { get; set; }
         public virtual Kategorije? Kategorija { get; set; }
-        
+        public virtual ICollection<Dojmovi> Dojmovis { get; set; }
+        public virtual ICollection<SponzoriSeminari> SponzoriSeminaris { get; set; }
+
     }
 }

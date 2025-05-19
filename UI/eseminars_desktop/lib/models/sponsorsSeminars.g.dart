@@ -11,6 +11,9 @@ Sponsorsseminars _$SponsorsseminarsFromJson(Map<String, dynamic> json) =>
       sponzoriSeminariId: (json['sponzoriSeminariId'] as num?)?.toInt(),
       seminarId: (json['seminarId'] as num?)?.toInt(),
       sponzorId: (json['sponzorId'] as num?)?.toInt(),
+      sponzor: json['sponzor'] == null
+          ? null
+          : Sponsors.fromJson(json['sponzor'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$SponsorsseminarsToJson(Sponsorsseminars instance) =>
@@ -18,4 +21,5 @@ Map<String, dynamic> _$SponsorsseminarsToJson(Sponsorsseminars instance) =>
       'sponzoriSeminariId': instance.sponzoriSeminariId,
       'seminarId': instance.seminarId,
       'sponzorId': instance.sponzorId,
+      'sponzor': instance.sponzor,
     };

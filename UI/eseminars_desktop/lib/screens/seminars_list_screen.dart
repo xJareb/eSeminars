@@ -16,6 +16,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
+import 'package:pdf/widgets.dart' as pw;
+import 'package:printing/printing.dart';
+import 'package:pdf/pdf.dart';
 
 class SeminarsListScreen extends StatefulWidget {
   SeminarsListScreen({super.key});
@@ -289,7 +292,9 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               );
             }
           ),
-          ElevatedButton(onPressed: (){}, child: Text("Report"))
+          ElevatedButton(onPressed: (){
+            generatePdfReport(e);
+          }, child: Text("Report"))
         ],))
     ])
     ).toList().cast<DataRow>() ?? [])
@@ -308,4 +313,112 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     },
   );
 }
+void generatePdfReport(dynamic report) async {
+  final pdf = pw.Document();
+
+  // Funkcija za sigurno dohvaćanje datuma i vremena u željenom formatu
+  String formatDateTime(String? datetime) {
+    if (datetime == null || !datetime.contains('T')) return '';
+    try {
+      final date = datetime.substring(0, datetime.indexOf("T"));
+      final time = datetime.substring(datetime.indexOf("T") + 1, datetime.indexOf(":") + 3);
+      return "$date $time";
+    } catch (e) {
+      return '';
+    }
+  }
+
+  pdf.addPage(
+    pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      build: (context) {
+        return pw.Padding(
+          padding: const pw.EdgeInsets.all(20),
+          child: pw.Column(
+            crossAxisAlignment: pw.CrossAxisAlignment.start,
+            children: [
+              pw.Center(
+                child: pw.Text(
+                  report.naslov ?? '',
+                  style: pw.TextStyle(fontSize: 28, fontWeight: pw.FontWeight.bold),
+                ),
+              ),
+              pw.SizedBox(height: 20),
+
+              pw.Center(
+                child: pw.Text(
+                  report.opis ?? '',
+                  style: pw.TextStyle(fontSize: 18, fontStyle: pw.FontStyle.italic),
+                ),
+              ),
+              pw.SizedBox(height: 20),
+
+              pw.Text('Date & Time: ${formatDateTime(report.datumVrijeme)}', style: pw.TextStyle(fontSize: 14)),
+              pw.SizedBox(height: 5),
+              pw.Text('Location: ${report.lokacija ?? '-'}', style: pw.TextStyle(fontSize: 14)),
+              pw.SizedBox(height: 5),
+              pw.Text('Capacity: ${report.kapacitet ?? '-'}', style: pw.TextStyle(fontSize: 14)),
+              pw.SizedBox(height: 5),
+              pw.Text(
+                'Lecturer: ${report.predavac?.ime ?? '-'} ${report.predavac?.prezime ?? ''}',
+                style: pw.TextStyle(fontSize: 14),
+              ),
+              pw.SizedBox(height: 5),
+              pw.Text(
+                'Organizer: ${report.korisnik?.ime ?? '-'} ${report.korisnik?.prezime ?? ''}',
+                style: pw.TextStyle(fontSize: 14),
+              ),
+              pw.SizedBox(height: 5),
+              pw.Text('Category: ${report.kategorija?.naziv ?? '-'}', style: pw.TextStyle(fontSize: 14)),
+              pw.SizedBox(height: 20),
+
+              pw.Text('Feedbacks:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 8),
+              if (report.dojmovis != null && report.dojmovis.isNotEmpty)
+                pw.Table.fromTextArray(
+                  headers: ['User', 'Rating'],
+                  data: report.dojmovis
+                      .map<List<String>>(
+                        (d) => [
+                          '${d.korisnik?.ime ?? ''} ${d.korisnik?.prezime ?? ''}'.trim(),
+                          '${d.ocjena ?? ''}'
+                        ],
+                      )
+                      .toList(),
+                  headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: PdfColors.white),
+                  headerDecoration: const pw.BoxDecoration(color: PdfColors.blue),
+                  cellPadding: const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                  cellAlignment: pw.Alignment.centerLeft,
+                )
+              else
+                pw.Text('No feedbacks', style: pw.TextStyle(fontSize: 14, fontStyle: pw.FontStyle.italic)),
+              pw.SizedBox(height: 20),
+
+              pw.Text('Sponsors:', style: pw.TextStyle(fontSize: 16, fontWeight: pw.FontWeight.bold)),
+              pw.SizedBox(height: 8),
+              if (report.sponzoriSeminaris != null && report.sponzoriSeminaris.isNotEmpty)
+                pw.Table.fromTextArray(
+                  headers: ['Sponsor Name'],
+                  data: report.sponzoriSeminaris
+                      .map<List<String>>(
+                        (s) => ['${s.sponzor?.naziv ?? ''}'],
+                      )
+                      .toList(),
+                  headerStyle: pw.TextStyle(fontWeight: pw.FontWeight.bold, color: PdfColors.white),
+                  headerDecoration: const pw.BoxDecoration(color: PdfColors.green),
+                  cellPadding: const pw.EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                )
+              else
+                pw.Text('No sponsors', style: pw.TextStyle(fontSize: 14, fontStyle: pw.FontStyle.italic)),
+            ],
+          ),
+        );
+      },
+    ),
+  );
+
+  await Printing.layoutPdf(onLayout: (format) async => pdf.save());
 }
+}
+
+

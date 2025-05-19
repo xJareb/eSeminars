@@ -23,6 +23,12 @@ Seminars _$SeminarsFromJson(Map<String, dynamic> json) => Seminars(
       kategorija: json['kategorija'] == null
           ? null
           : Categories.fromJson(json['kategorija'] as Map<String, dynamic>),
+      dojmovis: (json['dojmovis'] as List<dynamic>?)
+          ?.map((e) => Feedbacks.fromJson(e as Map<String, dynamic>))
+          .toList(),
+      sponzoriSeminaris: (json['sponzoriSeminaris'] as List<dynamic>?)
+          ?.map((e) => Sponsorsseminars.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$SeminarsToJson(Seminars instance) => <String, dynamic>{
@@ -36,4 +42,6 @@ Map<String, dynamic> _$SeminarsToJson(Seminars instance) => <String, dynamic>{
       'korisnik': instance.korisnik,
       'predavac': instance.predavac,
       'kategorija': instance.kategorija,
+      'dojmovis': instance.dojmovis,
+      'sponzoriSeminaris': instance.sponzoriSeminaris,
     };

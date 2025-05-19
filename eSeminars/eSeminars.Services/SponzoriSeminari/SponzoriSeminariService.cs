@@ -8,6 +8,7 @@ using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
 using MapsterMapper;
+using Microsoft.EntityFrameworkCore;
 
 namespace eSeminars.Services.SponzoriSeminari
 {
@@ -15,6 +16,15 @@ namespace eSeminars.Services.SponzoriSeminari
     {
         public SponzoriSeminariService(ESeminarsContext context, IMapper mapper) : base(context, mapper)
         {
+        }
+
+        public override IQueryable<Database.SponzoriSeminari> AddFilter(SponzoriSeminariSearchObject search, IQueryable<Database.SponzoriSeminari> query)
+        {
+            var filteredQuery =  base.AddFilter(search, query);
+
+            filteredQuery = filteredQuery.Include(sp => sp.Sponzor);
+
+            return filteredQuery;
         }
 
         public override void BeforeInsert(SponzoriSeminariInsertRequest request, Database.SponzoriSeminari entity)
