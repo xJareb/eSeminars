@@ -1,5 +1,8 @@
+import 'package:eseminars_mobile/layouts/master_screen.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/screens/registration_screen.dart';
+import 'package:eseminars_mobile/utils/user_session.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -43,7 +46,10 @@ class MyApp extends StatelessWidget {
 }
 
 class LoginPage extends StatelessWidget {
-  const LoginPage({super.key});
+  LoginPage({super.key});
+
+  TextEditingController _email = TextEditingController();
+  TextEditingController _password = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -77,15 +83,28 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(decoration: InputDecoration(suffixIcon: Icon(Icons.person),labelText: "Email",border: OutlineInputBorder()),),
+                  child: TextField(controller: _email,decoration: InputDecoration(suffixIcon: Icon(CupertinoIcons.person),labelText: "Email",border: OutlineInputBorder()),),
                 ),
                 const SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: TextField(obscureText: true,decoration: InputDecoration(labelText: "Password",suffixIcon: Icon(Icons.password),border: OutlineInputBorder()),),
+                  child: TextField(controller: _password,obscureText: true,decoration: InputDecoration(labelText: "Password",suffixIcon: Icon(Icons.password),border: OutlineInputBorder()),),
                 ),
                 const SizedBox(height: 20,),
-                ElevatedButton(onPressed: (){}, child: Text("Login"),style: ElevatedButton.styleFrom(
+                ElevatedButton(onPressed: () async{
+                  KorisniciProvider provider = new KorisniciProvider();
+                  try {
+                    var user = await provider.login(_email.text, _password.text);
+                    if(user != null){
+                      UserSession.currentUser = user;
+                    }
+                    if(UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik"){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));
+                    }
+                  } catch (e) {
+                    print(e.toString());
+                  }
+                }, child: Text("Login"),style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   minimumSize: Size(300, 40),

@@ -17,6 +17,8 @@ abstract class BaseProvider<T> with ChangeNotifier {
         defaultValue: "http://10.0.2.2:5106/");
   }
 
+  static String? get baseUrl => _baseUrl;
+
   Future<SearchResult<T>> get({dynamic filter}) async {
     var url = "$_baseUrl$_endpoint";
 
