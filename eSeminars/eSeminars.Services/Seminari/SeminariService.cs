@@ -50,6 +50,10 @@ namespace eSeminars.Services.Seminari
                 {
                     filteredQuerry = filteredQuerry.Where(k => k.Kategorija.Naziv == search.KategorijaLIKE);
                 }
+                if(search?.isActive == true)
+                {
+                filteredQuerry = filteredQuerry.Where(k => k.StateMachine == "active");
+                }
             return filteredQuerry;
         }
 

@@ -1,8 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:eseminars_mobile/main.dart';
+import 'package:eseminars_mobile/models/notifications.dart';
+import 'package:eseminars_mobile/models/search_result.dart';
+import 'package:eseminars_mobile/providers/notifications_provider.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 
 class NotificationScreen extends StatefulWidget {
@@ -13,6 +18,31 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  //NaslovLIKE
+  SearchResult<Notifications>? result = null;
+  late NotificationsProvider notificationsProvider;
+  TextEditingController _searchNotification = TextEditingController();
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+
+    notificationsProvider = context.read<NotificationsProvider>();
+    _loadData();
+  }
+  
+
+  Future<void> _loadData() async{
+    var filter = {
+      'NaslovLIKE' : _searchNotification.text
+    };
+    result = await notificationsProvider.get(filter: filter);
+    
+    setState(() {
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -59,7 +89,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           const SizedBox(height: 25,),
           Padding(
             padding: const EdgeInsets.only(top: 15,left: 10,right: 10),
-            child: TextField(decoration: InputDecoration(
+            child: TextField(controller: _searchNotification,onChanged: (value){
+              _loadData();
+            },decoration: InputDecoration(
               filled: true,
               fillColor: Colors.white,
               prefixIcon: Icon(CupertinoIcons.search),
@@ -80,11 +112,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
   Widget _buildCarouselNotifications(){
+    if(result == null || result!.result.isEmpty){
+      return const Center(child: CircularProgressIndicator(),);
+    }
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: CarouselSlider(
         options: CarouselOptions(height: 200.0,viewportFraction: 1.0),
-        items: [1, 2, 3].map((i) {
+        items: result!.result.map((i) {
       return Builder(
         builder: (BuildContext context) {
           return Container(
@@ -95,12 +130,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
             width: MediaQuery.of(context).size.width,
             margin: EdgeInsets.symmetric(horizontal: 5.0),
             
-            child: Column(
-              children: [
-                Text("Title"),
-                Text("Content"),
-                Text("DateTime")
-              ],
+            child: Stack(
+              children: [Center(
+                child: Column(
+                  
+                  children: [
+                    const SizedBox(height: 10,),
+                    Text(i.naslov ?? "No title",style: GoogleFonts.poppins(fontSize: 27),),
+                    const SizedBox(height: 10,),
+                    Text(i.sadrzaj ?? "No content",style: GoogleFonts.poppins(fontSize: 18),),
+                    
+                  ],
+                ),
+              ),
+              Positioned(right: 5,bottom: 2,child: Text(i.datumObavijesti.toString().substring(0,i.datumObavijesti.toString().indexOf("T")) ?? "No date",style: GoogleFonts.poppins(),))
+              ]
             ),
           );
         },

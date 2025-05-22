@@ -9,5 +9,6 @@ namespace eSeminars.Model.SearchObjects
         public string? NaslovGTE { get; set; }
 
         public string? KategorijaLIKE { get; set; }
+        public bool? isActive { get; set; }
     }
 }

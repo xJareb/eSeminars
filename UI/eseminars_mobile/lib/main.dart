@@ -1,5 +1,8 @@
 import 'package:eseminars_mobile/layouts/master_screen.dart';
+import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
+import 'package:eseminars_mobile/providers/notifications_provider.dart';
+import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/screens/registration_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,6 +13,9 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(MultiProvider(providers: [
     ChangeNotifierProvider<KorisniciProvider>(create: (_) => KorisniciProvider()),
+    ChangeNotifierProvider<NotificationsProvider>(create: (_) => NotificationsProvider()),
+    ChangeNotifierProvider<CategoriesProvider>(create: (_) => CategoriesProvider()),
+    ChangeNotifierProvider<SeminarsProvider>(create: (_) => SeminarsProvider()),
   ],child: const MyApp(),));
 }
 
