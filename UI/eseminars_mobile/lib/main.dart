@@ -1,8 +1,11 @@
 import 'package:eseminars_mobile/layouts/master_screen.dart';
+import 'package:eseminars_mobile/providers/auth_provider.dart';
 import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/providers/notifications_provider.dart';
+import 'package:eseminars_mobile/providers/reservations_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/providers/wishlist_provider.dart';
 import 'package:eseminars_mobile/screens/registration_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
@@ -16,6 +19,8 @@ void main() {
     ChangeNotifierProvider<NotificationsProvider>(create: (_) => NotificationsProvider()),
     ChangeNotifierProvider<CategoriesProvider>(create: (_) => CategoriesProvider()),
     ChangeNotifierProvider<SeminarsProvider>(create: (_) => SeminarsProvider()),
+    ChangeNotifierProvider<ReservationsProvider>(create: (_) => ReservationsProvider()),
+    ChangeNotifierProvider<WishlistProvider>(create: (_) => WishlistProvider()),
   ],child: const MyApp(),));
 }
 
@@ -99,6 +104,8 @@ class LoginPage extends StatelessWidget {
                 const SizedBox(height: 20,),
                 ElevatedButton(onPressed: () async{
                   KorisniciProvider provider = new KorisniciProvider();
+                  AuthProvider.email = _email.text;
+                  AuthProvider.password = _password.text;
                   try {
                     var user = await provider.login(_email.text, _password.text);
                     if(user != null){

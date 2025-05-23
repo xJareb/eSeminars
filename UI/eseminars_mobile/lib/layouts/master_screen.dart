@@ -1,8 +1,10 @@
 import 'package:eseminars_mobile/screens/notification_screen.dart';
 import 'package:eseminars_mobile/screens/seminar_screen.dart';
 import 'package:eseminars_mobile/screens/user_screen.dart';
+import 'package:eseminars_mobile/screens/wishlist_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class MasterScreen extends StatefulWidget {
   const MasterScreen({super.key});
@@ -17,6 +19,7 @@ class _MasterScreenState extends State<MasterScreen> {
   final List<Widget> _screens = [
     NotificationScreen(),
     SeminarScreen(),
+    WishlistScreen(),
     UserScreen()
   ];
   @override
@@ -33,6 +36,7 @@ class _MasterScreenState extends State<MasterScreen> {
         destinations: [
         NavigationDestination(icon: Icon(CupertinoIcons.home), label: 'Home',),
         NavigationDestination(icon: Icon(CupertinoIcons.book), label: 'Seminars'),
+        NavigationDestination(icon: Icon(CupertinoIcons.heart), label: 'Wishlist'),
         NavigationDestination(icon: Icon(CupertinoIcons.person), label: 'Profile'),
       ]),
     );

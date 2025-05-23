@@ -10,7 +10,6 @@ class MyDialogs {
       title: 'Success',
       desc: message,
       btnOkOnPress: () {
-        Navigator.pop(context,true);
       },
       btnOkColor: Colors.green,
     ).show();
@@ -27,4 +26,18 @@ class MyDialogs {
       btnOkColor: Colors.red,
     ).show();
   }
+  static void showInformationDialog(BuildContext context, String message, VoidCallback onOkPressed,) {
+  AwesomeDialog(
+    context: context,
+    dialogType: DialogType.info,
+    animType: AnimType.scale,
+    title: 'Info',
+    desc: message,
+    btnOkOnPress: onOkPressed,
+    btnCancelOnPress: () {
+    },
+    btnOkColor: Colors.green,
+    btnCancelColor: Colors.red,
+  ).show();
+}
 }

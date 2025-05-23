@@ -2,11 +2,16 @@ import 'dart:ffi';
 
 import 'package:eseminars_mobile/main.dart';
 import 'package:eseminars_mobile/models/categories.dart';
+import 'package:eseminars_mobile/models/savedSeminars.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/categories_provider.dart';
+import 'package:eseminars_mobile/providers/reservations_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/providers/wishlist_provider.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
+import 'package:eseminars_mobile/utils/custom_dialogs.dart';
+import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -24,9 +29,14 @@ class _SeminarScreenState extends State<SeminarScreen> {
 
   SearchResult<Categories>? typeOfCategories;
   SearchResult<Seminars>? result = null;
+  SearchResult<Savedseminars>? wishlistResult;
   late CategoriesProvider categoriesProvider;
   late SeminarsProvider provider;
+  late ReservationsProvider reservationsProvider;
+  late WishlistProvider wishlistProvider;
   bool isLoading=true;
+  bool isCategoriesLoading = true;
+  bool isSeminarsLoading = true;
   String? categoryName;
 
   @override
@@ -35,32 +45,47 @@ class _SeminarScreenState extends State<SeminarScreen> {
     super.didChangeDependencies();
     categoriesProvider = context.read<CategoriesProvider>();
     provider = context.read<SeminarsProvider>();
+    reservationsProvider = context.read<ReservationsProvider>();
+    wishlistProvider = context.read<WishlistProvider>();
 
     _loadCategories();
     _loadSeminars();
+    _loadWishlist();
   }
   Future<void> _loadCategories() async{
     typeOfCategories = await categoriesProvider.get();
     setState(() {
-      isLoading = false;
+      isCategoriesLoading = false;
     });
   }
   Future<void> _loadSeminars() async{
     var filter = {
-      'isActive':true,
-      'KategorijaLIKE' : true
+      'isActive': true,
+      'KategorijaLIKE' : categoryName
     };
     result = await provider.get(filter: filter);
     setState(() {
+      isSeminarsLoading = false;
+    });
+  }
+  Future<void> _loadWishlist() async{
+    var filter = {
+      'KorisnikId' : UserSession.currentUser?.korisnikId
+    };
+    wishlistResult = await wishlistProvider.get(filter: filter);
+
+  
+    setState(() {
       isLoading = false;
     });
+
   }
   @override
   Widget build(BuildContext context) {
-    return isLoading? CircularProgressIndicator() : SingleChildScrollView(child: Column(
+    return SingleChildScrollView(child: Column(
       children: [
-        _buildUpperContainer(),
-        _buildGridSeminars()
+        isCategoriesLoading ? const Center(child: CircularProgressIndicator()) : _buildUpperContainer(),
+        isSeminarsLoading ? const Center(child: CircularProgressIndicator()) : _buildGridSeminars(),
       ],
     ),);
   }
@@ -107,6 +132,7 @@ class _SeminarScreenState extends State<SeminarScreen> {
                     setState(() {
                       categoryName=typeOfCategories?.result[index].naziv;
                     });
+                    _loadSeminars();
                   },
                   child: Container(
                     width: 50,
@@ -175,7 +201,32 @@ class _SeminarScreenState extends State<SeminarScreen> {
                           ],)
                         ],
                       ),
-                      Positioned(bottom: 0,child: IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.heart))),
+                      Positioned(bottom: 0,child: IconButton(onPressed: () async{
+                        try {
+
+                          final alreadySaved = wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false;
+                          if(!alreadySaved){
+                            final request = {
+                              'seminarId' : result?.result[index].seminarId,
+                              'korisnikId' : UserSession.currentUser?.korisnikId
+                            };
+                          
+                          await wishlistProvider.insert(request);
+                          _loadWishlist();
+                          setState(() {
+                            
+                          });
+                          }else{
+                            //TODO:: Remove seminar from wishlist
+                          }
+                          
+                        } catch (e) {
+                          MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+                        }
+                      }, icon: Icon(
+                        (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
+                        (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? Colors.red:Colors.grey,
+                      ))),
                       Positioned(bottom: 3,right: 3,child: 
                       Container(decoration: 
                       BoxDecoration(
@@ -185,7 +236,21 @@ class _SeminarScreenState extends State<SeminarScreen> {
                           bottomRight: Radius.circular(15))
                       ),
                       child: 
-                      IconButton(onPressed: (){}, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
+                      IconButton(onPressed: () async{
+                        MyDialogs.showInformationDialog(context, "Are you sure you want to reserve a seat?", () async{
+                          try {
+                            final request = {
+                              'seminarId' : result?.result[index].seminarId,
+                              'korisnikId' : UserSession.currentUser?.korisnikId
+                            };
+                            await reservationsProvider.insert(request);
+                            MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                            
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                          }
+                        });
+                      }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
                         foregroundColor: Colors.white.withOpacity(0.8),
                         padding: EdgeInsets.all(4),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap

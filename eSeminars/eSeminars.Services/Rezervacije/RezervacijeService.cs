@@ -36,13 +36,7 @@ namespace eSeminars.Services.Rezervacije
 
         public override void BeforeInsert(RezervacijeInsertRequest request, Database.Rezervacije entity)
         {
-            var checkDuplicates = Context.Rezervacijes
-                .Where(r => r.KorisnikId == request.KorisnikId && r.SeminarId == request.SeminarId).FirstOrDefault();
-            if (checkDuplicates != null)
-            {
-                throw new UserException("Record already exists in the database");
-            }
-
+            
             entity.DatumRezervacije = DateTime.Now;
             base.BeforeInsert(request, entity);
         }
@@ -55,6 +49,17 @@ namespace eSeminars.Services.Rezervacije
 
         public override Model.Models.Rezervacije Insert(RezervacijeInsertRequest request)
         {
+            var checkDuplicates = Context.Rezervacijes
+                .Where(r => r.KorisnikId == request.KorisnikId && r.SeminarId == request.SeminarId).FirstOrDefault();
+            if (checkDuplicates != null)
+            {
+                throw new UserException("A reservation has already been submitted. Please note that it is currently awaiting approval");
+            }
+            var checkActiveDuplicates = Context.Rezervacijes.Where(r => r.KorisnikId == request.KorisnikId && r.SeminarId == request.SeminarId && r.StateMachine == "approved").FirstOrDefault();
+            if (checkActiveDuplicates != null)
+            {
+                throw new UserException("You already have an approved reservation.");
+            }
             var state = BaseRezervacijeState.CreateState("initial");
             return state.Insert(request);
         }
