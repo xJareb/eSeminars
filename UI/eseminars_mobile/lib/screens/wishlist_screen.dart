@@ -1,8 +1,17 @@
+import 'dart:math';
+
 import 'package:eseminars_mobile/layouts/master_screen.dart';
+import 'package:eseminars_mobile/main.dart';
+import 'package:eseminars_mobile/models/savedSeminars.dart';
+import 'package:eseminars_mobile/models/search_result.dart';
+import 'package:eseminars_mobile/providers/wishlist_provider.dart';
+import 'package:eseminars_mobile/screens/seminar_details_screen.dart';
+import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -12,10 +21,33 @@ class WishlistScreen extends StatefulWidget {
 }
 
 class _WishlistScreenState extends State<WishlistScreen> {
+
+  SearchResult<Savedseminars>? result = null;
+  late WishlistProvider wishlistProvider;
+  bool isLoading = true;
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    wishlistProvider = context.read<WishlistProvider>();
+
+    _loadWishlist();
+  }
+  void _loadWishlist() async{
+    var filter = {
+      'KorisnikId' : UserSession.currentUser?.korisnikId
+    };
+     result = await wishlistProvider.get(filter: filter);
+     setState(() {
+       isLoading = false;
+     });
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      child: Column(
+      child: isLoading ? Center(child: const CircularProgressIndicator()) : Column(
         children: [
           const SizedBox(height: 30,),
           _buildWishList()
@@ -27,7 +59,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.85,
       child: ListView.builder(
-        itemCount: 13,
+        itemCount: result?.result.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (context,index){
           return Padding(
@@ -53,13 +85,15 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("Tittle",style: GoogleFonts.poppins(fontSize: 26),),
-                      Text("Description",style: GoogleFonts.poppins(fontSize: 18)),
+                      Text("${result?.result[index].seminar?.naslov}",style: GoogleFonts.poppins(fontSize: 26),),
+                      Text("${result?.result[index].seminar?.opis}",style: GoogleFonts.poppins(fontSize: 18)),
                     ],
                                     ),
                   ),
-                Positioned(bottom: 20,left: 10,child: Text("Date and time")),
-                Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: (){}, child: Text("Details"))),
+                Positioned(bottom: 20,left: 10,child: Text("${result?.result[index].seminar?.datumVrijeme!.substring(0,result?.result[index].seminar?.datumVrijeme!.indexOf("T"))}")),
+                Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: (){
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarDetailsScreen(seminars: result?.result[index].seminar)));
+                }, child: Text("Details"))),
                 Positioned(top: 2,right: 10,child: IconButton(onPressed: (){}, icon: Icon(Icons.close)))
                 ]
               ),

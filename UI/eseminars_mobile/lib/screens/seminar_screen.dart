@@ -9,6 +9,7 @@ import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/reservations_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/providers/wishlist_provider.dart';
+import 'package:eseminars_mobile/screens/seminar_details_screen.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
 import 'package:eseminars_mobile/utils/custom_dialogs.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
@@ -170,92 +171,100 @@ class _SeminarScreenState extends State<SeminarScreen> {
                 childAspectRatio: 1,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20),itemCount: result?.result.length, itemBuilder: (context,index){
-                  return Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(15),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(2, 3)
-                        )
-                      ]
-                    ),
-                    child: Stack(
-                      children:[Column(
-                        children: [
-                          const SizedBox(height: 10,),
-                          Text("${result?.result[index].naslov ?? ""}",style: GoogleFonts.poppins(fontSize: 26),),
-                          const SizedBox(height: 10,),
-                          Text("${result?.result[index].opis ?? ""}",style: GoogleFonts.poppins(fontSize: 18),),
-                          const SizedBox(height: 20,),
-                          Row(children: [
-                            Expanded(child: Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: Text("Seats: ${result?.result[index].kapacitet}",style: GoogleFonts.poppins()),
-                            )),
-                            Expanded(child: Text("${result?.result[index].datumVrijeme!.substring(0,result?.result[index].datumVrijeme!.indexOf("T"))}",style: GoogleFonts.poppins())),
-                          ],)
-                        ],
+                  return GestureDetector(
+                    onTap: ()async{
+                      var flow = await  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarDetailsScreen(seminars: result?.result[index],)));
+                      if(flow == true){
+                        await _loadWishlist();
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(2, 3)
+                          )
+                        ]
                       ),
-                      Positioned(bottom: 0,child: IconButton(onPressed: () async{
-                        try {
-
-                          final alreadySaved = wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false;
-                          if(!alreadySaved){
-                            final request = {
-                              'seminarId' : result?.result[index].seminarId,
-                              'korisnikId' : UserSession.currentUser?.korisnikId
-                            };
-                          
-                          await wishlistProvider.insert(request);
-                          _loadWishlist();
-                          setState(() {
-                            
-                          });
-                          }else{
-                            //TODO:: Remove seminar from wishlist
-                          }
-                          
-                        } catch (e) {
-                          MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
-                        }
-                      }, icon: Icon(
-                        (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
-                        (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? Colors.red:Colors.grey,
-                      ))),
-                      Positioned(bottom: 3,right: 3,child: 
-                      Container(decoration: 
-                      BoxDecoration(
-                        color: Colors.black87,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(15),
-                          bottomRight: Radius.circular(15))
-                      ),
-                      child: 
-                      IconButton(onPressed: () async{
-                        MyDialogs.showInformationDialog(context, "Are you sure you want to reserve a seat?", () async{
+                      child: Stack(
+                        children:[Column(
+                          children: [
+                            const SizedBox(height: 10,),
+                            Text("${result?.result[index].naslov ?? ""}",style: GoogleFonts.poppins(fontSize: 26,color: Colors.grey[800]),),
+                            const SizedBox(height: 10,),
+                            Text("${result?.result[index].opis ?? ""}",style: GoogleFonts.poppins(fontSize: 16,color: Colors.grey[800]),),
+                            const SizedBox(height: 20,),
+                            Row(children: [
+                              Expanded(child: Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text("Seats: ${result?.result[index].kapacitet}",style: GoogleFonts.poppins()),
+                              )),
+                              Expanded(child: Text("${result?.result[index].datumVrijeme!.substring(0,result?.result[index].datumVrijeme!.indexOf("T"))}",style: GoogleFonts.poppins())),
+                            ],)
+                          ],
+                        ),
+                        Positioned(bottom: 0,child: IconButton(onPressed: () async{
                           try {
-                            final request = {
-                              'seminarId' : result?.result[index].seminarId,
-                              'korisnikId' : UserSession.currentUser?.korisnikId
-                            };
-                            await reservationsProvider.insert(request);
-                            MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                    
+                            final alreadySaved = wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false;
+                            if(!alreadySaved){
+                              final request = {
+                                'seminarId' : result?.result[index].seminarId,
+                                'korisnikId' : UserSession.currentUser?.korisnikId
+                              };
+                            
+                            await wishlistProvider.insert(request);
+                            _loadWishlist();
+                            setState(() {
+                              
+                            });
+                            }else{
+                              //TODO:: Remove seminar from wishlist
+                            }
                             
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
                           }
-                        });
-                      }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
-                        foregroundColor: Colors.white.withOpacity(0.8),
-                        padding: EdgeInsets.all(4),
-                        tapTargetSize: MaterialTapTargetSize.shrinkWrap
-                      ),),))
-                      ]
+                        }, icon: Icon(
+                          (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
+                          (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? Colors.red:Colors.grey,
+                        ))),
+                        Positioned(bottom: 3,right: 3,child: 
+                        Container(decoration: 
+                        BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15))
+                        ),
+                        child: 
+                        IconButton(onPressed: () async{
+                          MyDialogs.showInformationDialog(context, "Are you sure you want to reserve a seat?", () async{
+                            try {
+                              final request = {
+                                'seminarId' : result?.result[index].seminarId,
+                                'korisnikId' : UserSession.currentUser?.korisnikId
+                              };
+                              await reservationsProvider.insert(request);
+                              MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                              
+                            } catch (e) {
+                              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                            }
+                          });
+                        }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
+                          foregroundColor: Colors.white.withOpacity(0.8),
+                          padding: EdgeInsets.all(4),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                        ),),))
+                        ]
+                      ),
                     ),
                   );
                 });

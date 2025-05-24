@@ -54,6 +54,10 @@ namespace eSeminars.Services.Seminari
                 {
                 filteredQuerry = filteredQuerry.Where(k => k.StateMachine == "active");
                 }
+                if(search.SeminarId != null)
+            {
+                filteredQuerry = filteredQuerry.Where(k=>k.SeminarId == search.SeminarId);
+            }
             return filteredQuerry;
         }
 

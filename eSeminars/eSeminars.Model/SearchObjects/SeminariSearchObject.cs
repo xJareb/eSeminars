@@ -10,5 +10,7 @@ namespace eSeminars.Model.SearchObjects
 
         public string? KategorijaLIKE { get; set; }
         public bool? isActive { get; set; }
+
+        public int? SeminarId { get; set; }
     }
 }
