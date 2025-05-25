@@ -1,4 +1,8 @@
+import 'package:eseminars_mobile/utils/user_session.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:iconsax_flutter/iconsax_flutter.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -10,6 +14,168 @@ class UserScreen extends StatefulWidget {
 class _UserScreenState extends State<UserScreen> {
   @override
   Widget build(BuildContext context) {
-    return  Center(child: Text("Users"),);
-  }
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 25),
+          _buildUserInfo(),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+           child: Padding(
+             padding: const EdgeInsets.only(left:8.0),
+             child: Text(
+              "Profile",
+              style: GoogleFonts.poppins(
+              fontSize: 24,
+              fontWeight: FontWeight.w600,
+              color: Colors.grey[800],
+                 ),
+               ),
+           ),
+),
+          const SizedBox(height: 20),
+          _buildUserManage(
+            "Manage user",
+            CupertinoIcons.circle,
+            Color.fromRGBO(203, 113, 59, 1),
+            Color.fromRGBO(255, 240, 229, 1),
+            (){
+
+          }),
+          const SizedBox(height: 20),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: Padding(
+              padding: const EdgeInsets.only(left:8.0),
+              child: Text("Activity",
+              style: GoogleFonts.poppins(
+                fontSize: 24,
+                fontWeight: FontWeight.w600,
+                color: Colors.grey[800]
+              ),),
+            ),
+          ),
+          const SizedBox(height: 20,),
+          _buildUserManage(
+            "Seminars history", 
+            CupertinoIcons.book, 
+            const Color.fromRGBO(92,72, 208, 1),
+             const Color.fromRGBO(237,234, 255, 1), 
+             (){
+              
+             })
+        ],
+      ),
+    ),
+  );
+}
+
+  Widget _buildUserInfo() {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Row(
+        children: [
+          Container(
+            padding: EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              CupertinoIcons.person,
+              size: 56,
+              color: Colors.grey[800],
+            ),
+          ),
+          const SizedBox(width: 12),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${UserSession.currentUser?.ime} ${UserSession.currentUser?.prezime}",
+                style: GoogleFonts.poppins(
+                  color: Colors.grey[800],
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Text(
+                "Active user",
+                style: GoogleFonts.poppins(
+                  color: Colors.grey,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+      ElevatedButton(
+        onPressed: () {},
+        child: Text("Sign Out"),
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          backgroundColor: Colors.red[400],
+          foregroundColor: Colors.white,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+      ),
+    ],
+  );
+}
+  Widget _buildUserManage(String text, IconData icon, Color iconColor, Color iconColorBackground, VoidCallback? onPressed) {
+  return Container(
+    padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+    decoration: BoxDecoration(
+      color: Colors.grey[100],
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.grey.withOpacity(0.2),
+          blurRadius: 6,
+          offset: Offset(0, 2),
+        )
+      ],
+    ),
+    child: Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: iconColorBackground,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: 28,
+          ),
+        ),
+        const SizedBox(width: 12),
+        Expanded(
+          child: Text(
+            text,
+            textAlign: TextAlign.left,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              color: Colors.grey[800],
+            ),
+          ),
+        ),
+        IconButton(
+          onPressed: onPressed ?? () {},
+          icon: Icon(CupertinoIcons.right_chevron, color: Colors.grey[600]),
+        ),
+      ],
+    ),
+  );
+}
 }
