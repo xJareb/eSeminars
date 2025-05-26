@@ -1,8 +1,14 @@
+import 'package:eseminars_mobile/main.dart';
+import 'package:eseminars_mobile/models/korisnik.dart';
+import 'package:eseminars_mobile/models/search_result.dart';
+import 'package:eseminars_mobile/providers/korisnici_provider.dart';
+import 'package:eseminars_mobile/screens/user_details_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
+import 'package:provider/provider.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({super.key});
@@ -12,6 +18,7 @@ class UserScreen extends StatefulWidget {
 }
 
 class _UserScreenState extends State<UserScreen> {
+
   @override
   Widget build(BuildContext context) {
   return SingleChildScrollView(
@@ -43,8 +50,8 @@ class _UserScreenState extends State<UserScreen> {
             CupertinoIcons.circle,
             Color.fromRGBO(203, 113, 59, 1),
             Color.fromRGBO(255, 240, 229, 1),
-            (){
-
+            () async{
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: UserSession.currentUser,)));
           }),
           const SizedBox(height: 20),
           Align(
