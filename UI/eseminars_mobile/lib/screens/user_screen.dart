@@ -2,7 +2,7 @@ import 'package:eseminars_mobile/main.dart';
 import 'package:eseminars_mobile/models/korisnik.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
-import 'package:eseminars_mobile/screens/user_details_screen.dart';
+import 'package:eseminars_mobile/screens/manage_user_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,12 @@ class _UserScreenState extends State<UserScreen> {
             Color.fromRGBO(203, 113, 59, 1),
             Color.fromRGBO(255, 240, 229, 1),
             () async{
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: UserSession.currentUser,)));
+              var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => ManageUserScreen(user: UserSession.currentUser,)));
+              if(result == true){
+                setState(() {
+                  
+                });
+              }
           }),
           const SizedBox(height: 20),
           Align(

@@ -64,6 +64,7 @@ namespace eSeminars.Services.Korisnici
             entity.LozinkaHash = GenerateHash(entity.LozinkaSalt, request.Lozinka);
             base.BeforeInsert(request, entity);
         }
+        
 
         public static string GenerateSalt()
         {
@@ -87,6 +88,26 @@ namespace eSeminars.Services.Korisnici
 
         public override void BeforeUpdate(KorisniciUpdateRequest request, Database.Korisnici entity)
         {
+            var checkDuplicates = Context.Korisnicis.FirstOrDefault(k=>k.Email == request.Email && k.KorisnikId != entity.KorisnikId);
+            if (checkDuplicates != null)
+            {
+                throw new UserException($"User with email {checkDuplicates.Email} already exists.");
+            }
+            entity.Ime = request.Ime;
+            entity.Prezime = request.Prezime;
+            entity.Email = request.Email;
+            entity.DatumRodjenja = request.DatumRodjenja;
+
+            if (!string.IsNullOrEmpty(request.Lozinka) || !string.IsNullOrEmpty(request.LozinkaPotvrda))
+            {
+                if(request.Lozinka != request.LozinkaPotvrda)
+                {
+                    throw new UserException("Password and confirmation password must be the same.");
+                }
+                entity.LozinkaSalt = GenerateSalt();
+                entity.LozinkaHash = GenerateHash(entity.LozinkaSalt,request.Lozinka);
+            }
+            
             base.BeforeUpdate(request, entity);
         }
 
