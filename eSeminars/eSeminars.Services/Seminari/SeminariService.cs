@@ -39,7 +39,7 @@ namespace eSeminars.Services.Seminari
                     .Include(s => s.Predavac)
                     .Include(s => s.Kategorija)
                     .Include(s=>s.SponzoriSeminaris).ThenInclude(s=>s.Sponzor)
-                    .Include(s=>s.Dojmovis).ThenInclude(s=>s.Korisnik);
+                    .Include(s=>s.Dojmovis).ThenInclude(s=>s.Korisnik).Include(s=>s.Rezervacijes);
 
                 if (!string.IsNullOrWhiteSpace(search?.NaslovGTE))
                 {
@@ -55,10 +55,22 @@ namespace eSeminars.Services.Seminari
                 filteredQuerry = filteredQuerry.Where(k => k.StateMachine == "active");
                 }
                 if(search.SeminarId != null)
-            {
+                {
                 filteredQuerry = filteredQuerry.Where(k=>k.SeminarId == search.SeminarId);
-            }
-            return filteredQuerry;
+                }
+                if (search.isHistory == true)
+                {
+                filteredQuerry = filteredQuerry
+                    .Where(s =>
+                        s.DatumVrijeme < DateTime.Now &&
+                        s.Rezervacijes.Any(r =>
+                            r.StateMachine == "approved" &&
+                            r.IsDeleted != true &&
+                            (search.KorisnikId == null || r.KorisnikId == search.KorisnikId)
+                        )
+                    );
+                }
+                return filteredQuerry;
         }
 
         public override void BeforeInsert(SeminariInsertRequest request, Database.Seminari entity)

@@ -12,5 +12,8 @@ namespace eSeminars.Model.SearchObjects
         public bool? isActive { get; set; }
 
         public int? SeminarId { get; set; }
+        public bool? isHistory { get; set; }
+        public int? KorisnikId { get; set; }
+
     }
 }

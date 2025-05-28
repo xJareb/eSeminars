@@ -30,23 +30,11 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
   late SeminarsProvider provider;
   late String randomImagePath;
   bool isLoading = true;
-  bool isLoadingSeminars = true;
   Color color = Color.fromRGBO(70, 70, 70, 1);
   late ReservationsProvider reservationsProvider;
   late WishlistProvider wishlistProvider;
   SearchResult<Savedseminars>? wishlistResult;
 
-  Future<void> _loadSeminars() async{
-    var filter = {
-      //'isActive' : true,
-      'SeminarId' : widget.seminars?.seminarId
-    };
-    result = await provider.get(filter: filter);
-    
-    setState(() {
-      isLoadingSeminars = false;
-    });
-  }
   final List<String> imagePaths = [
   "assets/images/OIP.jpg",
   "assets/images/Speaking2.jpg",
@@ -74,7 +62,6 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
     wishlistProvider = context.read<WishlistProvider>();
     final random = Random();
     randomImagePath = imagePaths[random.nextInt(imagePaths.length)];
-    _loadSeminars();
     _loadWishlist();
     
   }

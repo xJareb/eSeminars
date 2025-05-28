@@ -3,6 +3,7 @@ import 'package:eseminars_mobile/models/korisnik.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/screens/manage_user_screen.dart';
+import 'package:eseminars_mobile/screens/seminars_history_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -77,8 +78,8 @@ class _UserScreenState extends State<UserScreen> {
             CupertinoIcons.book, 
             const Color.fromRGBO(92,72, 208, 1),
              const Color.fromRGBO(237,234, 255, 1), 
-             (){
-              
+             () async{
+              var result = Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsHistoryScreen()));
              })
         ],
       ),
