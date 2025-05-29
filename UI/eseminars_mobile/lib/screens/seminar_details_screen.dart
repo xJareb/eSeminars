@@ -169,7 +169,6 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
           ),
         ),
 
-        // Ovdje možeš dodati widget za prikaz sponzora, npr. ListView.builder
         fetchedSeminar?.sponzoriSeminaris == null || fetchedSeminar!.sponzoriSeminaris!.isEmpty ? 
         Text("No sponsors available",style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, color: Colors.grey)) : SizedBox(
           height: 100,

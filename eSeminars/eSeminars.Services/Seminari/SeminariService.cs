@@ -70,6 +70,15 @@ namespace eSeminars.Services.Seminari
                         )
                     );
                 }
+                if(search.includeMaterials == true)
+                {
+                var checkFeedback = Context.Dojmovis.Where(x => x.SeminarId == search.SeminarId && x.KorisnikId == search.KorisnikId).FirstOrDefault();
+                if (checkFeedback != null)
+                {
+                    filteredQuerry = filteredQuerry.Include(s => s.Materijalis);
+                }
+                
+                }
                 return filteredQuerry;
         }
 

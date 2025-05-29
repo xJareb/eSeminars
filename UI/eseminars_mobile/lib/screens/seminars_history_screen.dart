@@ -4,6 +4,7 @@ import 'package:eseminars_mobile/main.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/screens/seminars_materials_freedbacks.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
@@ -116,8 +117,8 @@ class _SeminarsHistoryScreenState extends State<SeminarsHistoryScreen> {
                       ),
                     ),
                     Positioned(bottom: 20,left: 10,child: Text("${result?.result[index].datumVrijeme!.substring(0,result?.result[index].datumVrijeme!.indexOf("T"))}")),
-                    Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: (){
-                      
+                    Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: () async{
+                     await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsMaterialsFreedbacks(seminar: result?.result[index],)));
                     }, child: Text("Details")))
                   ],
 

@@ -14,6 +14,7 @@ namespace eSeminars.Model.SearchObjects
         public int? SeminarId { get; set; }
         public bool? isHistory { get; set; }
         public int? KorisnikId { get; set; }
+        public bool? includeMaterials { get; set; }
 
     }
 }

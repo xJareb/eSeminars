@@ -2,7 +2,9 @@ import 'package:eseminars_mobile/models/categories.dart';
 import 'package:eseminars_mobile/models/feedbacks.dart';
 import 'package:eseminars_mobile/models/korisnik.dart';
 import 'package:eseminars_mobile/models/lecturers.dart';
+import 'package:eseminars_mobile/models/materials.dart';
 import 'package:eseminars_mobile/models/sponsorsSeminars.dart';
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'seminars.g.dart';
@@ -21,8 +23,9 @@ class Seminars {
   Categories? kategorija;
   List<Feedbacks>? dojmovis;
   List<Sponsorsseminars>? sponzoriSeminaris;
+  List<Materials>? materijalis;
 
-  Seminars({this.seminarId,this.naslov,this.opis,this.datumVrijeme,this.lokacija,this.kapacitet,this.stateMachine,this.korisnik,this.predavac,this.kategorija,this.dojmovis,this.sponzoriSeminaris});
+  Seminars({this.seminarId,this.naslov,this.opis,this.datumVrijeme,this.lokacija,this.kapacitet,this.stateMachine,this.korisnik,this.predavac,this.kategorija,this.dojmovis,this.sponzoriSeminaris,this.materijalis});
 
   factory Seminars.fromJson(Map<String, dynamic> json) => _$SeminarsFromJson(json);
 
