@@ -80,7 +80,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                   Text("Good day for seminars",style: GoogleFonts.poppins(fontSize: 13,color: Colors.white),),
-                  Text("Book your seminar",style: GoogleFonts.poppins(fontSize: 19,fontWeight: FontWeight.bold,color: Colors.white))
+                  Text("Reserve your seminar",style: GoogleFonts.poppins(fontSize: 19,fontWeight: FontWeight.bold,color: Colors.white))
                 ],)),
                 Expanded(child: Container())
               ],

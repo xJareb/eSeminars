@@ -115,6 +115,8 @@ class LoginPage extends StatelessWidget {
                     }
                     if(UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik"){
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));
+                    } else if(UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator"){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));
                     }
                   } catch (e) {
                     print(e.toString());
