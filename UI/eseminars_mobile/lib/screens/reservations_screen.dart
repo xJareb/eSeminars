@@ -169,8 +169,8 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
     itemCount: reservationsResult?.result.length ?? 0,
     itemBuilder: (context, index) {
       final reservation = reservationsResult!.result[index];
-      final korisnik = reservation.korisnik;
-      final imePrezime = "${korisnik?.ime ?? ''} ${korisnik?.prezime ?? ''}";
+      final user = reservation.korisnik;
+      final nameSurname = "${user?.ime ?? ''} ${user?.prezime ?? ''}";
       final datum = reservation.datumRezervacije;
       final datumFormatted = datum != null
           ? "${datum.substring(0, datum.indexOf("T"))} ${datum.substring(datum.indexOf("T") + 1, datum.indexOf(":") + 3)}"
@@ -189,7 +189,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
               children: [
                 Expanded(
                   child: Text(
-                    imePrezime,
+                    nameSurname,
                     textAlign: TextAlign.center,
                     style: GoogleFonts.poppins(fontSize: 14),
                   ),

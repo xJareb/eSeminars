@@ -15,6 +15,8 @@ namespace eSeminars.Model.SearchObjects
         public bool? isHistory { get; set; }
         public int? KorisnikId { get; set; }
         public bool? includeMaterials { get; set; }
+        public bool? dateTime { get; set; }
+        public bool? isDraft { get; set; }
 
     }
 }

@@ -77,9 +77,16 @@ namespace eSeminars.Services.Seminari
                 {
                     filteredQuerry = filteredQuerry.Include(s => s.Materijalis);
                 }
-                
                 }
-                return filteredQuerry;
+                if (search.dateTime == true)
+                {
+                filteredQuerry = filteredQuerry.Where(x => x.DatumVrijeme > DateTime.Now);
+                }
+                if(search.isDraft == true)
+                {
+                filteredQuerry = filteredQuerry.Where(x => x.StateMachine == "draft");
+                }
+            return filteredQuerry;
         }
 
         public override void BeforeInsert(SeminariInsertRequest request, Database.Seminari entity)

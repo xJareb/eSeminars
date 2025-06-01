@@ -1,6 +1,7 @@
 import 'package:eseminars_mobile/screens/notification_screen.dart';
 import 'package:eseminars_mobile/screens/reservations_screen.dart';
 import 'package:eseminars_mobile/screens/seminar_screen.dart';
+import 'package:eseminars_mobile/screens/seminars_manage_screen.dart';
 import 'package:eseminars_mobile/screens/user_screen.dart';
 import 'package:eseminars_mobile/screens/wishlist_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
@@ -35,6 +36,7 @@ class _MasterScreenState extends State<MasterScreen> {
     }
     if(roles == "Organizator"){
       _screens = [
+        SeminarsManageScreen(),
         ReservationsScreen(),
         UserScreen()
       ];
@@ -59,6 +61,7 @@ class _MasterScreenState extends State<MasterScreen> {
         NavigationDestination(icon: Icon(CupertinoIcons.heart), label: 'Wishlist'),
         NavigationDestination(icon: Icon(CupertinoIcons.person), label: 'Profile'),
         ] else if(roles == "Organizator") ... [
+        NavigationDestination(icon: Icon(CupertinoIcons.book), label: 'Seminars'),
         NavigationDestination(icon: Icon(Icons.check), label: "Reservations"),
         NavigationDestination(icon: Icon(CupertinoIcons.person), label: 'Profile'),
         ]
