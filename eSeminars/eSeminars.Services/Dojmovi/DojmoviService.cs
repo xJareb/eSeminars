@@ -33,7 +33,7 @@ namespace eSeminars.Services.Dojmovi
                 .Where(d => d.KorisnikId == request.KorisnikId && d.SeminarId == request.SeminarId).FirstOrDefault();
             if (checkDuplicates != null)
             {
-                throw new UserException("Record exist in the database");
+                throw new UserException("The user has already submitted feedback.");
             }
             entity.DatumKreiranjaDojma = DateTime.Now;
 

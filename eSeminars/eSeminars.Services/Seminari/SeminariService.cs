@@ -86,6 +86,10 @@ namespace eSeminars.Services.Seminari
                 {
                 filteredQuerry = filteredQuerry.Where(x => x.StateMachine == "draft");
                 }
+                if(search.includeMaterialsOrg == true)
+                {
+                filteredQuerry = filteredQuerry.Include(s => s.Materijalis);
+                }
             return filteredQuerry;
         }
 

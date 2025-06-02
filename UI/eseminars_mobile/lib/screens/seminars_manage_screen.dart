@@ -6,6 +6,7 @@ import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/lecturers_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/screens/seminars_materials_freedbacks.dart';
 import 'package:eseminars_mobile/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -247,7 +248,9 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
                   children: [
                     Text("Date: ${seminarResult?.result[index].datumVrijeme!.substring(0,seminarResult!.result[index].datumVrijeme!.indexOf("T"))} ${seminarResult?.result[index].datumVrijeme!.substring(seminarResult!.result[index].datumVrijeme!.indexOf("T") + 1, seminarResult!.result[index].datumVrijeme!.indexOf(":") + 3)}", style: GoogleFonts.poppins(fontSize: 13)),
                     ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async{
+                        await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsMaterialsFreedbacks(seminar: seminarResult?.result[index],)));
+                      },
                       style: ElevatedButton.styleFrom(
                         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         shape: RoundedRectangleBorder(

@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:eseminars_mobile/main.dart';
+import 'package:eseminars_mobile/models/feedbacks.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/feedback_provider.dart';
@@ -26,11 +27,13 @@ class SeminarsMaterialsFreedbacks extends StatefulWidget {
 class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedbacks> {
 
   SearchResult<Seminars>? result = null;
+  SearchResult<Feedbacks>? feedbackResult;
   late SeminarsProvider seminarsProvider;
   late FeedbackProvider feedbackProvider;
   bool isDetails = true;
   late int rating;
   bool isMaterials = false;
+  bool isFeedback = false;
   late String randomImagePath;
   final List<String> imagePaths = [
   "assets/images/OIP.jpg",
@@ -47,7 +50,8 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
     seminarsProvider = context.read<SeminarsProvider>();
     feedbackProvider = context.read<FeedbackProvider>();
     rating = 0;
-    _loadSeminarsInfo();
+    UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator" ? _loadSeminarsInfoOrg() : _loadSeminarsInfo();
+    UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator" ? _loadFeedbacks() : null;
   }
   Future<void> _loadSeminarsInfo() async{
     var filter = {
@@ -59,6 +63,25 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
     setState(() {
     });
   }
+  Future<void> _loadSeminarsInfoOrg() async{
+    var filter = {
+      'SeminarId' : widget.seminar?.seminarId,
+      'KorisnikId' : UserSession.currentUser?.korisnikId,
+      'includeMaterialsOrg' : true
+    };
+    result = await seminarsProvider.get(filter: filter);
+    setState(() {
+    });
+  }
+  Future<void> _loadFeedbacks() async{
+    var filter = {
+      'SeminarId' : widget.seminar?.seminarId,
+    };
+    feedbackResult = await feedbackProvider.get(filter: filter);
+    setState(() {
+      
+    });
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,7 +91,8 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
             _buildUpperContainer(),
             _buildControls(),
             isDetails ? _buildSeminarDetails() : Container(),
-            isMaterials? _buildSeminarMaterials() :Container()
+            isMaterials? _buildSeminarMaterials() :Container(),
+            isFeedback? _buildFeedback() : Container()
 
           ],
         ),
@@ -107,6 +131,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
           setState(() {
             isDetails = true;
             isMaterials = false;
+            isFeedback = false;
           });
         }, child: Text("Details"),style: isDetails ? ElevatedButton.styleFrom(
           backgroundColor: Colors.blue[600],
@@ -117,6 +142,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
           setState(() {
             isDetails = false;
             isMaterials = true;
+            isFeedback = false;
           });
         }, child: Text("Materials"),style: isMaterials ? ElevatedButton.styleFrom(
           backgroundColor: Colors.blue[600],
@@ -125,7 +151,14 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
         const SizedBox(width: 10,),
         ElevatedButton(
   onPressed: () async {
-    setState(() {
+    if(UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator"){
+      setState(() {
+        isDetails = false;
+        isMaterials = false;
+        isFeedback = true;
+      });
+    } else if(UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik"){
+      setState(() {
             isDetails = true;
             isMaterials = false;
           });
@@ -207,9 +240,10 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
         );
       },
     );
+    }
   },
   child: Text("Feedback"),
-  style: ElevatedButton.styleFrom(
+  style: UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator" && !isFeedback ? null: ElevatedButton.styleFrom(
     backgroundColor: Colors.blue[600],
     foregroundColor: Colors.white,
   ),
@@ -288,6 +322,8 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
   }
   Widget _buildSeminarMaterials(){
     final fetchedSeminar = result?.result.first;
+    String infoOrgText = "There are currently no materials available for this seminar";
+    String infoUserText = "To access the seminar materials, please share your feedback first. Your opinion helps us improve future sessions.";
 
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
@@ -299,7 +335,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
             fontWeight: FontWeight.w600
           ),),
           fetchedSeminar?.materijalis == null || fetchedSeminar!.materijalis!.isEmpty ? 
-          Text("To access the seminar materials, please share your feedback first. Your opinion helps us improve future sessions.",
+          Text("${UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator" ? infoOrgText : infoUserText}",
           style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic, color: Colors.grey)) : SizedBox(
             height: MediaQuery.of(context).size.height * 0.8,
             child: ListView.builder(
@@ -377,6 +413,82 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
         ),
       ),
     ],
+  );
+}
+  Widget _buildFeedback() {
+  final fetchedSeminar = result?.result.first;
+
+  return SingleChildScrollView(
+    child: Padding(
+      padding: const EdgeInsets.all(16.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Feedbacks:",
+            style: GoogleFonts.poppins(
+              fontSize: 20,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          const SizedBox(height: 12),
+          if (fetchedSeminar?.dojmovis == null || fetchedSeminar!.dojmovis!.isEmpty)
+            Text(
+              "There are currently no feedbacks available for this seminar.",
+              style: TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey,
+              ),
+            )
+          else
+            ListView.builder(
+              shrinkWrap: true,
+              physics: NeverScrollableScrollPhysics(),
+              itemCount: feedbackResult?.result.length,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    elevation: 4,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Text(
+                              "${feedbackResult?.result[index].korisnik?.ime} ${feedbackResult?.result[index].korisnik?.prezime}",
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.poppins(fontSize: 14),
+                            ),
+                          ),
+                          Expanded(
+                            child: buildStars(feedbackResult?.result[index].ocjena ?? 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
+            )
+        ],
+      ),
+    ),
+  );
+}
+Widget buildStars(int rating, {int maxRating = 5}) {
+  return Row(
+    children: List.generate(maxRating, (index) {
+      if (index < rating) {
+        return const Icon(Icons.star, color: Colors.amber, size: 20);
+      } else {
+        return const Icon(Icons.star_border, color: Colors.grey, size: 20);
+      }
+    }),
   );
 }
 }

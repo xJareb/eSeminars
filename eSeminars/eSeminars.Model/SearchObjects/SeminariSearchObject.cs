@@ -17,6 +17,7 @@ namespace eSeminars.Model.SearchObjects
         public bool? includeMaterials { get; set; }
         public bool? dateTime { get; set; }
         public bool? isDraft { get; set; }
+        public bool? includeMaterialsOrg { get; set; }
 
     }
 }
