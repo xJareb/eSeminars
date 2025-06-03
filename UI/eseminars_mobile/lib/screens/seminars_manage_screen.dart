@@ -280,7 +280,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildFormControls("naslov", "Title", Icons.title,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
             FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
             FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
             ]),

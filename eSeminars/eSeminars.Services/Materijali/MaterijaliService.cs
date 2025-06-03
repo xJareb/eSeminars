@@ -20,7 +20,7 @@ namespace eSeminars.Services.Materijali
         {
             var filteredQuery = base.AddFilter(search, query);
 
-            filteredQuery = filteredQuery.Where(m => m.SeminarId == search.SeminarId);
+            filteredQuery = filteredQuery.Where(m => m.SeminarId == search.SeminarId && m.IsDeleted == false);
 
             return filteredQuery;
         }

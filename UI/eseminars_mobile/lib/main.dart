@@ -4,6 +4,7 @@ import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/feedback_provider.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/providers/lecturers_provider.dart';
+import 'package:eseminars_mobile/providers/materials_provider.dart';
 import 'package:eseminars_mobile/providers/notifications_provider.dart';
 import 'package:eseminars_mobile/providers/reservations_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
@@ -25,6 +26,7 @@ void main() {
     ChangeNotifierProvider<WishlistProvider>(create: (_) => WishlistProvider()),
     ChangeNotifierProvider<FeedbackProvider>(create: (_) => FeedbackProvider()),
     ChangeNotifierProvider<LecturersProvider>(create: (_) => LecturersProvider()),
+     ChangeNotifierProvider<MaterialsProvider>(create: (_) => MaterialsProvider()),
   ],child: const MyApp(),));
 }
 
