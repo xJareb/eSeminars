@@ -8,6 +8,8 @@ import 'package:eseminars_mobile/providers/materials_provider.dart';
 import 'package:eseminars_mobile/providers/notifications_provider.dart';
 import 'package:eseminars_mobile/providers/reservations_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/providers/sponsorsSeminars_provider.dart';
+import 'package:eseminars_mobile/providers/sponsors_provider.dart';
 import 'package:eseminars_mobile/providers/wishlist_provider.dart';
 import 'package:eseminars_mobile/screens/registration_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
@@ -26,7 +28,9 @@ void main() {
     ChangeNotifierProvider<WishlistProvider>(create: (_) => WishlistProvider()),
     ChangeNotifierProvider<FeedbackProvider>(create: (_) => FeedbackProvider()),
     ChangeNotifierProvider<LecturersProvider>(create: (_) => LecturersProvider()),
-     ChangeNotifierProvider<MaterialsProvider>(create: (_) => MaterialsProvider()),
+    ChangeNotifierProvider<MaterialsProvider>(create: (_) => MaterialsProvider()),
+    ChangeNotifierProvider<SponsorsseminarsProvider>(create: (_) => SponsorsseminarsProvider()),
+    ChangeNotifierProvider<SponsorsProvider>(create: (_) => SponsorsProvider()),
   ],child: const MyApp(),));
 }
 

@@ -6,5 +6,6 @@ namespace eSeminars.Model.SearchObjects
 {
     public class SponzoriSeminariSearchObject : BaseSearchObject
     {
+        public int? seminarId { get; set; }
     }
 }

@@ -24,6 +24,11 @@ namespace eSeminars.Services.SponzoriSeminari
 
             filteredQuery = filteredQuery.Include(sp => sp.Sponzor);
 
+            if(search.seminarId != null)
+            {
+                filteredQuery = filteredQuery.Where(sp => search.seminarId == sp.SeminarId);
+            }
+
             return filteredQuery;
         }
 

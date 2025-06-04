@@ -1,12 +1,16 @@
 import 'package:eseminars_mobile/main.dart';
 import 'package:eseminars_mobile/models/korisnik.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
+import 'package:eseminars_mobile/providers/auth_provider.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/screens/manage_user_screen.dart';
 import 'package:eseminars_mobile/screens/seminars_history_screen.dart';
+import 'package:eseminars_mobile/screens/sponsors_screen.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:iconsax_flutter/iconsax_flutter.dart';
 import 'package:provider/provider.dart';
@@ -80,7 +84,17 @@ class _UserScreenState extends State<UserScreen> {
              const Color.fromRGBO(237,234, 255, 1), 
              () async{
               var result = Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsHistoryScreen()));
-             })
+             }),
+            const SizedBox(height: 15,),
+            if(UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator") ... [
+              _buildUserManage("Sponsors", 
+              CupertinoIcons.money_dollar, 
+              const Color.fromRGBO(34, 139, 34, 1), 
+              const Color.fromRGBO(200, 255, 200, 1), 
+              () async{
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsScreen()));
+              })
+            ]
         ],
       ),
     ),
@@ -119,7 +133,7 @@ class _UserScreenState extends State<UserScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                "Active user",
+                UserSession.currentUser?.ulogaNavigation?.naziv == "" ?"Active user" : "Active organizer",
                 style: GoogleFonts.poppins(
                   color: Colors.grey,
                   fontSize: 14,
@@ -130,7 +144,11 @@ class _UserScreenState extends State<UserScreen> {
         ],
       ),
       ElevatedButton(
-        onPressed: () {},
+        onPressed: () async{
+          Navigator.pop(context);
+          AuthProvider.email = "";
+          AuthProvider.password = "";
+        },
         child: Text("Sign Out"),
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
@@ -189,6 +207,32 @@ class _UserScreenState extends State<UserScreen> {
         ),
       ],
     ),
+  );
+}
+Widget _buildFormDropDownMenu<T>(
+  String? hintText,
+  String name,
+  List<T>? items,
+  String Function(T) labelBuilder,
+  dynamic Function(T) valueBuilder, {
+  IconData? icon,
+}) {
+  return FormBuilderDropdown(
+    name: name,
+    decoration: InputDecoration(
+      labelText: hintText,
+      border: const OutlineInputBorder(),
+      filled: true,
+      fillColor: Colors.grey[100],
+      suffixIcon: icon != null ? Icon(icon, color: Colors.grey[700]) : null,
+    ),
+    items: items?.map((item) {
+          return DropdownMenuItem(
+            value: valueBuilder(item),
+            child: Text(labelBuilder(item)),
+          );
+        }).toList() ??
+        [],validator: FormBuilderValidators.required(errorText: "This field is required"),
   );
 }
 }
