@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:eseminars_desktop/layouts/master_screen.dart';
 import 'package:eseminars_desktop/main.dart';
 import 'package:eseminars_desktop/models/categories.dart';
@@ -35,13 +37,19 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   late SeminarsProvider seminarsProvider;
   SearchResult<Seminars>? typeOfSeminarsResult; 
   SearchResult<Sponsors>? typeOfSponsorsResult;
+  SearchResult<Seminars>? seminarsDropdown;
   late SponsorsSeminarsProvider sponsorsSeminarsProvider;
   late CategoriesProvider categoriesProvider;
   SearchResult<Categories>? typeOfCategories;
+  SearchResult<Sponsorsseminars>? sponsorsSeminarsResult;
   bool isLoading = true;
   int _selectedIndex = 0;
   int pageSize = 4;
   String? selectedCategory;
+  int? seminarId;
+
+  bool isSeminarsActive = true;
+  bool isSponsorsActive = false;
 
   @override
   void didChangeDependencies() {
@@ -63,6 +71,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     typeOfSeminarsResult = await seminarsProvider.get();
     typeOfSponsorsResult = await sponsorsProvider.get();
     typeOfCategories = await categoriesProvider.get();
+    await _loadSeminarsDropDown();
 
 
     setState(() {
@@ -71,6 +80,18 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         _filterData();
       }
       isLoading = false;
+      if(seminarsDropdown?.result.isNotEmpty == true){
+        seminarId = seminarsDropdown?.result.first.seminarId;
+      }
+    });
+    
+  }
+  Future<void> _loadSeminarsDropDown()async{
+    var filter = {
+      'isActive' : true
+    };
+    seminarsDropdown = await seminarsProvider.get(filter: filter);
+    setState(() {
     });
   }
   Future<void> _loadData() async{
@@ -100,6 +121,15 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     result = await seminarsProvider.get(filter: filter);
     setState(() {});
   }
+  Future<void> _loadSponsorsBySeminar()async{
+    var filter = {
+      'seminarId' : seminarId,
+      'Page' : _selectedIndex,
+      'PageSize' : pageSize
+    };
+    sponsorsSeminarsResult = await sponsorsSeminarsProvider.get(filter: filter);
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,8 +137,9 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
      isLoading ? Container():
       _buildFilter(),
       const SizedBox(height: 55,),
-      _buildForm(),
-      _buildPaging()
+      isSeminarsActive ? _buildForm() : Container(),
+      isSponsorsActive ? _buildFormSponsors() : Container(),
+      isSponsorsActive ? _buildPagingSponsors() : _buildPaging()
     ],));
   }
 
@@ -117,16 +148,40 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   Widget _buildFilter(){
     return Row(
       children: [
-        Expanded(flex: 1,child: Container()),
+        Expanded(flex: 1,child: Row(
+          children: [
+            IconButton(onPressed: isSeminarsActive ? null : () async {
+              setState(() {
+                isSeminarsActive = true;
+                isSponsorsActive = false;
+                _selectedIndex = 0;
+                _loadData();
+              });
+            } , icon: Icon(Icons.cast_for_education)),
+            const SizedBox(width: 10,),
+            IconButton(onPressed: isSponsorsActive ? null : () async {
+              setState(() {
+                isSeminarsActive = false;
+                isSponsorsActive = true;
+                _selectedIndex = 0;
+                _loadSponsorsBySeminar();
+              });
+            }  , icon: Icon(Icons.attach_money)),
+
+          ],
+        )),
         Expanded(flex: 2,child: Row(
           children: [
+            if(isSeminarsActive == true) ... [
             Expanded(child: TextField(controller: _searchSeminar,onChanged: (value) {
               setState(() {
                 _selectedIndex = 0;
               });
              _filterData();
             },decoration: InputDecoration(labelText: "Search seminar",border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),)),
+            ],
             const SizedBox(width: 10,),
+             if(isSeminarsActive == true) ... [
             Expanded(child: FormBuilderDropdown(onChanged: (value) {
               setState(() {
                 selectedCategory = value as String;
@@ -134,18 +189,39 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               });
               _filterData();
             },decoration: InputDecoration(labelText: "Category", border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),name: 'kategorijaId', items: typeOfCategories?.result.map((item) => 
-            DropdownMenuItem(value: item.naziv,child: Text(item.naziv ?? ""))).toList() ?? [])),
+            DropdownMenuItem(value: item.naziv,child: Text(item.naziv ?? ""))).toList() ?? []))
+            ],
             const SizedBox(width: 10,),
+            if(isSponsorsActive == true) ... [
+              Expanded(child: FormBuilderDropdown(decoration: InputDecoration(
+                labelText: "Seminar",
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(30))),
+                  initialValue:seminarId ,
+                  name: 'seminarId', 
+                  onChanged:(value) async{
+                    setState(() {
+                      seminarId = value as int;
+                    });
+                    await _loadSponsorsBySeminar();
+                  },
+                  items: seminarsDropdown?.result.map((item)=> DropdownMenuItem(value: item.seminarId,child: Text("${item.naslov}"))).toList() ?? []))
+            ],
+            const SizedBox(width: 10,),
+            if(isSponsorsActive == true) ... [
             ElevatedButton(onPressed: (){
               isLoading ? Container() : showCustomDialog(context);
-            }, child: Text("Sponsor")),
+            }, child: Text("Sponsor"))
+            ],
             const SizedBox(width: 10,),
+            if(isSeminarsActive == true) ... [
             ElevatedButton(onPressed: () async{
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen()));
               if(result == true){
                 await _filterData();
               }
             }, child: Text("Add")),
+            ]
           ],
         ))
       ],
@@ -205,6 +281,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               await sponsorsSeminarsProvider.insert(_formKey.currentState?.value);
               _formKey.currentState?.reset();
               showSuccessMessage(context, "The sponsor already exists in a seminar.");
+              await _loadSponsorsBySeminar();
               Navigator.pop(context, true);
             } catch (e) {
               showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
@@ -214,6 +291,23 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         }, child: Text("Add"))
       ],
     );
+  }
+  Widget _buildFormSponsors(){
+    return Expanded(child: 
+    SingleChildScrollView(
+      child: DataTable(columns: [
+        DataColumn(label: Text("Name")),
+        DataColumn(label: Text("Email")),
+        DataColumn(label: Text("Phone")),
+        DataColumn(label: Text(""))
+      ], rows: sponsorsSeminarsResult?.result.map((e) => 
+      DataRow(cells: [
+        DataCell(Text(e.sponzor?.naziv ?? "")),
+        DataCell(Text(e.sponzor?.email ?? "")),
+        DataCell(Text(e.sponzor?.telefon ?? "")),
+        DataCell(ElevatedButton(onPressed: ()async{},child: Text("Remove"),))
+      ])).toList().cast<DataRow>() ?? []),
+    ));
   }
   Widget _buildForm(){
     return Expanded(child: 
@@ -304,6 +398,19 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   return PaginationControls(
     currentPage: _selectedIndex,
     totalItems: result?.count ?? 0,
+    pageSize: pageSize,
+    onPageChanged: (newPage) async {
+      setState(() {
+        _selectedIndex = newPage;
+      });
+      await _filterData();
+    },
+  );
+}
+Widget _buildPagingSponsors() {
+  return PaginationControls(
+    currentPage: _selectedIndex,
+    totalItems: sponsorsSeminarsResult?.count ?? 0,
     pageSize: pageSize,
     onPageChanged: (newPage) async {
       setState(() {

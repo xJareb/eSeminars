@@ -5,6 +5,7 @@ import 'package:eseminars_desktop/providers/feedbacks_provider.dart';
 import 'package:eseminars_desktop/providers/korisnici_provider.dart';
 import 'package:eseminars_desktop/providers/lecturers_provider.dart';
 import 'package:eseminars_desktop/providers/logged_korisnici_provider.dart';
+import 'package:eseminars_desktop/providers/materials_provider.dart';
 import 'package:eseminars_desktop/providers/notifications_provider.dart';
 import 'package:eseminars_desktop/providers/reservations_provider.dart';
 import 'package:eseminars_desktop/providers/seminars_provider.dart';
@@ -26,7 +27,8 @@ void main() {
     ChangeNotifierProvider<FeedbacksProvider>(create: (_) => FeedbacksProvider()),
     ChangeNotifierProvider<SeminarsProvider>(create: (_) => SeminarsProvider()),
     ChangeNotifierProvider<ReservationsProvider>(create: (_) => ReservationsProvider()),
-    ChangeNotifierProvider<SponsorsSeminarsProvider>(create: (_) => SponsorsSeminarsProvider())
+    ChangeNotifierProvider<SponsorsSeminarsProvider>(create: (_) => SponsorsSeminarsProvider()),
+    ChangeNotifierProvider<MaterialsProvider>(create: (_) => MaterialsProvider())
   ], 
   child: const MyApp(), ));
 }

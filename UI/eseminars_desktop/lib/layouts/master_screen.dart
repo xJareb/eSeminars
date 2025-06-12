@@ -1,6 +1,7 @@
 import 'package:eseminars_desktop/screens/categories_list_screen.dart';
 import 'package:eseminars_desktop/screens/feedbacks_list_screen.dart';
 import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
+import 'package:eseminars_desktop/screens/materials_screen.dart';
 import 'package:eseminars_desktop/screens/notifications_list_screen.dart';
 import 'package:eseminars_desktop/screens/reservation_list_screen.dart';
 import 'package:eseminars_desktop/screens/seminars_list_screen.dart';
@@ -83,6 +84,13 @@ class _MasterScreenState extends State<MasterScreen> {
                   title: Text("Feedbacks"),
                   onTap: (){
                     Navigator.of(context).push(MaterialPageRoute(builder: (context) => FeedbacksListScreen()));
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.book_outlined),
+                  title: Text("Materials"),
+                  onTap: (){
+                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MaterialsScreen()));
                   },
                 )
               ],
