@@ -23,6 +23,8 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   late CategoriesProvider provider;
   Map<String, dynamic> _initialValue = {};
+  final RegExp capitalLetter = RegExp(r'^[A-Z].*');
+  final RegExp noNumber = RegExp(r'^[^0-9]*$');
 
   @override
   void didChangeDependencies() {
@@ -39,7 +41,7 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
     });
     _initialValue = {
       'naziv':widget.categories?.naziv,
-      'opis':widget.categories?.naziv,
+      'opis':widget.categories?.opis,
     };
   }
 
@@ -61,10 +63,13 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
       children: [
         Expanded(child: CustomFormBuilderTextField(name: 'naziv', label: "Title",validators: [
           FormBuilderValidators.required(errorText: "This field is required."),
+          FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+          FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
         ],)),
         const SizedBox(width: 40,),
         Expanded(child: CustomFormBuilderTextField(name: 'opis', label: "Description",validators: [
-          FormBuilderValidators.required(errorText: "This field is required.")
+          FormBuilderValidators.required(errorText: "This field is required."),
+          FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
         ],))
       ],
     )

@@ -24,6 +24,9 @@ class SeminarsDetailsScreen extends StatefulWidget {
 
 class _SeminarsDetailsScreenState extends State<SeminarsDetailsScreen> {
 
+
+   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
+   final RegExp noNumber = RegExp(r'^[^0-9]*$');
    final _formKey = GlobalKey<FormBuilderState>();
    late LecturersProvider lecturersProvider;
    late CategoriesProvider categoriesProvider;
@@ -98,7 +101,9 @@ class _SeminarsDetailsScreenState extends State<SeminarsDetailsScreen> {
         Row(
           children: [
             Expanded(child: CustomFormBuilderTextField(name: 'naslov', label: "Seminar",validators: [
-              FormBuilderValidators.required(errorText: "This field is required.")
+              FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
             ],)),
             const SizedBox(width: 40,),
             Expanded(child: CustomFormBuilderTextField(name: 'opis', label: "Description",validators: [

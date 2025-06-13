@@ -84,7 +84,6 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         seminarId = seminarsDropdown?.result.first.seminarId;
       }
     });
-    
   }
   Future<void> _loadSeminarsDropDown()async{
     var filter = {
@@ -188,7 +187,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                 _selectedIndex = 0;
               });
               _filterData();
-            },decoration: InputDecoration(labelText: "Category", border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),name: 'kategorijaId', items: typeOfCategories?.result.map((item) => 
+            },initialValue: selectedCategory,decoration: InputDecoration(labelText: "Category", border: OutlineInputBorder(borderRadius: BorderRadius.circular(30))),name: 'kategorijaId', items: typeOfCategories?.result.map((item) => 
             DropdownMenuItem(value: item.naziv,child: Text(item.naziv ?? ""))).toList() ?? []))
             ],
             const SizedBox(width: 10,),

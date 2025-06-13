@@ -48,7 +48,10 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   }
 
    Future initForm() async{
-    typeOfSeminarsResult = await seminarsProvider.get();
+    var seminarFilter = {
+      'isActive' : true
+    };
+    typeOfSeminarsResult = await seminarsProvider.get(filter: seminarFilter);
 
     setState(() {
       if(typeOfSeminarsResult?.result.isNotEmpty == true){
@@ -118,7 +121,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
           ],
         )),
         Expanded(flex: 1,child: 
-            FormBuilderDropdown(name: 'seminarId', items: typeOfSeminarsResult?.result.map((item) => DropdownMenuItem(value: item.seminarId.toString(),child: Text(item.naslov ?? "" ))).toList() ?? [],
+            FormBuilderDropdown(initialValue: selectedSeminarId,name: 'seminarId', items: typeOfSeminarsResult?.result.map((item) => DropdownMenuItem(value: item.seminarId.toString(),child: Text(item.naslov ?? "" ))).toList() ?? [],
             decoration: InputDecoration(
               labelText: "Seminar",border: 
               OutlineInputBorder(borderRadius: 

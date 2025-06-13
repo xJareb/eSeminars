@@ -26,6 +26,8 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   Map<String, dynamic> _initialValue = {};
   late KorisniciProvider userProdiver;
   final _formKey = GlobalKey<FormBuilderState>();
+  final RegExp capitalLetter = RegExp(r'^[A-Z].*');
+  final RegExp noNumber = RegExp(r'^[^0-9]*$');
 
   @override
   void didChangeDependencies() {
@@ -67,12 +69,16 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
             Expanded(child: CustomFormBuilderTextField(name: "ime", label: "Name", validators: [
               FormBuilderValidators.required(errorText: "This field is required."),
               FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
             ],
             )),
             const SizedBox(width: 40,),
             Expanded(child: CustomFormBuilderTextField(name: "prezime", label: "Surname", validators: [
               FormBuilderValidators.required(errorText: "This field is required."),
               FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
             ],))
           ],
         ),

@@ -23,6 +23,8 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   RegExp phoneExp = RegExp( r'^\d{9,10}$');
   late LecturersProvider provider;
+  final RegExp capitalLetter = RegExp(r'^[A-Z].*');
+  final RegExp noNumber = RegExp(r'^[^0-9]*$');
 
   @override
   void didChangeDependencies() {
@@ -64,6 +66,8 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
               FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "This field is required."),
                 FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
+                FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+                FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
               ])
             ],)),
             const SizedBox(width: 40,),
@@ -71,6 +75,8 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
               FormBuilderValidators.compose([
                 FormBuilderValidators.required(errorText: "This field is required."),
                 FormBuilderValidators.minLength(3,errorText: "This field must contain at least three characters."),
+                FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+                FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
               ])
             ],)),
           ],
@@ -80,6 +86,7 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
           children: [
             Expanded(child: CustomFormBuilderTextField(name: 'biografija', label: "Biography",validators: [
               FormBuilderValidators.required(errorText: "This field is required."),
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
             ],)),
             const SizedBox(width: 40,),
             if(widget.lecturers == null) ... [
