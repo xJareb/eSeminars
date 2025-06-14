@@ -304,94 +304,108 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         DataCell(Text(e.sponzor?.naziv ?? "")),
         DataCell(Text(e.sponzor?.email ?? "")),
         DataCell(Text(e.sponzor?.telefon ?? "")),
-        DataCell(ElevatedButton(onPressed: ()async{},child: Text("Remove"),))
+        DataCell(ElevatedButton(onPressed: ()async{
+          await buildAlertDiagram(context: context, onConfirmDelete: ()async{
+            try {
+              
+            } catch (e) {
+              showErrorMessage(context, e.toString().replaceFirst('Exception: ', ''));
+            }
+          });
+        },child: Text("Remove"),))
       ])).toList().cast<DataRow>() ?? []),
     ));
   }
   Widget _buildForm(){
-    return Expanded(child: 
-    SingleChildScrollView(
-    scrollDirection: Axis.horizontal,
-    child: 
-    DataTable(showCheckboxColumn: false,columns: [
-      DataColumn(label: Text("Seminar")),
-      DataColumn(label: Text("Date")),
-      DataColumn(label: Text("Location")),
-      DataColumn(label: Text("Capacity")),
-      DataColumn(label: Text(""))
-    ], rows: result?.result.map((e) =>
-        DataRow(onSelectChanged: (selected) async{
-          if(selected == true){
-            try {
-              List<String> actions = await seminarsProvider.allowedActions(e.seminarId!);
-              if(actions.contains('Update')){
-                var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen(seminars: e,)));
-                if(result == true){
-                _filterData();
-              }
-              }
-            } catch (e) {
-              print(e.toString());
-            }
-          }
-          
-        },cells: [
-        DataCell(Text(e.naslov ?? "")),
-        DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
-        DataCell(Text(e.lokacija ?? "")),
-        DataCell(Text(e.kapacitet.toString() ?? "")),
-        DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
-          FutureBuilder<List<String>>(
-            future: seminarsProvider.allowedActions(e.seminarId!),
-            builder: (context,snapshot){
-              if (snapshot.hasError) {
-                  return Text("Error");
+    return Expanded(
+      child: SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      child: 
+      DataTable(
+      showCheckboxColumn: false,
+      columnSpacing: 14,
+      columns: [
+        DataColumn(label: Text("Seminar")),
+        DataColumn(label: Text("Date")),
+        DataColumn(label: Text("Location")),
+        DataColumn(label: Text("Capacity")),
+        DataColumn(label: Text("Reserved")),
+        DataColumn(label: Text(""))
+      ], rows: result?.result.map((e) =>
+          DataRow(onSelectChanged: (selected) async{
+            if(selected == true){
+              try {
+                List<String> actions = await seminarsProvider.allowedActions(e.seminarId!);
+                if(actions.contains('Update')){
+                  var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen(seminars: e,)));
+                  if(result == true){
+                  _filterData();
                 }
-              final actions = snapshot.data ?? [];
-
-              return Row(
-                children: [
-                  if(actions.contains('Activate'))
-                  ElevatedButton(onPressed: () async{
-                    try {
-                      await seminarsProvider.activateSeminar(e.seminarId!);
-                      await _filterData();
-                      showSuccessMessage(context, "Seminar successfully activated");
-                    } catch (e) {
-                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                    }
-                  }, child: Text("Activate")),
-                  if(actions.contains('Hide'))
-                  ElevatedButton(onPressed: () async{
-                    try {
-                      await seminarsProvider.hideSeminar(e.seminarId!);
-                      await _filterData();
-                      showSuccessMessage(context, "Seminar successfully hidden");
-                    } catch (e) {
-                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                    }
-                  }, child: Text("Hide")),
-                  if(actions.contains('Edit'))
-                  ElevatedButton(onPressed: () async{
-                    try {
-                      await seminarsProvider.editSeminar(e.seminarId!);
-                      await _filterData();
-                      showSuccessMessage(context, "Seminar successfully edited");
-                    } catch (e) {
-                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                    }
-                  }, child: Text("Edit")),
-                ],
-              );
+                }
+              } catch (e) {
+                print(e.toString());
+              }
             }
-          ),
-          ElevatedButton(onPressed: (){
-            generatePdfReport(e);
-          }, child: Text("Report"))
-        ],))
-    ])
-    ).toList().cast<DataRow>() ?? [])
-    ,));
+            
+          },cells: [
+          DataCell(Text(e.naslov ?? "")),
+          DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
+          DataCell(Text(e.lokacija ?? "")),
+          DataCell(Text(e.kapacitet.toString() ?? "")),
+          DataCell(Text(e.kapacitet.toString() ?? "")),
+          DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
+            FutureBuilder<List<String>>(
+              future: seminarsProvider.allowedActions(e.seminarId!),
+              builder: (context,snapshot){
+                if (snapshot.hasError) {
+                    return Text("Error");
+                  }
+                final actions = snapshot.data ?? [];
+      
+                return Row(
+                  children: [
+                    if(actions.contains('Activate'))
+                    ElevatedButton(onPressed: () async{
+                      try {
+                        await seminarsProvider.activateSeminar(e.seminarId!);
+                        await _filterData();
+                        showSuccessMessage(context, "Seminar successfully activated");
+                      } catch (e) {
+                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                      }
+                    }, child: Text("Activate")),
+                    if(actions.contains('Hide'))
+                    ElevatedButton(onPressed: () async{
+                      try {
+                        await seminarsProvider.hideSeminar(e.seminarId!);
+                        await _filterData();
+                        showSuccessMessage(context, "Seminar successfully hidden");
+                      } catch (e) {
+                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                      }
+                    }, child: Text("Hide")),
+                    if(actions.contains('Edit'))
+                    ElevatedButton(onPressed: () async{
+                      try {
+                        await seminarsProvider.editSeminar(e.seminarId!);
+                        await _filterData();
+                        showSuccessMessage(context, "Seminar successfully edited");
+                      } catch (e) {
+                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                      }
+                    }, child: Text("Edit")),
+                  ],
+                );
+              }
+            ),
+            ElevatedButton(onPressed: (){
+              generatePdfReport(e);
+            }, child: Text("Report"))
+          ],))
+      ])
+      ).toList().cast<DataRow>() ?? [])
+      ,),
+    );
   }
   Widget _buildPaging() {
   return PaginationControls(

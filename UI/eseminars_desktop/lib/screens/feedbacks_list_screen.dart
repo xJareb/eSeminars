@@ -65,7 +65,10 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
   }
 
   Future initForm() async{
-    typeOfSeminarsResult = await seminarsProvider.get();
+    var seminarFilter = {
+      'isActive' : true
+    };
+    typeOfSeminarsResult = await seminarsProvider.get(filter: seminarFilter);
 
     setState(() {
       if(typeOfSeminarsResult?.result.isNotEmpty == true){
@@ -93,7 +96,7 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
     return Row(
       children: [
         Expanded(flex: 3,child: Container()),
-        Expanded(flex: 2,child: FormBuilderDropdown(name: 'seminarId',decoration: InputDecoration(labelText: "Seminar",border: OutlineInputBorder(
+        Expanded(flex: 2,child: FormBuilderDropdown(initialValue: selectedSeminarId,name: 'seminarId',decoration: InputDecoration(labelText: "Seminar",border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(30))), items: 
           typeOfSeminarsResult?.result.map((item) => DropdownMenuItem(value: item.seminarId.toString(),child: Text(item.naslov ?? ""),)).toList() ?? []
         ,onChanged: (value){
