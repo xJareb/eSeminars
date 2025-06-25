@@ -116,10 +116,15 @@ class LoginPage extends StatelessWidget {
                   KorisniciProvider provider = new KorisniciProvider();
                   AuthProvider.email = _email.text;
                   AuthProvider.password = _password.text;
+                  final FocusNode _emailFocusNode = FocusNode();
                   try {
                     var user = await provider.login(_email.text, _password.text);
                     if(user != null){
                       UserSession.currentUser = user;
+
+                      _password.clear();
+                      _email.clear();
+                      FocusScope.of(context).requestFocus(_emailFocusNode);
                     }
                     if(UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik"){
                       Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));

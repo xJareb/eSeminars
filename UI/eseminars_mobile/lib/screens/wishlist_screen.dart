@@ -6,6 +6,7 @@ import 'package:eseminars_mobile/models/savedSeminars.dart';
 import 'package:eseminars_mobile/models/search_result.dart';
 import 'package:eseminars_mobile/providers/wishlist_provider.dart';
 import 'package:eseminars_mobile/screens/seminar_details_screen.dart';
+import 'package:eseminars_mobile/utils/custom_dialogs.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
     _loadWishlist();
   }
-  void _loadWishlist() async{
+  Future<void> _loadWishlist() async{
     var filter = {
       'KorisnikId' : UserSession.currentUser?.korisnikId
     };
@@ -62,6 +63,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
         itemCount: result?.result.length,
         scrollDirection: Axis.vertical,
         itemBuilder: (context,index){
+          final wishlist = result?.result[index];
           return Padding(
             padding: const EdgeInsets.all(12.0),
             child: Container(
@@ -91,10 +93,28 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                     ),
                   ),
                 Positioned(bottom: 20,left: 10,child: Text("${result?.result[index].seminar?.datumVrijeme!.substring(0,result?.result[index].seminar?.datumVrijeme!.indexOf("T"))}")),
-                Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: (){
-                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarDetailsScreen(seminars: result?.result[index].seminar)));
+                Positioned(bottom: 10,right: 10,child: ElevatedButton(onPressed: () async{
+                  await Navigator.of(context).push(MaterialPageRoute(
+  builder: (context) => SeminarDetailsScreen(seminars: result?.result[index].seminar),
+)).then((value) async {
+  await _loadWishlist();
+});
                 }, child: Text("Details"))),
-                Positioned(top: 2,right: 10,child: IconButton(onPressed: (){}, icon: Icon(Icons.close)))
+                Positioned(top: 2,right: 10,child: IconButton(onPressed: () async{
+                  try {
+                              MyDialogs.showInformationDialog(context, "Are you sure you want to remove this seminar from wishlist?", ()async{
+                              try {
+                              await wishlistProvider.softDelete(wishlist?.sacuvaniSeminarId ?? 0);
+                              MyDialogs.showSuccessDialog(context, "Successfully removed seminar from wishlist");
+                              await _loadWishlist();
+                              } catch (e) {
+                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              }
+                            });
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                          }
+                }, icon: Icon(Icons.close)))
                 ]
               ),
             ),

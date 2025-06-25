@@ -12,6 +12,7 @@ public partial class SacuvaniSeminari
     public int? SeminarId { get; set; }
 
     public DateTime DatumSacuvanja { get; set; }
+    public bool? IsDeleted { get; set; } = false;
 
     public virtual Korisnici? Korisnik { get; set; }
 

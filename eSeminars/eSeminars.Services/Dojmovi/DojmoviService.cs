@@ -22,7 +22,7 @@ namespace eSeminars.Services.Dojmovi
         {
             var filteredQuery = base.AddFilter(search, query);
 
-            filteredQuery = filteredQuery.Include(k=>k.Korisnik).Where(d => d.SeminarId == search.SeminarId);
+            filteredQuery = filteredQuery.Include(k=>k.Korisnik).Where(d => d.SeminarId == search.SeminarId && d.IsDeleted == false);
 
             return filteredQuery;
         }

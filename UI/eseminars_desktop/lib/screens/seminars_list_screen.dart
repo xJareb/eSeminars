@@ -307,10 +307,13 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         DataCell(ElevatedButton(onPressed: ()async{
           await buildAlertDiagram(context: context, onConfirmDelete: ()async{
             try {
-              
+              await sponsorsSeminarsProvider.softDelete(e.sponzoriSeminariId!);
+              showSuccessMessage(context, "Sponsor successfully removed");
             } catch (e) {
               showErrorMessage(context, e.toString().replaceFirst('Exception: ', ''));
             }
+            await _loadSponsorsBySeminar();
+            setState(() {});
           });
         },child: Text("Remove"),))
       ])).toList().cast<DataRow>() ?? []),
@@ -352,7 +355,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
           DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
           DataCell(Text(e.lokacija ?? "")),
           DataCell(Text(e.kapacitet.toString() ?? "")),
-          DataCell(Text(e.kapacitet.toString() ?? "")),
+          DataCell(Text(e.zauzeti.toString() ?? "")),
           DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
             FutureBuilder<List<String>>(
               future: seminarsProvider.allowedActions(e.seminarId!),
@@ -436,7 +439,6 @@ Widget _buildPagingSponsors() {
 void generatePdfReport(dynamic report) async {
   final pdf = pw.Document();
 
-  // Funkcija za sigurno dohvaćanje datuma i vremena u željenom formatu
   String formatDateTime(String? datetime) {
     if (datetime == null || !datetime.contains('T')) return '';
     try {

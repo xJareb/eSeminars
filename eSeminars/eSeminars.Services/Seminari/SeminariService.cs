@@ -82,6 +82,10 @@ namespace eSeminars.Services.Seminari
                 {
                 filteredQuerry = filteredQuerry.Where(x => x.DatumVrijeme > DateTime.Now);
                 }
+                else if (search.dateTime == false)
+                {
+                filteredQuerry = filteredQuerry.Where(x => x.DatumVrijeme < DateTime.Now);
+                }
                 if(search.isDraft == true)
                 {
                 filteredQuerry = filteredQuerry.Where(x => x.StateMachine == "draft");
@@ -89,6 +93,10 @@ namespace eSeminars.Services.Seminari
                 if(search.includeMaterialsOrg == true)
                 {
                 filteredQuerry = filteredQuerry.Include(s => s.Materijalis);
+                }
+                if(search.OrganizatorId != null)
+                {
+                filteredQuerry = filteredQuerry.Where(x => x.KorisnikId == search.OrganizatorId);
                 }
             return filteredQuerry;
         }

@@ -10,6 +10,7 @@ public partial class SponzoriSeminari
     public int? SeminarId { get; set; }
 
     public int? SponzorId { get; set; }
+    public bool? IsDeleted { get; set; } = false;
 
     public virtual Seminari? Seminar { get; set; }
 

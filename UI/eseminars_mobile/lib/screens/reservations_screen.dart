@@ -54,6 +54,7 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
   }
   Future<void> _loadSeminars() async{
     var filter = {
+      'isActive' : true
     };
     seminarResult = await seminarsProvider.get(filter: filter);
     setState(() {

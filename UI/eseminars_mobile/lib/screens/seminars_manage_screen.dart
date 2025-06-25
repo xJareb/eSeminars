@@ -67,6 +67,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
     setState(() {
       isLoading = false;
     });
+    print(seminarResult?.count);
   }
 
   Future<void> _loadCategories()async{

@@ -289,7 +289,7 @@ Widget _buildSeminarMaterials(){
                               MyDialogs.showInformationDialog(context, "Are you sure you want to delete this material?", ()async{
                               try {
                               await materialsProvider.softDelete(material?.materijalId ?? 0);
-                              MyDialogs.showSuccessDialog(context, "Successfully removed material");
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed material");
                               await _loadMaterials();
                               } catch (e) {
                                 MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));

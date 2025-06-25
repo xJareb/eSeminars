@@ -1,4 +1,5 @@
-﻿using eSeminars.Services.Database;
+﻿using eSeminars.Model;
+using eSeminars.Services.Database;
 using MapsterMapper;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,21 @@ namespace eSeminars.Services.RezervacijeStateMachine
         {
             var set = Context.Set<Database.Rezervacije>();
 
+            var seminarset = Context.Set<Database.Seminari>();
+
             var entity = set.Find(id);
+
+            var seminarId = entity.SeminarId;
+
+            var seminar = seminarset.Find(seminarId);
+
+            if(seminar.Zauzeti > seminar.Kapacitet)
+            {
+                throw new UserException("Capacity is full");
+            }else
+            {
+                seminar.Zauzeti = seminar.Zauzeti + 1;
+            }
 
             entity.StateMachine = "approved";
 

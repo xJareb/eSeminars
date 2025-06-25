@@ -41,7 +41,15 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
   "assets/images/52844500911_19813ef7cd_b.jpg",
   "assets/images/Universal-655-1520027541.jpg",
   ];
-
+  Future<void> _loadSeminarsInfo() async{
+    var filter = {
+      'SeminarId' : widget.seminars?.seminarId,
+      'KorisnikId' : UserSession.currentUser?.korisnikId
+    };
+    result = await provider.get(filter: filter);
+    setState(() {
+    });
+  }
   Future<void> _loadWishlist() async{
     var filter = {
       'KorisnikId' : UserSession.currentUser?.korisnikId
@@ -51,7 +59,6 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
     setState(() {
       isLoading = false;
     });
-
   }
   @override
   void didChangeDependencies() {
@@ -63,6 +70,7 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
     final random = Random();
     randomImagePath = imagePaths[random.nextInt(imagePaths.length)];
     _loadWishlist();
+    _loadSeminarsInfo();
     
   }
   @override
@@ -109,6 +117,12 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
   Widget _buildSeminarDetails() {
   final fetchedSeminar = result?.result.first;
   final dateTime = widget?.seminars?.datumVrijeme;
+  bool isSeminarExpired = false;
+
+  if (widget.seminars?.datumVrijeme != null) {
+  final seminarDateTime = DateTime.tryParse(widget.seminars!.datumVrijeme!);
+  isSeminarExpired = seminarDateTime != null && seminarDateTime.isBefore(DateTime.now());
+  }
 
   return SingleChildScrollView(
     padding: const EdgeInsets.all(16),
@@ -201,6 +215,23 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
               });
             }else{
               //TODO:: Remove seminar from wishlist
+              final savedSeminar = wishlistResult?.result.firstWhere(
+              (s) => s.seminar?.seminarId == widget?.seminars?.seminarId,);
+              final savedSeminarId = savedSeminar?.sacuvaniSeminarId;
+              try {
+              MyDialogs.showInformationDialog(context, "Are you sure you want to remove this seminar from wishlist?", ()async{
+              try {
+              await wishlistProvider.softDelete(savedSeminarId!);
+              await  _loadWishlist();
+              setState(() {});
+              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+              } catch (e) {
+              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+              }
+            });
+           } catch (e) {
+            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+          }
             }
             } catch (e) {
               MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
@@ -211,7 +242,7 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
           )),
           SizedBox(
             width: MediaQuery.of(context).size.width * 0.4,
-            child: ElevatedButton(onPressed: ()async{
+            child: ElevatedButton(onPressed: isSeminarExpired ? null :  ()async{
               MyDialogs.showInformationDialog(context, "Are you sure you want to reserve a seat?", ()async{
                 try {
                   final request = {

@@ -16,6 +16,7 @@ class Seminars {
   String? datumVrijeme;
   String? lokacija;
   int? kapacitet;
+  int? zauzeti;
   String? stateMachine;
   Korisnik? korisnik;
   Lecturers? predavac;
@@ -23,7 +24,7 @@ class Seminars {
   List<Feedbacks>? dojmovis;
   List<Sponsorsseminars>? sponzoriSeminaris;
 
-  Seminars({this.seminarId,this.naslov,this.opis,this.datumVrijeme,this.lokacija,this.kapacitet,this.stateMachine,this.korisnik,this.predavac,this.kategorija,this.dojmovis,this.sponzoriSeminaris});
+  Seminars({this.seminarId,this.naslov,this.opis,this.datumVrijeme,this.lokacija,this.kapacitet,this.zauzeti,this.stateMachine,this.korisnik,this.predavac,this.kategorija,this.dojmovis,this.sponzoriSeminaris});
 
   factory Seminars.fromJson(Map<String, dynamic> json) => _$SeminarsFromJson(json);
 

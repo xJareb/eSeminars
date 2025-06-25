@@ -1,8 +1,11 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 
 class MyDialogs {
-  static void showSuccessDialog(BuildContext context, String message) {
+  static Future<void> showSuccessDialog(BuildContext context, String message) {
+    final completer = Completer<void>();
     AwesomeDialog(
       context: context,
       dialogType: DialogType.success,
@@ -10,12 +13,16 @@ class MyDialogs {
       title: 'Success',
       desc: message,
       btnOkOnPress: () {
+        completer.complete();
       },
       btnOkColor: Colors.green,
     ).show();
+
+     return completer.future;
   }
 
-  static void showErrorDialog(BuildContext context, String message) {
+  static Future<void> showErrorDialog(BuildContext context, String message) {
+    final completer = Completer<void>();
     AwesomeDialog(
       context: context,
       dialogType: DialogType.error,
@@ -25,6 +32,8 @@ class MyDialogs {
       btnOkOnPress: () {},
       btnOkColor: Colors.red,
     ).show();
+
+    return completer.future;
   }
   static void showInformationDialog(BuildContext context, String message, VoidCallback onOkPressed,) {
   AwesomeDialog(

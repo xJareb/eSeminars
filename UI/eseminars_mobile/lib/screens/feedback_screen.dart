@@ -5,6 +5,7 @@ import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/feedback_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
+import 'package:eseminars_mobile/utils/custom_dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -150,6 +151,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         scrollDirection: Axis.vertical,
         itemCount: feedbackResult?.result.length,
         itemBuilder: (context,index){
+          final feedback = feedbackResult?.result[index];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
             child: Card(
@@ -159,7 +161,21 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                   children: [
                     Expanded(flex: 3,child: Text("${feedbackResult?.result[index].korisnik?.ime} ${feedbackResult?.result[index].korisnik?.prezime}")),
                     Expanded(flex: 3,child: buildStars(feedbackResult?.result[index].ocjena ?? 0)),
-                    Expanded(flex: 1,child: IconButton(onPressed: () async{}, icon: Icon(Icons.close,),style: IconButton.styleFrom(
+                    Expanded(flex: 1,child: IconButton(onPressed: () async{
+                      try {
+                              MyDialogs.showInformationDialog(context, "Are you sure you want to delete this feedback?", ()async{
+                              try {
+                              await feedbackProvider.softDelete(feedback?.dojamId ?? 0);
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed feedback");
+                              await _loadFeedbacks();
+                              } catch (e) {
+                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              }
+                            });
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                          }
+                    }, icon: Icon(Icons.close,),style: IconButton.styleFrom(
                       foregroundColor: Colors.red
                     ),)),
                   ],

@@ -12,6 +12,7 @@ public partial class Dojmovi
     public int? KorisnikId { get; set; }
 
     public int Ocjena { get; set; }
+    public bool? IsDeleted { get; set; } = false;
 
     public DateTime DatumKreiranjaDojma { get; set; }
 

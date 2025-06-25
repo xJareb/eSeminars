@@ -122,8 +122,15 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
       DataCell(buildStars(e.ocjena ?? 0)),
       DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
         await buildAlertDiagram(context: context, onConfirmDelete: () async{
-
+          try{
+            await feedbacksProvider.softDelete(e.dojamId!);
+            showSuccessMessage(context, "Feedback successfully removed");
+          }catch (e){
+            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+          }
         });
+        await _filterData("");
+        setState(() {});
       },
       )
       ),

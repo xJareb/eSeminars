@@ -62,6 +62,7 @@ class _SeminarScreenState extends State<SeminarScreen> {
   Future<void> _loadSeminars() async{
     var filter = {
       'isActive': true,
+      'dateTime': true,
       'KategorijaLIKE' : categoryName
     };
     result = await provider.get(filter: filter);
@@ -171,6 +172,7 @@ class _SeminarScreenState extends State<SeminarScreen> {
                 childAspectRatio: 1,
                 crossAxisSpacing: 20,
                 mainAxisSpacing: 20),itemCount: result?.result.length, itemBuilder: (context,index){
+                  final seminar = result?.result[index];
                   return GestureDetector(
                     onTap: ()async{
                       var flow = await  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarDetailsScreen(seminars: result?.result[index],)));
@@ -196,9 +198,9 @@ class _SeminarScreenState extends State<SeminarScreen> {
                         children:[Column(
                           children: [
                             const SizedBox(height: 10,),
-                            Text("${result?.result[index].naslov ?? ""}",style: GoogleFonts.poppins(fontSize: 26,color: Colors.grey[800]),),
+                            Text("${result?.result[index].naslov ?? ""}",style: GoogleFonts.poppins(fontSize: 26,color: Colors.grey[800]),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
                             const SizedBox(height: 10,),
-                            Text("${result?.result[index].opis ?? ""}",style: GoogleFonts.poppins(fontSize: 16,color: Colors.grey[800]),),
+                            Text("${result?.result[index].opis ?? ""}",style: GoogleFonts.poppins(fontSize: 16,color: Colors.grey[800]),maxLines: 2,overflow: TextOverflow.ellipsis,softWrap: false,),
                             const SizedBox(height: 20,),
                             Row(children: [
                               Expanded(child: Padding(
@@ -225,7 +227,25 @@ class _SeminarScreenState extends State<SeminarScreen> {
                               
                             });
                             }else{
-                              //TODO:: Remove seminar from wishlist
+                              final savedSeminar = wishlistResult?.result.firstWhere(
+                              (s) => s.seminar?.seminarId == seminar?.seminarId,);
+                              final savedSeminarId = savedSeminar?.sacuvaniSeminarId;
+
+                              try {
+                              MyDialogs.showInformationDialog(context, "Are you sure you want to remove this seminar from wishlist?", ()async{
+                              try {
+                              await wishlistProvider.softDelete(savedSeminarId!);
+                              await _loadWishlist();
+                              setState(() {});
+                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+
+                              } catch (e) {
+                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              }
+                            });
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                          }
                             }
                             
                           } catch (e) {

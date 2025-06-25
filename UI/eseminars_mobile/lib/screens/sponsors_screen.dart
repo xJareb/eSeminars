@@ -8,6 +8,7 @@ import 'package:eseminars_mobile/models/sponsorsSeminars.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/providers/sponsorsSeminars_provider.dart';
 import 'package:eseminars_mobile/providers/sponsors_provider.dart';
+import 'package:eseminars_mobile/utils/custom_dialogs.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -206,6 +207,19 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
                   ),
                   IconButton(
                     onPressed: () async {
+                      try {
+                              MyDialogs.showInformationDialog(context, "Are you sure you want to delete this sponsor from seminar?", ()async{
+                              try {
+                              await sponsorsseminarsProvider.softDelete(sponsorSeminar?.sponzoriSeminariId ?? 0);
+                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+                              await _loadSponsorsBySeminar(seminarId: seminarId);
+                              } catch (e) {
+                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              }
+                            });
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                          }
                     },
                     icon: const Icon(Icons.close),
                     color: Colors.red,

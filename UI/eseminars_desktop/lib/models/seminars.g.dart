@@ -13,6 +13,7 @@ Seminars _$SeminarsFromJson(Map<String, dynamic> json) => Seminars(
       datumVrijeme: json['datumVrijeme'] as String?,
       lokacija: json['lokacija'] as String?,
       kapacitet: (json['kapacitet'] as num?)?.toInt(),
+      zauzeti: (json['zauzeti'] as num?)?.toInt(),
       stateMachine: json['stateMachine'] as String?,
       korisnik: json['korisnik'] == null
           ? null
@@ -38,6 +39,7 @@ Map<String, dynamic> _$SeminarsToJson(Seminars instance) => <String, dynamic>{
       'datumVrijeme': instance.datumVrijeme,
       'lokacija': instance.lokacija,
       'kapacitet': instance.kapacitet,
+      'zauzeti': instance.zauzeti,
       'stateMachine': instance.stateMachine,
       'korisnik': instance.korisnik,
       'predavac': instance.predavac,

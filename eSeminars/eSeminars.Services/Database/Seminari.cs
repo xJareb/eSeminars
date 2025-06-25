@@ -16,6 +16,7 @@ public partial class Seminari
     public string Lokacija { get; set; } = null!;
 
     public int Kapacitet { get; set; }
+    public int Zauzeti { get; set; } 
 
     public string? StateMachine { get; set; }
 

@@ -22,7 +22,7 @@ namespace eSeminars.Services.SacuvaniSeminari
         {
             var filteredQuery =  base.AddFilter(search, query);
 
-            filteredQuery = filteredQuery.Include(ss => ss.Seminar).Where(s => search.KorisnikId == s.KorisnikId);
+            filteredQuery = filteredQuery.Include(ss => ss.Seminar).Where(s => search.KorisnikId == s.KorisnikId && s.IsDeleted == false);
 
             return filteredQuery;
         }
