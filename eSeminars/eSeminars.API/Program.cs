@@ -7,6 +7,7 @@ using eSeminars.Services.Korisnici;
 using eSeminars.Services.Materijali;
 using eSeminars.Services.Obavijesti;
 using eSeminars.Services.Predavaci;
+using eSeminars.Services.RabbitMQ;
 using eSeminars.Services.Rezervacije;
 using eSeminars.Services.RezervacijeStateMachine;
 using eSeminars.Services.SacuvaniSeminari;
@@ -47,6 +48,7 @@ builder.Services.AddTransient<InitialRezervacijeState>();
 builder.Services.AddTransient<PendingRezervacijeState>();
 builder.Services.AddTransient<ApprovedRezervacijeState>();
 builder.Services.AddTransient<RejectedRezervacijeState>();
+builder.Services.AddScoped<IRabbitMQService, RabbitMQService>();
 
 
 builder.Services.AddControllers(
