@@ -10,8 +10,10 @@ namespace eSeminars.API.Controllers
 {
     public class KorisniciController : BaseCRUDController<Korisnici, KorisniciSearchObject, KorisniciInsertRequest, KorisniciUpdateRequest>
     {
+        private readonly IKorisniciService _korisniciService;
         public KorisniciController(IKorisniciService service) : base(service)
         {
+            _korisniciService = service;
         }
         [HttpPost("login")]
         [AllowAnonymous]
@@ -38,6 +40,19 @@ namespace eSeminars.API.Controllers
         public override Korisnici GetById(int id)
         {
             return base.GetById(id);
+        }
+        [AllowAnonymous]
+        [HttpGet("{userId}/recommended-seminars")]
+        public ActionResult<List<Model.Models.Seminari>> GetRecommendedDoktori(int userId)
+        {
+            var recommended = _korisniciService.GetRecommendedSeminars(userId);
+            return Ok(recommended);
+        }
+        [Authorize(Roles = "Administrator,Organizator,Korisnik")]
+        [HttpGet("train-model")]
+        public void TrainModel()
+        {
+            _korisniciService.TrainModel();
         }
     }
 }

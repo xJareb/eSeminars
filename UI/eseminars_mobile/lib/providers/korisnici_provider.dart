@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:math';
 import 'package:eseminars_mobile/models/korisnik.dart';
 import 'package:eseminars_mobile/models/logged_user.dart';
+import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/base_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -25,6 +26,7 @@ class KorisniciProvider extends BaseProvider<Korisnik> {
       return null;
     }
   }
+  
   
   @override
   Korisnik fromJson(data) {

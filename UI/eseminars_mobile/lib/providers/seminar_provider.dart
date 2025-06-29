@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/base_provider.dart';
+import 'package:http/http.dart' as http;
 
 class SeminarsProvider extends BaseProvider<Seminars>{
   SeminarsProvider():super("Seminari");
@@ -9,4 +12,26 @@ class SeminarsProvider extends BaseProvider<Seminars>{
     // TODO: implement fromJson
     return Seminars.fromJson(data);
   }
+  Future<List<Seminars>> recommendedSeminars(int userId) async {
+  var url = "${BaseProvider.baseUrl}Korisnici/${userId}/recommended-seminars";
+  
+
+  var headers = {
+    "Content-Type": "application/json"
+  };
+
+  try {
+    var response = await http.get(Uri.parse(url), headers: headers);
+
+    if (response.statusCode == 200) {
+      final List<dynamic> body = jsonDecode(response.body);
+      return body.map((item) => Seminars.fromJson(item)).toList();
+    } else {
+      throw Exception('Greška pri učitavanju preporučenih seminara, status: ${response.statusCode}');
+    }
+  } catch (e) {
+    print('Exception: $e');
+    rethrow;
+  }
+}
 }

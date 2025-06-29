@@ -9,6 +9,7 @@ using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
 using eSeminars.Services.Database;
+using eSeminars.Services.Recommender;
 using MapsterMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -19,9 +20,11 @@ namespace eSeminars.Services.Korisnici
     public class KorisniciService : BaseCRUDService<Model.Models.Korisnici, KorisniciSearchObject, Database.Korisnici, KorisniciInsertRequest, KorisniciUpdateRequest>, IKorisniciService
     {
         public ILogger<KorisniciService> _logger { get; set; }
-        public KorisniciService(ESeminarsContext context, IMapper mapper,ILogger<KorisniciService> logger) : base(context, mapper)
+        private readonly IRecommenderService recommenderService;
+        public KorisniciService(ESeminarsContext context, IMapper mapper,ILogger<KorisniciService> logger, IRecommenderService recommenderService) : base(context, mapper)
         {
             _logger = logger;
+            this.recommenderService = recommenderService;
         }
 
         public override IQueryable<Database.Korisnici> AddFilter(KorisniciSearchObject search, IQueryable<Database.Korisnici> query)
@@ -127,6 +130,16 @@ namespace eSeminars.Services.Korisnici
             }
 
             return Mapper.Map<Model.Models.Korisnici>(entity);
-        } 
+        }
+
+        public void TrainModel()
+        {
+            recommenderService.TrainModel();
+        }
+
+        public List<Model.Models.Seminari> GetRecommendedSeminars(int userId)
+        {
+            return recommenderService.GetRecommendedSeminars(userId);
+        }
     }
 }

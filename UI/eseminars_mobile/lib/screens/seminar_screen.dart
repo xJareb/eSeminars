@@ -35,6 +35,7 @@ class _SeminarScreenState extends State<SeminarScreen> {
   late SeminarsProvider provider;
   late ReservationsProvider reservationsProvider;
   late WishlistProvider wishlistProvider;
+  List<Seminars> recommendedSeminars = [];
   bool isLoading=true;
   bool isCategoriesLoading = true;
   bool isSeminarsLoading = true;
@@ -50,8 +51,15 @@ class _SeminarScreenState extends State<SeminarScreen> {
     wishlistProvider = context.read<WishlistProvider>();
 
     _loadCategories();
-    _loadSeminars();
+    //_loadSeminars();
     _loadWishlist();
+
+    _loadRecommendedSeminars(UserSession.currentUser!.korisnikId!);
+  }
+  Future<void> _loadRecommendedSeminars(int userId) async{
+    recommendedSeminars = await provider.recommendedSeminars(userId);
+    print("Učitano ${recommendedSeminars.length} seminara.");
+    setState(() {});
   }
   Future<void> _loadCategories() async{
     typeOfCategories = await categoriesProvider.get();
@@ -87,7 +95,7 @@ class _SeminarScreenState extends State<SeminarScreen> {
     return SingleChildScrollView(child: Column(
       children: [
         isCategoriesLoading ? const Center(child: CircularProgressIndicator()) : _buildUpperContainer(),
-        isSeminarsLoading ? const Center(child: CircularProgressIndicator()) : _buildGridSeminars(),
+        _buildGridSeminars(),
       ],
     ),);
   }
@@ -158,12 +166,12 @@ class _SeminarScreenState extends State<SeminarScreen> {
   Widget _buildGridSeminars(){
     return Column(
       children: [
-        Text("${categoryName ?? ""}",style: GoogleFonts.poppins(fontSize: 20),),
+        Text("${categoryName ?? "Recommended for You"}",style: GoogleFonts.poppins(fontSize: 20),),
         const SizedBox(height: 10,),
         SizedBox(
           height: MediaQuery.of(context).size.height * 0.64,
           width: MediaQuery.of(context).size.width * 0.95
-          ,child: _buildGridBuilder())
+          ,child: isSeminarsLoading ? _buildGridBuilderRecommended() : _buildGridBuilder())
       ],
     );
   }
@@ -269,6 +277,128 @@ class _SeminarScreenState extends State<SeminarScreen> {
                             try {
                               final request = {
                                 'seminarId' : result?.result[index].seminarId,
+                                'korisnikId' : UserSession.currentUser?.korisnikId
+                              };
+                              await reservationsProvider.insert(request);
+                              MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                              
+                            } catch (e) {
+                              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                            }
+                          });
+                        }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
+                          foregroundColor: Colors.white.withOpacity(0.8),
+                          padding: EdgeInsets.all(4),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap
+                        ),),))
+                        ]
+                      ),
+                    ),
+                  );
+                });
+  }
+  Widget _buildGridBuilderRecommended(){
+    return GridView.builder(gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(maxCrossAxisExtent: 200,
+                childAspectRatio: 1,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20),itemCount: recommendedSeminars.length, itemBuilder: (context,index){
+                  final seminar = recommendedSeminars[index];
+                  return GestureDetector(
+                    onTap: ()async{
+                      var flow = await  Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarDetailsScreen(seminars: recommendedSeminars[index],)));
+                      if(flow == true){
+                        await _loadWishlist();
+                      }
+                    },
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[300],
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(2, 3)
+                          )
+                        ]
+                      ),
+                      child: Stack(
+                        children:[Column(
+                          children: [
+                            const SizedBox(height: 10,),
+                            Text("${recommendedSeminars[index].naslov ?? ""}",style: GoogleFonts.poppins(fontSize: 26,color: Colors.grey[800]),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
+                            const SizedBox(height: 10,),
+                            Text("${recommendedSeminars[index].opis ?? ""}",style: GoogleFonts.poppins(fontSize: 16,color: Colors.grey[800]),maxLines: 2,overflow: TextOverflow.ellipsis,softWrap: false,),
+                            const SizedBox(height: 20,),
+                            Row(children: [
+                              Expanded(child: Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: Text("Seats: ${recommendedSeminars[index].kapacitet}",style: GoogleFonts.poppins()),
+                              )),
+                              Expanded(child: Text("${recommendedSeminars[index].datumVrijeme!.substring(0,recommendedSeminars[index].datumVrijeme!.indexOf("T"))}",style: GoogleFonts.poppins())),
+                            ],)
+                          ],
+                        ),
+                        Positioned(bottom: 0,child: IconButton(onPressed: () async{
+                          try {
+                    
+                            final alreadySaved = wishlistResult?.result.any((s) => s.seminar?.seminarId == recommendedSeminars[index].seminarId) ?? false;
+                            if(!alreadySaved){
+                              final request = {
+                                'seminarId' : recommendedSeminars[index].seminarId,
+                                'korisnikId' : UserSession.currentUser?.korisnikId
+                              };
+                            
+                            await wishlistProvider.insert(request);
+                            _loadWishlist();
+                            setState(() {
+                              
+                            });
+                            }else{
+                              final savedSeminar = wishlistResult?.result.firstWhere(
+                              (s) => s.seminar?.seminarId == seminar?.seminarId,);
+                              final savedSeminarId = savedSeminar?.sacuvaniSeminarId;
+
+                              try {
+                              MyDialogs.showInformationDialog(context, "Are you sure you want to remove this seminar from wishlist?", ()async{
+                              try {
+                              await wishlistProvider.softDelete(savedSeminarId!);
+                              await _loadWishlist();
+                              setState(() {});
+                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+
+                              } catch (e) {
+                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              }
+                            });
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                          }
+                            }
+                            
+                          } catch (e) {
+                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+                          }
+                        }, icon: Icon(
+                          (wishlistResult?.result.any((s) => s.seminar?.seminarId == recommendedSeminars[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
+                          (wishlistResult?.result.any((s) => s.seminar?.seminarId == recommendedSeminars[index].seminarId) ?? false ) ? Colors.red:Colors.grey,
+                        ))),
+                        Positioned(bottom: 3,right: 3,child: 
+                        Container(decoration: 
+                        BoxDecoration(
+                          color: Colors.black87,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(15),
+                            bottomRight: Radius.circular(15))
+                        ),
+                        child: 
+                        IconButton(onPressed: () async{
+                          MyDialogs.showInformationDialog(context, "Are you sure you want to reserve a seat?", () async{
+                            try {
+                              final request = {
+                                'seminarId' : recommendedSeminars[index].seminarId,
                                 'korisnikId' : UserSession.currentUser?.korisnikId
                               };
                               await reservationsProvider.insert(request);
