@@ -3,10 +3,12 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace eSeminars.Services.Migrations
 {
     /// <inheritdoc />
-    public partial class initialCreate : Migration
+    public partial class InitialCreateSeed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -34,7 +36,7 @@ namespace eSeminars.Services.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Ime = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Prezime = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Biografija = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 200, nullable: false),
+                    Biografija = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Telefon = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
@@ -50,7 +52,7 @@ namespace eSeminars.Services.Migrations
                 {
                     SponzorID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Naziv = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Naziv = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Email = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Telefon = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     KontaktOsoba = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
@@ -106,7 +108,7 @@ namespace eSeminars.Services.Migrations
                     ObavijestID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Naslov = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Sadrzaj = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Sadrzaj = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     DatumObavijesti = table.Column<DateTime>(type: "datetime", nullable: false),
                     KorisnikID = table.Column<int>(type: "int", nullable: true),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
@@ -127,10 +129,10 @@ namespace eSeminars.Services.Migrations
                 {
                     SeminarID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Naslov = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Opis = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 200, nullable: false),
+                    Naslov = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
+                    Opis = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     DatumVrijeme = table.Column<DateTime>(type: "datetime", nullable: false),
-                    Lokacija = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Lokacija = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     Kapacitet = table.Column<int>(type: "int", nullable: false),
                     Zauzeti = table.Column<int>(type: "int", nullable: false),
                     StateMachine = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: true),
@@ -195,7 +197,7 @@ namespace eSeminars.Services.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SeminarID = table.Column<int>(type: "int", nullable: true),
                     Naziv = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    Putanja = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Putanja = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     DatumDodavanja = table.Column<DateTime>(type: "datetime", nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
                 },
@@ -285,6 +287,158 @@ namespace eSeminars.Services.Migrations
                         column: x => x.SponzorID,
                         principalTable: "Sponzori",
                         principalColumn: "SponzorID");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Kategorije",
+                columns: new[] { "KategorijaID", "isDeleted", "Naziv", "Opis" },
+                values: new object[,]
+                {
+                    { 1, false, "Technology", "Seminars focused on emerging technologies, programming, the IT industry, and innovations." },
+                    { 2, false, "Entrepreneurship", "Educational content on starting, managing, and growing a business" },
+                    { 3, false, "Health and Wellness", "Topics related to physical and mental health, disease prevention, nutrition, and fitness." },
+                    { 4, false, "Education", "Seminars for teachers, parents, and students aiming to improve education quality" },
+                    { 5, false, "Personal Development", "Focused on building communication, time management, public speaking" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Predavaci",
+                columns: new[] { "PredavacID", "Biografija", "Email", "Ime", "isDeleted", "Prezime", "Telefon" },
+                values: new object[,]
+                {
+                    { 1, "Experienced software engineer with a passion for teaching coding.", "emily.johnson@example.com", "Emily", false, "Johnson", "12025550101" },
+                    { 2, "Startup mentor and entrepreneur with 10+ years of experience.", "michael.lee@example.com", "Michael", false, "Lee", "12025550123" },
+                    { 3, "Health coach focused on nutrition and mental well-being.", "sophia.martinez@example.com", "Sophia", false, "Martinez", "12025550188" },
+                    { 4, "Educator and public speaker specializing in effective teaching methods.", "david.nguyen@example.com", "David", false, "Nguyen", "12025550170" },
+                    { 5, "Personal development trainer and leadership consultant.", "olivia.brown@example.com", "Olivia", false, "Brown", "12025550135" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Sponzori",
+                columns: new[] { "SponzorID", "Email", "isDeleted", "KontaktOsoba", "Naziv", "Telefon" },
+                values: new object[,]
+                {
+                    { 1, "contact@technova.com", false, "Laura Smith", "TechNova Inc.", "2025550191" },
+                    { 2, "info@greenhealth.org", false, "James Taylor", "GreenHealth Foundation", "2025550142" },
+                    { 3, "support@edufuture.com", false, "Anna Williams", "EduFuture Alliance", "2025550177" },
+                    { 4, "hello@wellbeingco.com", false, "Robert Johnson", "WellBeing Co.", "2025550165" },
+                    { 5, "partners@innovalab.io", false, "Emily Davis", "InnovaLab", "2025550119" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Uloge",
+                columns: new[] { "UlogaID", "Naziv" },
+                values: new object[,]
+                {
+                    { 1, "Administrator" },
+                    { 2, "Korisnik" },
+                    { 3, "Organizator" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Korisnici",
+                columns: new[] { "KorisnikID", "DatumRodjenja", "Email", "Ime", "isDeleted", "LozinkaHash", "LozinkaSalt", "Prezime", "Uloga" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@gmail.com", "Admin", false, "uDJQzltg1+w1Hjhdktk4XbhuCrE=", "VBZIM52NwnqBQqr+Z84P9Q==", "Admin", 1 },
+                    { 2, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "organizator@gmail.com", "Organizator", false, "NVG/++BM466+Da6OgKZyptEKQP4=", "6ZA2IamCnGv7wLPfY3roQw==", "Organizator", 3 },
+                    { 3, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "korisnik@gmail.com", "Korisnik", false, "IYQP04iyzp/PgO854mbEzcUB+bE=", "+nykRTSHxp8hfVWKYjFt4w==", "Korisnik", 2 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Obavijesti",
+                columns: new[] { "ObavijestID", "DatumObavijesti", "isDeleted", "KorisnikID", "Naslov", "Sadrzaj" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 6, 28, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(7085), false, 1, "Seminar Schedule Update", "The schedule for the upcoming seminars has been updated. Please check your email for details." },
+                    { 2, new DateTime(2025, 6, 30, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(7102), false, 1, "New Seminar Available", "A new seminar on 'Advanced JavaScript Concepts' has been added to the schedule." },
+                    { 3, new DateTime(2025, 6, 24, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(7105), false, 1, "Maintenance Downtime", "The system will undergo maintenance on July 10th from 1 AM to 3 AM. Services may be temporarily unavailable." },
+                    { 4, new DateTime(2025, 7, 1, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(7108), false, 1, "Feedback Request", "Please provide your feedback for the seminar you attended last week." }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Seminari",
+                columns: new[] { "SeminarID", "DatumKreiranja", "DatumVrijeme", "isDeleted", "Kapacitet", "KategorijaID", "KorisnikID", "Lokacija", "Naslov", "Opis", "PredavacID", "StateMachine", "Zauzeti" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 1, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5049), new DateTime(2024, 12, 10, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Introduction to Modern Web Development", "Learn the basics of HTML, CSS, and JavaScript.", 1, "active", 0 },
+                    { 2, new DateTime(2025, 2, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5103), new DateTime(2025, 1, 15, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Startup Fundamentals", "Essential knowledge for launching your own business.", 2, "active", 0 },
+                    { 3, new DateTime(2025, 3, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5110), new DateTime(2025, 3, 20, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Nutrition and Mental Health", "Discover how diet affects your mind and body.", 3, "active", 0 },
+                    { 4, new DateTime(2025, 4, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5114), new DateTime(2025, 4, 22, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Innovative Teaching Techniques", "Improve your teaching skills with new methods.", 4, "active", 0 },
+                    { 5, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5118), new DateTime(2025, 12, 25, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Effective Communication Skills", "Learn how to communicate clearly and confidently.", 5, "active", 0 },
+                    { 6, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5122), new DateTime(2025, 12, 30, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Advanced JavaScript Concepts", "Deep dive into closures, prototypes, and async programming.", 1, "active", 0 },
+                    { 7, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5126), new DateTime(2026, 1, 3, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Funding Your Startup", "Explore strategies for raising capital.", 2, "active", 0 },
+                    { 8, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5130), new DateTime(2026, 1, 5, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Mindfulness and Stress Reduction", "Techniques to improve mental wellness.", 3, "active", 0 },
+                    { 9, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5133), new DateTime(2026, 1, 7, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Blended Learning Models", "Combine online and in-person teaching effectively.", 4, "active", 0 },
+                    { 10, new DateTime(2025, 7, 1, 5, 14, 9, 345, DateTimeKind.Local).AddTicks(5137), new DateTime(2026, 1, 10, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Time Management Strategies", "Boost productivity with smart planning.", 5, "active", 0 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Dojmovi",
+                columns: new[] { "DojamID", "DatumKreiranjaDojma", "IsDeleted", "KorisnikID", "Ocjena", "SeminarID" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 6, 11, 5, 14, 9, 341, DateTimeKind.Local).AddTicks(8601), false, 3, 5, 1 },
+                    { 2, new DateTime(2025, 6, 13, 5, 14, 9, 341, DateTimeKind.Local).AddTicks(8651), false, 3, 4, 2 },
+                    { 3, new DateTime(2025, 6, 16, 5, 14, 9, 341, DateTimeKind.Local).AddTicks(8653), false, 3, 3, 3 },
+                    { 4, new DateTime(2025, 6, 21, 5, 14, 9, 341, DateTimeKind.Local).AddTicks(8656), false, 3, 5, 4 },
+                    { 5, new DateTime(2025, 6, 26, 5, 14, 9, 341, DateTimeKind.Local).AddTicks(8658), false, 3, 4, 5 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Materijali",
+                columns: new[] { "MaterijalID", "DatumDodavanja", "isDeleted", "Naziv", "Putanja", "SeminarID" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 6, 1, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4391), false, "Web Development Basics Slides", "materials/web_dev_basics.pdf", 1 },
+                    { 2, new DateTime(2025, 6, 6, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4434), false, "Startup Fundamentals Workbook", "materials/startup_fundamentals.docx", 2 },
+                    { 3, new DateTime(2025, 6, 11, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4437), false, "Nutrition & Mental Health Research", "materials/nutrition_mental_health.pdf", 3 },
+                    { 4, new DateTime(2025, 6, 16, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4440), false, "Innovative Teaching Methods Guide", "materials/teaching_methods_guide.pdf", 4 },
+                    { 5, new DateTime(2025, 6, 21, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4442), false, "Communication Skills Exercises", "materials/communication_skills.zip", 5 },
+                    { 6, new DateTime(2025, 6, 26, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4445), false, "Advanced JavaScript Examples", "materials/advanced_js_examples.zip", 6 },
+                    { 7, new DateTime(2025, 7, 1, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4448), false, "Funding Strategies Presentation", "materials/funding_strategies.pptx", 7 },
+                    { 8, new DateTime(2025, 7, 1, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4450), false, "Mindfulness Exercises", "materials/mindfulness_exercises.pdf", 8 },
+                    { 9, new DateTime(2025, 7, 1, 5, 14, 9, 343, DateTimeKind.Local).AddTicks(4453), false, "Blended Learning Resources", "materials/blended_learning_resources.pdf", 9 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Rezervacije",
+                columns: new[] { "RezervacijaID", "DatumRezervacije", "isDeleted", "KorisnikID", "SeminarID", "StateMachine" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 5, 1, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3220), false, 3, 1, "approved" },
+                    { 2, new DateTime(2025, 5, 22, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3241), false, 3, 2, "approved" },
+                    { 3, new DateTime(2025, 6, 1, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3245), false, 3, 3, "approved" },
+                    { 4, new DateTime(2025, 6, 26, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3248), false, 3, 7, "pending" },
+                    { 5, new DateTime(2025, 6, 28, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3250), false, 3, 8, "pending" },
+                    { 6, new DateTime(2025, 7, 1, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(3252), false, 3, 10, "pending" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SacuvaniSeminari",
+                columns: new[] { "SacuvaniSeminarID", "DatumSacuvanja", "IsDeleted", "KorisnikID", "SeminarID" },
+                values: new object[,]
+                {
+                    { 1, new DateTime(2025, 6, 21, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(6085), false, 3, 2 },
+                    { 2, new DateTime(2025, 6, 26, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(6099), false, 3, 5 },
+                    { 3, new DateTime(2025, 7, 1, 5, 14, 9, 344, DateTimeKind.Local).AddTicks(6102), false, 3, 8 }
+                });
+
+            migrationBuilder.InsertData(
+                table: "SponzoriSeminari",
+                columns: new[] { "SponzoriSeminariID", "IsDeleted", "SeminarID", "SponzorID" },
+                values: new object[,]
+                {
+                    { 1, false, 1, 1 },
+                    { 2, false, 2, 2 },
+                    { 3, false, 3, 3 },
+                    { 4, false, 4, 1 },
+                    { 5, false, 5, 4 },
+                    { 6, false, 6, 2 },
+                    { 7, false, 7, 3 },
+                    { 8, false, 8, 5 },
+                    { 9, false, 9, 4 },
+                    { 10, false, 10, 5 }
                 });
 
             migrationBuilder.CreateIndex(

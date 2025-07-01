@@ -8,6 +8,7 @@ import 'package:eseminars_mobile/providers/lecturers_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/screens/seminars_materials_freedbacks.dart';
 import 'package:eseminars_mobile/utils/custom_form_builder_text_field.dart';
+import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -61,7 +62,8 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
       'Page' : _selectedIndex,
       'PageSize' : pageSize,
       'isDraft' : isOnWait ? true : false,
-      'isActive' : isActive ? true : false
+      'isActive' : isActive ? true : false,
+      'OrganizatorId' : UserSession.currentUser?.korisnikId
     };
     seminarResult = await seminarsProvider.get(filter: filter);
     setState(() {

@@ -123,8 +123,8 @@ class _SeminarsHistoryScreenState extends State<SeminarsHistoryScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("${result?.result[index].naslov}",style: GoogleFonts.poppins(fontSize: 26),),
-                          Text("${result?.result[index].opis}",style: GoogleFonts.poppins(fontSize: 18)),
+                          Text("${result?.result[index].naslov}",style: GoogleFonts.poppins(fontSize: 26),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
+                          Text("${result?.result[index].opis}",style: GoogleFonts.poppins(fontSize: 18),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false),
                         ],
                       ),
                     ),

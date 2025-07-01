@@ -36,11 +36,13 @@ namespace eSeminars.Services.Recommender
                 .Include(s=>s.SponzoriSeminaris).ThenInclude(ss=>ss.Sponzor).Where(s=>s.StateMachine == "active")
                 .ToList();
 
-            var approvedReservations = Context.Rezervacijes.Where(r => r.KorisnikId == korisnikId && r.StateMachine == "approved").Include(r => r.Seminar).ToList();
+            var approvedReservations = Context.Rezervacijes.Where(r => r.KorisnikId == korisnikId && r.StateMachine == "approved")
+                .Include(r => r.Seminar).ToList();
 
             var attendedSeminars = approvedReservations.Select(r => r.Seminar).Distinct().ToList();
 
-            var onWaitReservations = Context.Rezervacijes.Where(r => r.KorisnikId == korisnikId && r.StateMachine == "rejected").Include(r => r.Seminar).Select(r => r.Seminar).Distinct().ToList();
+            var onWaitReservations = Context.Rezervacijes.Where(r => r.KorisnikId == korisnikId && r.StateMachine == "rejected").Include(r => r.Seminar)
+                .Select(r => r.Seminar).Distinct().ToList();
 
             var candidatesForRecommendation = allSeminars.Where(s => !approvedReservations.Any(ar => ar.Seminar.SeminarId == s.SeminarId) &&
             !onWaitReservations.Any(or => or.SeminarId == s.SeminarId)).ToList();

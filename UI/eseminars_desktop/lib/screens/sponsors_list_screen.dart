@@ -106,7 +106,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
   }
   Widget _buildForm(){
     return Expanded(child: SingleChildScrollView(
-      child: DataTable(showCheckboxColumn: false,columns: [
+      child: DataTable(showCheckboxColumn: false,columnSpacing: 15,columns: [
         DataColumn(label: Text("Company")),
         DataColumn(label: Text("Email")),
         DataColumn(label: Text("Phone number")),
@@ -127,8 +127,9 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
               await buildAlertDiagram(context: context, onConfirmDelete: () async{
                 try {
                   await provider.softDelete(e.sponzorId!);
+                  showSuccessMessage(context, "Sponsor successfully removed");
                 } catch (e) {
-                  showErrorMessage(context, e.toString());
+                   showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
                 }
               });
               await _loadData();

@@ -131,7 +131,7 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
         height: MediaQuery.of(context).size.height * 0.6,
         child: Column(
           children: [
-            Text("${seminarName}",style: GoogleFonts.poppins(fontSize: 20,fontWeight: FontWeight.w500),),
+            Text("${seminarName}",style: GoogleFonts.poppins(fontSize: 20,fontWeight: FontWeight.w500),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
             const SizedBox(height: 8,),
             Expanded(child: isLoadingFeedbacks? Center(child: CircularProgressIndicator(),) : _buildVerticalContent())
           ],

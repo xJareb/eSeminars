@@ -124,16 +124,16 @@ class _UserScreenState extends State<UserScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "${UserSession.currentUser?.ime} ${UserSession.currentUser?.prezime}",
+                "${UserSession.currentUser?.ime}",
                 style: GoogleFonts.poppins(
                   color: Colors.grey[800],
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
-                ),
+                ),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,
               ),
               const SizedBox(height: 4),
               Text(
-                UserSession.currentUser?.ulogaNavigation?.naziv == "" ?"Active user" : "Active organizer",
+                UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik" ? "Active user" : "Active organizer",
                 style: GoogleFonts.poppins(
                   color: Colors.grey,
                   fontSize: 14,

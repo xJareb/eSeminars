@@ -278,10 +278,9 @@ Widget _buildSeminarMaterials(){
                         Row(
                           children: [
                             Icon(Icons.abc),
-                            const SizedBox(width: 10,),
                             Text(material?.naziv ?? "", style: 
                             GoogleFonts.poppins(fontSize: 16, 
-                            fontWeight: FontWeight.w600),),
+                            fontWeight: FontWeight.w600),maxLines: 2,overflow: TextOverflow.ellipsis,softWrap: false),
                           ],
                         ),
                         IconButton(onPressed: () async{

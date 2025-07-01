@@ -154,7 +154,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                 isSeminarsActive = true;
                 isSponsorsActive = false;
                 _selectedIndex = 0;
-                _loadData();
+                _filterData();
               });
             } , icon: Icon(Icons.cast_for_education)),
             const SizedBox(width: 10,),

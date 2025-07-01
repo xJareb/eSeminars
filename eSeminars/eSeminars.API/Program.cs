@@ -101,4 +101,12 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<ESeminarsContext>();
+    //dataContext.Database.EnsureCreated();
+
+    dataContext.Database.Migrate();
+}
+
 app.Run();

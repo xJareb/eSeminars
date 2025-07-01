@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetEnv;
 
 namespace eSeminars.Services.RabbitMQ
 {
@@ -14,6 +15,8 @@ namespace eSeminars.Services.RabbitMQ
     {
         public async Task SendEmail(Email email)
         {
+            Env.Load();
+
             var hostname = Environment.GetEnvironmentVariable("_rabbitMqHost") ?? "localhost";
             var username = Environment.GetEnvironmentVariable("_rabbitMqUser") ?? "guest";
             var password = Environment.GetEnvironmentVariable("_rabbitMqPassword") ?? "guest";

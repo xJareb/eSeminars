@@ -87,8 +87,8 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${result?.result[index].seminar?.naslov}",style: GoogleFonts.poppins(fontSize: 26),),
-                      Text("${result?.result[index].seminar?.opis}",style: GoogleFonts.poppins(fontSize: 18)),
+                      Text("${result?.result[index].seminar?.naslov}",style: GoogleFonts.poppins(fontSize: 26),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
+                      Text("${result?.result[index].seminar?.opis}",style: GoogleFonts.poppins(fontSize: 18),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false),
                     ],
                                     ),
                   ),

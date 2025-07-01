@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DotNetEnv;
 
 namespace eSeminars.Subscriber.MailSenderService
 {
@@ -14,8 +15,10 @@ namespace eSeminars.Subscriber.MailSenderService
         {
             if (emailObj == null) return;
 
+            Env.Load();
+
             string fromAddress = Environment.GetEnvironmentVariable("_fromAddress") ?? "egymzalik@gmail.com";
-            string password = Environment.GetEnvironmentVariable("_password") ?? "hcxrsjwktiidlxxb";
+            string password = Environment.GetEnvironmentVariable("_password") ?? string.Empty;
             string host = Environment.GetEnvironmentVariable("_host") ?? "smtp.gmail.com";
             int port = int.Parse(Environment.GetEnvironmentVariable("_port") ?? "465");
             bool enableSSL = bool.Parse(Environment.GetEnvironmentVariable("_enableSSL") ?? "true");
@@ -53,6 +56,7 @@ namespace eSeminars.Subscriber.MailSenderService
 
                     await smtp.DisconnectAsync(true);
                 }
+                Console.WriteLine("Mail successfully sent.");
             }
             catch (Exception ex) {
                 Console.WriteLine($"Error {ex.Message}");

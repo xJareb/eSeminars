@@ -119,7 +119,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
       }
     },cells: [
       DataCell(Text(e.naslov ?? "")),
-      DataCell(Text(e.sadrzaj ?? "")),
+      DataCell(Text('${e.sadrzaj!.substring(0,17 > e.sadrzaj!.length ? e.sadrzaj!.length : 17)}...' ?? "")),
       DataCell(Text('${e.datumObavijesti!.substring(0,e.datumObavijesti!.indexOf("T"))} ${e.datumObavijesti!.
       substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
       DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{

@@ -7,7 +7,9 @@ using Newtonsoft.Json;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System.Text;
+using DotNetEnv;
 
+Env.Load();
 var emailService = new MailSenderService();
 Task.Delay(10000).Wait();
 

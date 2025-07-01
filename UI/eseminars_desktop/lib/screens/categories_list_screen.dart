@@ -120,7 +120,7 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
           }
         },cells: [
           DataCell(Text(e.naziv ?? "")),
-          DataCell(Text(e.opis ?? "")),
+          DataCell(Text('${e.opis!.substring(0,50 > e.opis!.length ? e.opis!.length : 50)}...' ?? "")),
           DataCell(ElevatedButton(onPressed: () async{
             await buildAlertDiagram(context: context, onConfirmDelete: () async{
               try {
