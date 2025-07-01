@@ -45,6 +45,7 @@ services:
     environment:
       - ConnectionStrings:eSeminarsConnection=Server=${_source},1433;Database=${_catalog};User=sa;Password=${_saPassword};ConnectRetryCount=0; TrustServerCertificate=True
       - ASPNETCORE_ENVIRONMENT=Development
+      - ASPNETCORE_URLS=http://+:5106
       - _fromAddress=${_fromAddress}
       - _password=${_password}
       - _host=${_host}
