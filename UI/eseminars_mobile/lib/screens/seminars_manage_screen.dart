@@ -6,7 +6,9 @@ import 'package:eseminars_mobile/models/seminars.dart';
 import 'package:eseminars_mobile/providers/categories_provider.dart';
 import 'package:eseminars_mobile/providers/lecturers_provider.dart';
 import 'package:eseminars_mobile/providers/seminar_provider.dart';
+import 'package:eseminars_mobile/screens/seminars_edit_screen.dart';
 import 'package:eseminars_mobile/screens/seminars_materials_freedbacks.dart';
+import 'package:eseminars_mobile/utils/custom_dialogs.dart';
 import 'package:eseminars_mobile/utils/custom_form_builder_text_field.dart';
 import 'package:eseminars_mobile/utils/user_session.dart';
 import 'package:flutter/cupertino.dart';
@@ -104,6 +106,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
                 isActive = false;
                 _selectedIndex = 0;
               });
+              print(isOnWait);
               _loadSeminars();
             },
             style: ElevatedButton.styleFrom(
@@ -263,6 +266,50 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
                       ),
                       child: const Text("Details"),
                     ),
+                    isOnWait == true ? ElevatedButton(
+                      onPressed: () async{
+                        var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsEditScreen(seminar: seminarResult?.result[index],)));
+                        if(result == true){
+                          setState(() {
+                          isActive = false;
+                          isOnWait = true;
+                          _selectedIndex = 0;
+                          });
+                          await _loadSeminars();
+                        }
+                      },style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 2,
+                      ),child: const Text("Edit"),
+                    ) : SizedBox.shrink(),
+                    isActive == true ? ElevatedButton(
+                      onPressed: () async{
+                        try {
+                          MyDialogs.showInformationDialog(context, "Are you sure you want to hide this seminar?", ()async{
+                            try {
+                              await seminarsProvider.hideSeminar(seminarResult?.result[index].seminarId ?? 0);
+                              await MyDialogs.showSuccessDialog(context, "A successfully hidden seminar, if necessary, the administration will make it active");
+                              await _loadSeminars();
+                            } catch (e) {
+                              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                            }
+                          });
+                        } catch (e) {
+                          await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
+                        }
+                      },
+                      style: ElevatedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        elevation: 2,
+                      ),
+                      child: const Text("Hide"),
+                    ) : SizedBox.shrink(),
                   ],
                 ),
               ],
@@ -363,17 +410,18 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
               try {
                 await seminarsProvider.insert(formValues);
                 Navigator.pop(context);
-                await _loadSeminars();
+
                 setState(() {
                   isActive = true;
                   isOnWait = false;
                   _selectedIndex = 0;
                 });
-                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added seminar"),duration: Duration(seconds: 4),backgroundColor: Colors.green,));
+                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added seminar"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
+                await _loadSeminars();
                 
               } catch (e) {
                 Navigator.pop(context);
-                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 4),backgroundColor: Colors.red));
+                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 3),backgroundColor: Colors.red));
               }
             }
           }, child: Text("Add"))

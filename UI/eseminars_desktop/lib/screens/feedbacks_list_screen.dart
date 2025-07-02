@@ -87,7 +87,8 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
          isLoading ? Container() :
         _buildFilter(),
         const SizedBox(height: 55,),
-        _buildForm()
+        _buildForm(),
+        _buildPaging()
       ],
     ));
   }
@@ -108,39 +109,56 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
       ],
     );
   }
-  //TODO:: Add Date of feedback
-  Widget _buildForm(){
-    return Expanded(child: 
-    SingleChildScrollView(child: 
-    DataTable(columns: [
-      DataColumn(label: Text('User')),
-      DataColumn(label: Text('Rating')),
-      DataColumn(label: Text(""))
-    ]
-    , rows: result?.result.map((e) => DataRow(cells: [
-      DataCell(Text(e.korisnik?.ime ?? "")),
-      DataCell(buildStars(e.ocjena ?? 0)),
-      DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-        await buildAlertDiagram(context: context, onConfirmDelete: () async{
-          try{
-            await feedbacksProvider.softDelete(e.dojamId!);
-            showSuccessMessage(context, "Feedback successfully removed");
-          }catch (e){
-            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-          }
-        });
-        await _filterData("");
-        setState(() {});
-      },
-      )
+
+  Widget _buildForm() {
+  if (result?.result.isEmpty ?? true) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          "Currently no feedbacks available.",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
-    ]
-    )
-    ).toList().cast<DataRow>() ?? []
-    )
-    ,)
     );
   }
+
+  return Expanded(
+    child: SingleChildScrollView(
+      child: DataTable(
+        columns: const [
+          DataColumn(label: Text('User')),
+          DataColumn(label: Text('Rating')),
+          DataColumn(label: Text('')),
+        ],
+        rows: result!.result.map((e) => DataRow(cells: [
+          DataCell(Text(e.korisnik?.ime ?? "")),
+          DataCell(buildStars(e.ocjena ?? 0)),
+          DataCell(ElevatedButton(
+            child: const Text("Remove"),
+            onPressed: () async {
+              await buildAlertDiagram(context: context, onConfirmDelete: () async {
+                try {
+                  await feedbacksProvider.softDelete(e.dojamId!);
+                  showSuccessMessage(context, "Feedback successfully removed");
+                } catch (e) {
+                  showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                }
+              });
+              await _filterData("");
+              setState(() {});
+            },
+          )),
+        ])).toList(),
+      ),
+    ),
+  );
+}
 
   Widget buildStars(int rating, {int maxRating = 5}) {
   return Row(
@@ -154,9 +172,13 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
   );
 }
 Widget _buildPaging() {
+  if ((result?.count ?? 0) == 0) {
+    return SizedBox.shrink();
+  }
+
   return PaginationControls(
     currentPage: _selectedIndex,
-    totalItems: result?.count ?? 0,
+    totalItems: result!.count,
     pageSize: pageSize,
     onPageChanged: (newPage) async {
       setState(() {

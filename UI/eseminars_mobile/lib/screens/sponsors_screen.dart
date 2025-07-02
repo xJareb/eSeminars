@@ -70,6 +70,11 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
       'isActive' : true
     };
     seminarsResult = await seminarsProvider.get(filter: filter);
+
+    if(seminarsResult?.result.isNotEmpty == true){
+    seminarId = seminarsResult!.result.first.seminarId;
+    await _loadSponsorsBySeminar(seminarId: seminarId);
+    }
     setState(() {
       
     });
@@ -97,6 +102,7 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
       child: Row(
         children: [
           Expanded(flex: 5,child: FormBuilderDropdown(
+            initialValue: seminarId,
           hint: Text("Choose a seminar"),
           decoration: InputDecoration(
             filled: true,
@@ -109,7 +115,11 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
           onChanged: (value) async{
             if(value is int){
               seminarId = value;
+              print(seminarId);
               await _loadSponsorsBySeminar(seminarId: seminarId);
+              setState(() {
+                
+              });
             }
           },
           )),
@@ -171,11 +181,11 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
             await sponsorsseminarsProvider.insert(_formKey.currentState?.value);
             Navigator.pop(context);
              await _loadSponsorsBySeminar(seminarId: seminarId);
-            await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added new sponsor"),duration: Duration(seconds: 4),backgroundColor: Colors.green,));
+            await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added new sponsor"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
            
           } catch (e) {
             Navigator.pop(context);
-            await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 4),backgroundColor: Colors.red));
+            await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 3),backgroundColor: Colors.red));
           }
         }
       }, child: Text("Add"))
@@ -211,14 +221,14 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
                               MyDialogs.showInformationDialog(context, "Are you sure you want to delete this sponsor from seminar?", ()async{
                               try {
                               await sponsorsseminarsProvider.softDelete(sponsorSeminar?.sponzoriSeminariId ?? 0);
-                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
                               await _loadSponsorsBySeminar(seminarId: seminarId);
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                     },
                     icon: const Icon(Icons.close),

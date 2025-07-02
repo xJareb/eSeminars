@@ -60,8 +60,13 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
       children: [
         _buildSearch(),
         const SizedBox(height: 55,),
-        _buildForm(),
-        _buildPaging()
+        result?.result.length == 0 ? Center(child: Text("Currently no notifications available .",style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,),) :  _buildForm(),
+        result?.result.length == 0 ? SizedBox.shrink() :_buildPaging()
       ],
     ));
   }
@@ -124,7 +129,12 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
       substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
       DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
         await buildAlertDiagram(context: context, onConfirmDelete: () async{
-          await provider.softDelete(e.obavijestId!);
+          try {
+            await provider.softDelete(e.obavijestId!);
+            showSuccessMessage(context, "Notification successfully removed");
+          } catch (e) {
+            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+          }
         });
         await _loadData();
         setState(() {

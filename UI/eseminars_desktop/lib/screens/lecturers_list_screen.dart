@@ -64,8 +64,13 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
     return MasterScreen('Lecturers', Column(children: [
       _buildFilters(),
       const SizedBox(height: 55,),
-      _buildForm(),
-      _buildPaging()
+      result?.result.length == 0 ? Center(child: Text("Currently no lecturers available .",style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,),) :  _buildForm(),
+      result?.result.length == 0 ? SizedBox.shrink() :_buildPaging()
     ],));
   }
 

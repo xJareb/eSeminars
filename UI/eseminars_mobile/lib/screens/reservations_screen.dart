@@ -160,7 +160,12 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
           ),
         ),
         const SizedBox(height: 8),
-        Expanded(child: _buildVerticalView()),
+        Expanded(child: reservationsResult?.result.length == 0 ? Center(child: Text(textAlign: TextAlign.center,"There are currently no available records.",style: 
+        TextStyle(
+                fontSize: 16,
+                fontStyle: FontStyle.italic,
+                color: Colors.grey,
+              ),),) :  _buildVerticalView()),
       ],
     ),
   );
@@ -213,11 +218,11 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                                 await reservationsProvider.allowReservation(reservationsResult?.result[index].rezervacijaId ?? 0);
                               await _loadReservations(state: selectedState);
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                         },
                         icon: Icon(Icons.check, color: Colors.green),
@@ -230,11 +235,11 @@ class _ReservationsScreenState extends State<ReservationsScreen> {
                               await reservationsProvider.rejectReservation(reservationsResult?.result[index].rezervacijaId ?? 0);
                               await _loadReservations(state: selectedState);
                             } catch (e) {
-                              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                             }
                           });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                         },
                         icon: Icon(Icons.close, color: Colors.red),

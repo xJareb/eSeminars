@@ -206,12 +206,12 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
                   updatedUser.prezime = formValues['prezime'];
                   updatedUser.datumRodjenja = formValues['datumRodjenja'];
                 };
-                MyDialogs.showSuccessDialog(context, "User successfully edited");
+                await MyDialogs.showSuccessDialog(context, "User successfully edited");
                 setState(() {
                   isEnabled = false;
                 });
               } catch (e) {
-                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
               }
             }
           }, 
@@ -309,15 +309,14 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
               try {
                 var userId = UserSession.currentUser!.korisnikId;
                 await userProvider.update(userId!,formValues);
-                MyDialogs.showSuccessDialog(context, "Password successfully changed");
+                await MyDialogs.showSuccessDialog(context, "Password successfully changed");
                 setState(() {
                   isPassword = false;
                 });
               } catch (e) {
-                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
               }
             }
-            print('Ok');
           }, child: Text("Confirm"),
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,

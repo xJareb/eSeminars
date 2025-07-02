@@ -215,7 +215,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
                       SnackBar(
                         content: Text("Feedback successfully submitted"),
                         backgroundColor: Colors.green,
-                        duration: Duration(seconds: 4),
+                        duration: Duration(seconds: 3),
                       ),
                     );
                       _loadSeminarsInfo();
@@ -227,7 +227,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
                       SnackBar(
                         content: Text(e.toString().replaceFirst("Exception:", '')),
                         backgroundColor: Colors.red,
-                        duration: Duration(seconds: 4),
+                        duration: Duration(seconds: 3),
                       ),
                     );
                     }

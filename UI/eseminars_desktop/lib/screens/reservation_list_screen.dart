@@ -138,49 +138,79 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
     );
   }
 
-  Widget _buildForm(){
-    return Expanded(child: 
-    SingleChildScrollView(child: DataTable(
-      columns: [
-        DataColumn(label: Text("Name")),
-        DataColumn(label: Text("Surname")),
-        DataColumn(label: Text("Date")),
-        if(currentReservationState == reservationStates[0]) ...[
-          DataColumn(label: Text(""))
-        ]
-      ], 
-      rows: result?.result.map((e) =>
-      DataRow(cells: [
-        DataCell(Text(e.korisnik?.ime ?? "")),
-        DataCell(Text(e.korisnik?.prezime ?? "")),
-        DataCell(Text(e.datumRezervacije!.substring(0,(e.datumRezervacije!.indexOf("T"))) ?? "")),
-        if(currentReservationState == reservationStates[0]) ... [
-        DataCell(Row(children: [
-          IconButton(onPressed: () async{
-            await reservationsProvider.allowReservation(e.rezervacijaId!);
-            await _filterData("", state: currentReservationState);
-          }, icon: Icon(Icons.check,color: Colors.green,)),
-          const SizedBox(width: 10,),
-          IconButton(onPressed: () async{
-            await reservationsProvider.rejectReservation(e.rezervacijaId!);
-            await _filterData("",state: currentReservationState);
-          }, icon: Icon(Icons.close,color: Colors.red,)),
-        ],)),
-        ]
-      ])
-      ).toList().cast<DataRow>() ?? []),)
-    );
-  }
+  Widget _buildForm() {
+  final rows = result?.result.map((e) => DataRow(
+    cells: [
+      DataCell(Text(e.korisnik?.ime ?? "")),
+      DataCell(Text(e.korisnik?.prezime ?? "")),
+      DataCell(Text(e.datumRezervacije!.substring(0, e.datumRezervacije!.indexOf("T")))),
+      if (currentReservationState == reservationStates[0])
+        DataCell(Row(
+          children: [
+            IconButton(
+              onPressed: () async {
+                await reservationsProvider.allowReservation(e.rezervacijaId!);
+                await _filterData("", state: currentReservationState);
+              },
+              icon: Icon(Icons.check, color: Colors.green),
+            ),
+            SizedBox(width: 10),
+            IconButton(
+              onPressed: () async {
+                await reservationsProvider.rejectReservation(e.rezervacijaId!);
+                await _filterData("", state: currentReservationState);
+              },
+              icon: Icon(Icons.close, color: Colors.red),
+            ),
+          ],
+        )),
+    ],
+  )).toList() ?? [];
+
+  return rows.isEmpty
+    ? Center(
+  child: Padding(
+    padding: const EdgeInsets.all(20),
+    child: Text(
+      "There are currently no records.",
+      style: TextStyle(
+        fontSize: 18,
+        fontWeight: FontWeight.w600,
+        color: Colors.grey[600],
+      ),
+      textAlign: TextAlign.center,
+    ),
+  ),
+)
+    : Expanded(
+        child: SingleChildScrollView(
+          child: DataTable(
+            columns: [
+              DataColumn(label: Text("Name")),
+              DataColumn(label: Text("Surname")),
+              DataColumn(label: Text("Date")),
+              if (currentReservationState == reservationStates[0])
+                DataColumn(label: Text("")),
+            ],
+            rows: rows,
+          ),
+        ),
+      );
+}
   Widget _buildPaging() {
+  if ((result?.count ?? 0) == 0) {
+    return SizedBox.shrink();
+  }
+
   return PaginationControls(
     currentPage: _selectedIndex,
-    totalItems: result?.count ?? 0,
+    totalItems: result!.count,
     pageSize: pageSize,
     onPageChanged: (newPage) async {
       setState(() {
         _selectedIndex = newPage;
       });
-      await _filterData("",state: currentReservationState);
+      await _filterData("", state: currentReservationState);
     },
   );
 }

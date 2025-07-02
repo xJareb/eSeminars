@@ -152,10 +152,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                         formValues['datumRodjenja'] = formValues['datumRodjenja']?.toIso8601String();
                       }
                       await userProvider.insert(formValues);
-                      MyDialogs.showSuccessDialog(context, "Successfully registered");
+                      await MyDialogs.showSuccessDialog(context, "Successfully registered");
                       _formKey.currentState?.reset();
                       } catch (e) {
-                        MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+                        await MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
                       }
                       
                     }

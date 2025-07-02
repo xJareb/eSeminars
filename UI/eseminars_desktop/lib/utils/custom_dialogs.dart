@@ -32,7 +32,7 @@ Future<void> buildAlertDiagram({
 void showErrorMessage(BuildContext context, String content) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: Duration(seconds: 4),
+      duration: Duration(seconds: 2),
       content: Text(
         content,
         style: TextStyle(color: Colors.white),
@@ -45,7 +45,7 @@ void showErrorMessage(BuildContext context, String content) {
 void showSuccessMessage(BuildContext context, String content){
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
-      duration: Duration(seconds: 4),
+      duration: Duration(seconds: 2),
       content: Text(content,style: TextStyle(
        color: Colors.white,),
       ),

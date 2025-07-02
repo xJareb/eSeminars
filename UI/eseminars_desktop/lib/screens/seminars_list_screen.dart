@@ -50,6 +50,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
 
   bool isSeminarsActive = true;
   bool isSponsorsActive = false;
+  bool isProcessing = false;
 
   @override
   void didChangeDependencies() {
@@ -292,6 +293,22 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     );
   }
   Widget _buildFormSponsors(){
+    if(sponsorsSeminarsResult?.result.length == 0){
+      return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          "Currently no sponsors available for this seminar.",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
+      ),
+    );
+    }
     return Expanded(child: 
     SingleChildScrollView(
       child: DataTable(columns: [
@@ -368,33 +385,48 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                 return Row(
                   children: [
                     if(actions.contains('Activate'))
-                    ElevatedButton(onPressed: () async{
+                    ElevatedButton(onPressed: isProcessing ? null : () async{
+                      setState(() => isProcessing = true);
                       try {
                         await seminarsProvider.activateSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully activated");
+                        await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                        await Future.delayed(Duration(seconds: 3));
+                      } finally{
+                        setState(() => isProcessing = false);
                       }
                     }, child: Text("Activate")),
                     if(actions.contains('Hide'))
-                    ElevatedButton(onPressed: () async{
+                    ElevatedButton(onPressed: isProcessing ? null : () async{
+                      setState(() => isProcessing = true);
                       try {
                         await seminarsProvider.hideSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully hidden");
+                        await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                        await Future.delayed(Duration(seconds: 3));
+                      } finally{
+                        setState(() => isProcessing = false);
                       }
                     }, child: Text("Hide")),
                     if(actions.contains('Edit'))
-                    ElevatedButton(onPressed: () async{
+                    ElevatedButton(onPressed: isProcessing ? null: () async{
+                      setState(() => isProcessing = true);
                       try {
                         await seminarsProvider.editSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully edited");
+                        await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                        await Future.delayed(Duration(seconds: 3));
+                      } finally{
+                        setState(() => isProcessing = false);
                       }
                     }, child: Text("Edit")),
                   ],
@@ -424,6 +456,9 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   );
 }
 Widget _buildPagingSponsors() {
+  if(sponsorsSeminarsResult?.result.length == 0){
+    return SizedBox.shrink();
+  }
   return PaginationControls(
     currentPage: _selectedIndex,
     totalItems: sponsorsSeminarsResult?.count ?? 0,

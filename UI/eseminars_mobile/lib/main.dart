@@ -66,11 +66,19 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
   LoginPage({super.key});
 
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   TextEditingController _email = TextEditingController();
+
   TextEditingController _password = TextEditingController();
+
+  String? _errorMessage;
 
   @override
   Widget build(BuildContext context) {
@@ -106,30 +114,46 @@ class LoginPage extends StatelessWidget {
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(controller: _email,decoration: InputDecoration(suffixIcon: Icon(CupertinoIcons.person),labelText: "Email",border: OutlineInputBorder()),),
                 ),
+                _errorMessage == null? SizedBox.shrink(): Text(_errorMessage!,style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 30,),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextField(controller: _password,obscureText: true,decoration: InputDecoration(labelText: "Password",suffixIcon: Icon(Icons.password),border: OutlineInputBorder()),),
                 ),
+                _errorMessage == null? SizedBox.shrink(): Text(_errorMessage!,style: TextStyle(color: Colors.red, fontWeight: FontWeight.bold),),
                 const SizedBox(height: 20,),
                 ElevatedButton(onPressed: () async{
-                  KorisniciProvider provider = new KorisniciProvider();
-                  AuthProvider.email = _email.text;
-                  AuthProvider.password = _password.text;
-                  final FocusNode _emailFocusNode = FocusNode();
-                  try {
-                    var user = await provider.login(_email.text, _password.text);
-                    if(user != null){
-                      UserSession.currentUser = user;
-
-                      _password.clear();
-                      _email.clear();
-                      FocusScope.of(context).requestFocus(_emailFocusNode);
+                  setState(() {
+                      _errorMessage = null;
+                    });
+                    if(_email.text.isEmpty || _password.text.isEmpty){
+                      setState(() {
+                        _errorMessage = "Incorect data";
+                      });
+                      return;
                     }
+                  KorisniciProvider provider = new KorisniciProvider();
+                  try {
+                      var user = await provider.login(_email.text, _password.text);
+                    
+                    if(user == null){
+                      setState(() {
+                        _errorMessage = "Incorect data";
+                      });
+                      return;
+                    }
+                    AuthProvider.email = _email.text;
+                    AuthProvider.password = _password.text;
+                    UserSession.currentUser = user;
+
                     if(UserSession.currentUser?.ulogaNavigation?.naziv == "Korisnik"){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MasterScreen()));
                     } else if(UserSession.currentUser?.ulogaNavigation?.naziv == "Organizator"){
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => MasterScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => MasterScreen()));
+                    }else{
+                      setState(() {
+                        _errorMessage = "Incorect data";
+                      });
                     }
                   } catch (e) {
                     print(e.toString());

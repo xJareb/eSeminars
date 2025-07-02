@@ -73,6 +73,7 @@ class _SeminarsHistoryScreenState extends State<SeminarsHistoryScreen> {
           const SizedBox(height: 10,),
           _buildHeader(),
           const SizedBox(height: 20,),
+          result?.result.isEmpty == true ? Center(child: Text("Your seminar history is currently empty.",style: TextStyle(fontSize: 16, color: Colors.grey[700]),textAlign: TextAlign.center,),) : SizedBox.shrink(),
           isLoading ? CircularProgressIndicator() : _buildHistorySeminars()
         ],
       )

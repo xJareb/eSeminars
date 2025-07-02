@@ -224,17 +224,17 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
               await wishlistProvider.softDelete(savedSeminarId!);
               await  _loadWishlist();
               setState(() {});
-              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+              await MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
               } catch (e) {
-              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
               }
             });
            } catch (e) {
-            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
           }
             }
             } catch (e) {
-              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+              await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
             }
           }, icon: Icon(
             (wishlistResult?.result.any((s) => s.seminar?.seminarId == widget?.seminars?.seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
@@ -250,9 +250,9 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
                     'korisnikId' : UserSession.currentUser?.korisnikId
                   };
                   await reservationsProvider.insert(request);
-                  MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                  await MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
                 } catch (e) {
-                  MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                  await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
                 }
               });
             }, child: Text("Reserve"),style: ElevatedButton.styleFrom(

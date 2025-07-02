@@ -1,3 +1,4 @@
+import 'package:eseminars_desktop/main.dart';
 import 'package:eseminars_desktop/screens/categories_list_screen.dart';
 import 'package:eseminars_desktop/screens/feedbacks_list_screen.dart';
 import 'package:eseminars_desktop/screens/lecturers_list_screen.dart';
@@ -22,7 +23,9 @@ class _MasterScreenState extends State<MasterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(backgroundColor: Color.fromRGBO(255, 246, 230, 1),elevation: 4,title: Text(widget.title)),
+      appBar: AppBar(backgroundColor: Color.fromRGBO(255, 246, 230, 1),elevation: 4,title: Text(widget.title), leading: IconButton(onPressed: () async{
+        await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()),(route) => false);
+      }, icon: Icon(Icons.logout)),),
       body: Row(
         children: [
           Expanded(flex: 1,child: Container(

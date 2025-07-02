@@ -51,7 +51,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
       child: isLoading ? Center(child: const CircularProgressIndicator()) : Column(
         children: [
           const SizedBox(height: 30,),
-          _buildWishList()
+          result?.result.isEmpty ?? true ? Center(
+            child: Text("Your seminar wishlist is currently empty.",style: TextStyle(fontSize: 16, color: Colors.grey[700]),textAlign: TextAlign.center,
+                ),
+          )
+  : _buildWishList(),
+          
         ],
       ),
     );
@@ -87,7 +92,17 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text("${result?.result[index].seminar?.naslov}",style: GoogleFonts.poppins(fontSize: 26),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false,),
+                      Text(() {
+    final naslov = result?.result[index].seminar?.naslov;
+    if (naslov == null) return "";
+    final maxLength = 20;
+    if (naslov.length <= maxLength) return naslov;
+    return naslov.substring(0, maxLength) + "...";}(),
+  style: GoogleFonts.poppins(fontSize: 26),
+  maxLines: 1,
+  overflow: TextOverflow.ellipsis,
+  softWrap: false,
+),
                       Text("${result?.result[index].seminar?.opis}",style: GoogleFonts.poppins(fontSize: 18),maxLines: 1,overflow: TextOverflow.ellipsis,softWrap: false),
                     ],
                                     ),
@@ -105,14 +120,14 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               MyDialogs.showInformationDialog(context, "Are you sure you want to remove this seminar from wishlist?", ()async{
                               try {
                               await wishlistProvider.softDelete(wishlist?.sacuvaniSeminarId ?? 0);
-                              MyDialogs.showSuccessDialog(context, "Successfully removed seminar from wishlist");
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed seminar from wishlist");
                               await _loadWishlist();
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                 }, icon: Icon(Icons.close)))
                 ]

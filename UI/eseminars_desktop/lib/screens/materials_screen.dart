@@ -114,39 +114,63 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
       ],
     );
   }
-  Widget _buildMaterials(){
-    return Expanded(
-      child: SingleChildScrollView(
-        child: DataTable(columns: [
-          DataColumn(label: Text("Name")),
-          DataColumn(label: Text("Link")),
-          DataColumn(label: Text(""))
-        ], rows: materialsResult?.result.map((e) =>
-        DataRow(cells: [
-          DataCell(Text(e.naziv ?? "")),
-          DataCell(Text(e.putanja ?? "")),
-          DataCell(ElevatedButton(onPressed: () async{
-            try {
-              await buildAlertDiagram(context: context, onConfirmDelete: ()async{
-                await materialsProvider.softDelete(e.materijalId!);
-                showSuccessMessage(context, "Material successfully removed");
-              });
-            } catch (e) {
-              showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-            }
-            await _loadMaterials();
-            setState(() {});
-          },child: Text("Remove"),))
-        ]
-        )
-        ).toList().cast<DataRow>() ?? []),
+  Widget _buildMaterials() {
+  if (materialsResult?.result.isEmpty ?? true) {
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Text(
+          "Currently no materials available.",
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,
+        ),
       ),
     );
   }
+
+  return Expanded(
+    child: SingleChildScrollView(
+      child: DataTable(
+        columns: const [
+          DataColumn(label: Text("Name")),
+          DataColumn(label: Text("Link")),
+          DataColumn(label: Text("")),
+        ],
+        rows: materialsResult!.result.map((e) => DataRow(cells: [
+          DataCell(Text(e.naziv ?? "")),
+          DataCell(Text(e.putanja ?? "")),
+          DataCell(ElevatedButton(
+            onPressed: () async {
+              try {
+                await buildAlertDiagram(context: context, onConfirmDelete: () async {
+                  await materialsProvider.softDelete(e.materijalId!);
+                  showSuccessMessage(context, "Material successfully removed");
+                });
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
+              await _loadMaterials();
+              setState(() {});
+            },
+            child: const Text("Remove"),
+          )),
+        ])).toList(),
+      ),
+    ),
+  );
+}
   Widget _buildPaging() {
+  if ((materialsResult?.count ?? 0) == 0) {
+    return SizedBox.shrink();
+  }
+
   return PaginationControls(
     currentPage: _selectedIndex,
-    totalItems: materialsResult?.count ?? 0,
+    totalItems: materialsResult!.count,
     pageSize: pageSize,
     onPageChanged: (newPage) async {
       setState(() {

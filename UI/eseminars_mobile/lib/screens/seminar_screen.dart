@@ -58,7 +58,6 @@ class _SeminarScreenState extends State<SeminarScreen> {
   }
   Future<void> _loadRecommendedSeminars(int userId) async{
     recommendedSeminars = await provider.recommendedSeminars(userId);
-    print("Učitano ${recommendedSeminars.length} seminara.");
     setState(() {});
   }
   Future<void> _loadCategories() async{
@@ -245,19 +244,19 @@ class _SeminarScreenState extends State<SeminarScreen> {
                               await wishlistProvider.softDelete(savedSeminarId!);
                               await _loadWishlist();
                               setState(() {});
-                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
 
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                             }
                             
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                         }, icon: Icon(
                           (wishlistResult?.result.any((s) => s.seminar?.seminarId == result?.result[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
@@ -280,10 +279,10 @@ class _SeminarScreenState extends State<SeminarScreen> {
                                 'korisnikId' : UserSession.currentUser?.korisnikId
                               };
                               await reservationsProvider.insert(request);
-                              MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                              await MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
                               
                             } catch (e) {
-                              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
                             }
                           });
                         }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(
@@ -367,19 +366,19 @@ class _SeminarScreenState extends State<SeminarScreen> {
                               await wishlistProvider.softDelete(savedSeminarId!);
                               await _loadWishlist();
                               setState(() {});
-                              MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
+                              await MyDialogs.showSuccessDialog(context, "Successfully removed sponsor from seminar");
 
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                           }
                             }
                             
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+                            await MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
                           }
                         }, icon: Icon(
                           (wishlistResult?.result.any((s) => s.seminar?.seminarId == recommendedSeminars[index].seminarId) ?? false ) ? CupertinoIcons.heart_solid : CupertinoIcons.heart, color: 
@@ -402,10 +401,10 @@ class _SeminarScreenState extends State<SeminarScreen> {
                                 'korisnikId' : UserSession.currentUser?.korisnikId
                               };
                               await reservationsProvider.insert(request);
-                              MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
+                              await MyDialogs.showSuccessDialog(context, "Successfully reserved! Please wait for the reservation approval");
                               
                             } catch (e) {
-                              MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+                              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
                             }
                           });
                         }, icon: Icon(CupertinoIcons.plus),style: IconButton.styleFrom(

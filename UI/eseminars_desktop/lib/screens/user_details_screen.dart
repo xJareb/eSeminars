@@ -28,6 +28,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
   final _formKey = GlobalKey<FormBuilderState>();
   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
   final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  bool isChecked = false;
 
   @override
   void didChangeDependencies() {
@@ -54,7 +55,15 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
     return MasterScreen('User Details', Column(
       children: [
         _buildForm(),
-        const SizedBox(height: 30,),
+        widget.user == null ? SizedBox.shrink() : Row(children: [
+          Checkbox(value: isChecked, onChanged: (bool? newValue){
+          setState(() {
+            isChecked = newValue!;
+          });
+        }),
+        Text("Change password")
+        ],),
+        const SizedBox(height: 25,),
         _buildControls()
       ],
     ));
@@ -97,7 +106,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         const SizedBox(height: 20,),
         Row(
   children: [
-    if (widget.user == null) ...[
+    if (widget.user == null || isChecked == true) ...[
       Expanded(
         child: CustomFormBuilderTextField(
           name: "lozinka",
@@ -175,7 +184,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
               var korisnikId = widget.user!.korisnikId;
               await userProdiver.update(korisnikId!,formValues);
               showSuccessMessage(context,"User successfully edited");
-               _formKey.currentState?.reset();
+              _formKey.currentState?.reset();
               Navigator.pop(context,true);
               } catch (e) {
                 showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
@@ -190,5 +199,4 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
       ),
     );
   }
-  //TODO :: add checkbox to change password
 }

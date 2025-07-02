@@ -34,4 +34,13 @@ class SeminarsProvider extends BaseProvider<Seminars>{
     rethrow;
   }
 }
+Future<void> hideSeminar(int id) async{
+    final url = "${BaseProvider.baseUrl}Seminari/${id}/hide";
+    var headers = createHeaders();
+    var response = await http.put(Uri.parse(url), headers: headers);
+
+    if (!isValidResponse(response)) {
+    throw Exception("Failed to hide seminar");
+  }
+}
 }

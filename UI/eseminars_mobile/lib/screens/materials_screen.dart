@@ -191,10 +191,10 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
               try {
                 await materialsProvider.insert(_formKey.currentState?.value);
                 Navigator.pop(context);
-                 await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added new material"),duration: Duration(seconds: 4),backgroundColor: Colors.green,));
+                 await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added new material"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
               } catch (e) {
                 Navigator.pop(context);
-                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 4),backgroundColor: Colors.red));
+                await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 3),backgroundColor: Colors.red));
               }
             }
           }, child: Text("Add"))
@@ -291,11 +291,11 @@ Widget _buildSeminarMaterials(){
                               await MyDialogs.showSuccessDialog(context, "Successfully removed material");
                               await _loadMaterials();
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                           }
                         }, icon: Icon(Icons.close),style: IconButton.styleFrom(
                           foregroundColor: Colors.red

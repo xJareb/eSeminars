@@ -169,11 +169,11 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
                               await MyDialogs.showSuccessDialog(context, "Successfully removed feedback");
                               await _loadFeedbacks();
                               } catch (e) {
-                                MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                                await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
                               }
                             });
                           } catch (e) {
-                            MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception:", ''));
+                            await MyDialogs.showErrorDialog(context, "Something bad happened, please try again");
                           }
                     }, icon: Icon(Icons.close,),style: IconButton.styleFrom(
                       foregroundColor: Colors.red

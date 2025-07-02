@@ -26,7 +26,7 @@ namespace eSeminars.API.Controllers
         {
             return base.GetList(searchObject);
         }
-        [Authorize(Roles = "Administrator,Korisnik")]
+        [Authorize(Roles = "Administrator,Organizator,Korisnik")]
         public override Korisnici Update(int id, KorisniciUpdateRequest request)
         {
             return base.Update(id, request);

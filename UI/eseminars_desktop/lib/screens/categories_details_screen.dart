@@ -25,6 +25,7 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
   Map<String, dynamic> _initialValue = {};
   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
   final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  
 
   @override
   void didChangeDependencies() {

@@ -65,8 +65,13 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
     return MasterScreen('Categories', Column(children: [
       _buildSearch(),
       const SizedBox(height: 20,),
-      _buildForm(),
-      _buildPaging()
+      result?.result.length == 0 ? Center(child: Text("Currently no categories available .",style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,),) :  _buildForm(),
+      result?.result.length == 0 ? SizedBox.shrink() :_buildPaging()
     ],));
   }
 
@@ -126,10 +131,13 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
               try {
                 await provider.softDelete(e.kategorijaId!);
                 showSuccessMessage(context, "Category successfully removed");
+                
               } catch (e) {
                 showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-              }
+              }finally {
+          }
             });
+
             await _loadData();
             setState(() {});
           },child: Text("Remove"),))

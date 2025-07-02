@@ -71,8 +71,13 @@ class _UserListScreenState extends State<UserListScreen> {
       children: [
         _buildSearch(),
         SizedBox(height: 55,),
-        _buildResultView(),
-        _buildPaging()
+        result?.result.length == 0 ? Center(child:Text("Currently no materials available.",style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            color: Colors.grey[600],
+          ),
+          textAlign: TextAlign.center,)) :_buildResultView(),
+        result?.result.length == 0 ? SizedBox.shrink() :_buildPaging()
       ],
     ));
   }
@@ -128,9 +133,10 @@ class _UserListScreenState extends State<UserListScreen> {
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) =>
           DataRow(
-            onSelectChanged: (selected) =>{
+            onSelectChanged: (selected) async{
               if(selected == true){
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: e,)))
+                 await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: e,)));
+                 await _loadData();
               }
             },
             cells: [

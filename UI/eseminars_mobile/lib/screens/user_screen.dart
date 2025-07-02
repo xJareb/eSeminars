@@ -145,9 +145,10 @@ class _UserScreenState extends State<UserScreen> {
       ),
       ElevatedButton(
         onPressed: () async{
-          Navigator.pop(context);
           AuthProvider.email = "";
           AuthProvider.password = "";
+
+          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()),(route)=> false);
         },
         child: Text("Sign Out"),
         style: ElevatedButton.styleFrom(
