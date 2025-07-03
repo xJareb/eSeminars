@@ -283,6 +283,7 @@ Widget _buildRow(IconData icon1, String text1, IconData icon2, String text2) {
                 text1,
                 style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[800]),
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
           ],

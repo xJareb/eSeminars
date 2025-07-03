@@ -392,6 +392,7 @@ class _SeminarsMaterialsFreedbacksState extends State<SeminarsMaterialsFreedback
                 text1,
                 style: GoogleFonts.poppins(fontSize: 16, color: Colors.grey[800]),
                 overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
             ),
           ],

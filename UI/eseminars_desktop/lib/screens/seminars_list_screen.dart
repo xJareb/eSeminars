@@ -280,7 +280,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
             try {
               await sponsorsSeminarsProvider.insert(_formKey.currentState?.value);
               _formKey.currentState?.reset();
-              showSuccessMessage(context, "The sponsor already exists in a seminar.");
+              showSuccessMessage(context, "The sponsor successfully added in a seminar.");
               await _loadSponsorsBySeminar();
               Navigator.pop(context, true);
             } catch (e) {

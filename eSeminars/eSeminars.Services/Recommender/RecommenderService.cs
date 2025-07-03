@@ -33,7 +33,7 @@ namespace eSeminars.Services.Recommender
                 .Include(s => s.Korisnik)
                 .Include(s=>s.Materijalis)
                 .Include(s=>s.Predavac)
-                .Include(s=>s.SponzoriSeminaris).ThenInclude(ss=>ss.Sponzor).Where(s=>s.StateMachine == "active")
+                .Include(s=>s.SponzoriSeminaris).ThenInclude(ss=>ss.Sponzor).Where(s=>s.StateMachine == "active" && s.DatumVrijeme > DateTime.Now)
                 .ToList();
 
             var approvedReservations = Context.Rezervacijes.Where(r => r.KorisnikId == korisnikId && r.StateMachine == "approved")
