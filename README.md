@@ -14,7 +14,7 @@ Seminarski rad iz predmeta Razvoj Softvera II. Ova platforma omogućava korisnic
 docker-compose up --build
 ```
 
-• Nakon uspješnog pokretanja dockera raspakovati `fit-build-2025-07-04-desktop.zip`, pokrenuti `eseminars_desktop.apk` iz foldera Release. Unijeti korisničke podatke za aministratora kako bi pristupili aplikaciji.
+• Nakon uspješnog pokretanja dockera raspakovati `fit-build-2025-07-04-desktop.zip`, pokrenuti `eseminars_desktop.exe` iz foldera Release. Unijeti korisničke podatke za aministratora kako bi pristupili aplikaciji.
 
 • Prije pokretanja mobilne aplikacije povesti računa o tome da već ne postoji aplikacija na emulatoru, u suprotom deinstalirajte je. Raspakovati `fit-build-2025-07-04-mobile.zip` i prevući `app-release.apk` iz foldera flutter apk u emulator da se aplikacija instalira. Nakon instalacije unijeti korisničke podatke za organizatora ili administratora.
 
