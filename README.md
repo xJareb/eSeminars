@@ -20,6 +20,8 @@ docker-compose up --build
 
 • Nakon kreiranog seminara od strane organizatora treba biti odobren od strane administratora da bi bio dostupan korisnicima.
 
+• Organizator je u stanju uređivati seminar kada je isti na čekanju za odobrenje od strane administracije
+
 • Mobilnoj aplikaciji mogu pristupiti samo organizator i korisnici.
 
 # Podaci za prijavu
