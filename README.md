@@ -45,7 +45,7 @@ Lozinka: `organizator123A!`
 ### Korisnik
 Email: `korisnik@gmail.com`
 
-Lozinka: `korisnik123`
+Lozinka: `korisnik123!`
 
 # RabbitMQ
 
