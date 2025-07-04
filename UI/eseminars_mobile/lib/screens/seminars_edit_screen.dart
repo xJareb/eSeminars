@@ -195,6 +195,8 @@ class _SeminarsEditScreenState extends State<SeminarsEditScreen> {
     );
   }
   Widget _buildInputDateTime(String label, String name, bool isEnabled){
+    final DateTime initial = DateTime.now().add(const Duration(days: 1));
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -206,8 +208,9 @@ class _SeminarsEditScreenState extends State<SeminarsEditScreen> {
         const SizedBox(height: 5,),
         FormBuilderDateTimePicker(name: name,
         enabled: isEnabled,
-        inputType: InputType.date,
-        lastDate: DateTime.now(),
+        inputType: InputType.both,
+        firstDate: initial,
+        initialDate: initial,
         decoration: InputDecoration(
           filled: true,
           fillColor: Colors.grey[100],

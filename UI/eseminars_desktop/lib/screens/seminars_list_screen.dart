@@ -391,6 +391,10 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                         await seminarsProvider.activateSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully activated");
+                        await _loadSeminarsDropDown();
+                        setState(() {
+                          seminarId = seminarsDropdown?.result.first.seminarId;
+                        });
                         await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
@@ -406,6 +410,10 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                         await seminarsProvider.hideSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully hidden");
+                        await _loadSeminarsDropDown();
+                        setState(() {
+                          seminarId = seminarsDropdown?.result.first.seminarId;
+                        });
                         await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
@@ -421,6 +429,10 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                         await seminarsProvider.editSeminar(e.seminarId!);
                         await _filterData();
                         showSuccessMessage(context, "Seminar successfully edited");
+                        await _loadSeminarsDropDown();
+                        setState(() {
+                          seminarId = seminarsDropdown?.result.first.seminarId;
+                        });
                         await Future.delayed(Duration(seconds: 3));
                       } catch (e) {
                         showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
