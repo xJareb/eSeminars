@@ -9,7 +9,7 @@ Seminarski rad iz predmeta Razvoj Softvera II. Ova platforma omogućava korisnic
 <img src="https://github.com/user-attachments/assets/5492c792-38c4-408e-a2a4-8fa484e132df" alt="Screenshot" width="400"/>
 
 
-• Pokrenuti docker desktop i otvoriti \eSeminars\eSeminars u terminalu i pokrenuti komandu 
+• Pokrenuti docker desktop i otvoriti \eSeminars u terminalu sa iste lokacije kao na slici iznad i pokrenuti komandu 
 ```bash
 docker-compose up --build
 ```
