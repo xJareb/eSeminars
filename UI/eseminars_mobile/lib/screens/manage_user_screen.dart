@@ -1,5 +1,6 @@
 import 'package:eseminars_mobile/main.dart';
 import 'package:eseminars_mobile/models/logged_user.dart';
+import 'package:eseminars_mobile/providers/auth_provider.dart';
 import 'package:eseminars_mobile/providers/korisnici_provider.dart';
 import 'package:eseminars_mobile/utils/TCustomCurvedEdges.dart';
 import 'package:eseminars_mobile/utils/custom_dialogs.dart';
@@ -307,9 +308,20 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
                 formValues['datumRodjenja'] = formValues['datumRodjenja']?.toIso8601String();
               }
               try {
+                KorisniciProvider provider = new KorisniciProvider();
                 var userId = UserSession.currentUser!.korisnikId;
+                
                 await userProvider.update(userId!,formValues);
                 await MyDialogs.showSuccessDialog(context, "Password successfully changed");
+
+                final newPassword = formValues['lozinka'];
+                final email = formValues['email'];
+
+                var updatedUser = await provider.login(email,newPassword);
+
+                AuthProvider.email = email;
+                AuthProvider.password = newPassword;
+                UserSession.currentUser = updatedUser;
                 setState(() {
                   isPassword = false;
                 });

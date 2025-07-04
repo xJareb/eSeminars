@@ -192,6 +192,7 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                 await materialsProvider.insert(_formKey.currentState?.value);
                 Navigator.pop(context);
                  await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added new material"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
+                 await _loadMaterials();
               } catch (e) {
                 Navigator.pop(context);
                 await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(e.toString().replaceFirst("Exception", '')),duration: Duration(seconds: 3),backgroundColor: Colors.red));

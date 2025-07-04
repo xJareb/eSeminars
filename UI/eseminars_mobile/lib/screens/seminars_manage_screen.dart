@@ -292,6 +292,13 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
                             try {
                               await seminarsProvider.hideSeminar(seminarResult?.result[index].seminarId ?? 0);
                               await MyDialogs.showSuccessDialog(context, "A successfully hidden seminar, if necessary, the administration will make it active");
+
+                              if((seminarResult?.result.length ?? 0) == 1 && _selectedIndex>0){
+                                setState(() {
+                                  _selectedIndex -= 1;
+                                });
+                              }
+
                               await _loadSeminars();
                             } catch (e) {
                               await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));

@@ -95,15 +95,6 @@ public partial class ESeminarsContext : DbContext
                 },
                 new Dojmovi
                 {
-                    DojamId = 4,
-                    SeminarId = 4,  // past seminar
-                    KorisnikId = 3,
-                    Ocjena = 5,
-                    IsDeleted = false,
-                    DatumKreiranjaDojma = DateTime.Now.AddDays(-10)
-                },
-                new Dojmovi
-                {
                     DojamId = 5,
                     SeminarId = 5,  // past seminar
                     KorisnikId = 3,
