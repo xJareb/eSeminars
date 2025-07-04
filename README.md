@@ -4,12 +4,12 @@ Seminarski rad iz predmeta Razvoj Softvera II. Ova platforma omogućava korisnic
 # Upustvo za pokretanje
 • Klonirati ovaj repozitorij
 
-• Raspakovati `fit-build-2025-07-04-env.zip`, a zatim file `.env` postaviti u \eSeminars  [Upozorenje: U slučaju da operativni sistem obriše . ispred env dodati je]
+• Raspakovati `fit-build-2025-07-04-env.zip`, a zatim file `.env` postaviti u eSeminars\eSeminars  [Upozorenje: U slučaju da operativni sistem obriše . ispred env dodati je]
 
 <img src="https://github.com/user-attachments/assets/5492c792-38c4-408e-a2a4-8fa484e132df" alt="Screenshot" width="400"/>
 
 
-• Pokrenuti docker desktop i otvoriti \eSeminars u terminalu sa iste lokacije kao na slici iznad i pokrenuti komandu 
+• Pokrenuti docker desktop i otvoriti eSeminars\eSeminars u terminalu sa iste lokacije kao na slici iznad i pokrenuti komandu 
 ```bash
 docker-compose up --build
 ```
