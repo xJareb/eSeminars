@@ -115,7 +115,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
             ElevatedButton(onPressed: () async{
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen()));
               if(result == true){
-                await _loadData();
+                await _filterData("");
               }
               
             }, child: Text("Add",style: TextStyle(fontSize: 15),))

@@ -98,7 +98,7 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen()));
-              await _loadData();
+              await _filterData(_categoryName.text);
             }, child: Text("Add",style: TextStyle(fontSize: 15),))
           ],
         ),
