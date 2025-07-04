@@ -113,6 +113,9 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
             )),
             const SizedBox(width: 15,),
             ElevatedButton(onPressed: () async{
+              _emailEqual.clear();
+              _nameSurnameGTE.clear();
+              await _filterData("");
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen()));
               if(result == true){
                 await _filterData("");
@@ -144,6 +147,8 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
           ], rows: result?.result.map((e) =>
               DataRow(onSelectChanged: (seleceted) async{
                 if(seleceted == true){
+                  _emailEqual.clear();
+                  _nameSurnameGTE.clear();
                   await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen(lecturers: e,)));
                   await _loadData();
                 }
@@ -151,7 +156,7 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
               cells: [
                 DataCell(Text(e.ime ?? "")),
                 DataCell(Text(e.prezime ?? "")),
-                DataCell(Text('${e.biografija!.substring(0,17 > e.biografija!.length ? e.biografija!.length : 17)}...' ?? "")),
+                DataCell(Text(e.biografija != null && e.biografija!.length > 17 ? '${e.biografija!.substring(0, 17)}...' : (e.biografija ?? ''))),
                 DataCell(Container(width: 100,child: Text(e.email ?? "",),)),
                 DataCell(Text('${e.telefon}' ?? "")),
                 DataCell(ElevatedButton(onPressed: () async{

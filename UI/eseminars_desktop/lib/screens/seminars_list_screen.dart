@@ -164,6 +164,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
                 isSeminarsActive = false;
                 isSponsorsActive = true;
                 _selectedIndex = 0;
+                _searchSeminar.clear();
                 _loadSponsorsBySeminar();
               });
             }  , icon: Icon(Icons.attach_money)),
@@ -216,6 +217,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
             const SizedBox(width: 10,),
             if(isSeminarsActive == true) ... [
             ElevatedButton(onPressed: () async{
+              _searchSeminar.clear();
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen()));
               if(result == true){
                 await _filterData();
@@ -357,6 +359,8 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               try {
                 List<String> actions = await seminarsProvider.allowedActions(e.seminarId!);
                 if(actions.contains('Update')){
+                  _searchSeminar.clear();
+                  _filterData();
                   var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen(seminars: e,)));
                   if(result == true){
                   _filterData();

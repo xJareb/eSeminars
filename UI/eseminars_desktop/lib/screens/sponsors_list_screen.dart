@@ -99,6 +99,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
             ),
             const SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
+              _filterSponsor.clear();
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen()));
               if(result == true){
                 await _loadData();
@@ -120,6 +121,7 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
       ], rows: result?.result.map((e) => 
           DataRow(onSelectChanged: (selected) async{
             if(selected == true){
+              _filterSponsor.clear();
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen(sponsors: e,)));
               await _loadData();
             }

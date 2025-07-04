@@ -92,6 +92,7 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
             ),
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
+              _searchTitle.clear();
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsDetailsScreen()));
               if(result == true){
                 await _loadData();
@@ -119,12 +120,13 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
     rows: result?.result.map((e)=>
     DataRow(onSelectChanged: (selected) async{
       if(selected == true){
+        _searchTitle.clear();
         await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsDetailsScreen(notifications: e,)));
         await _loadData();
       }
     },cells: [
       DataCell(Text(e.naslov ?? "")),
-      DataCell(Text('${e.sadrzaj!.substring(0,17 > e.sadrzaj!.length ? e.sadrzaj!.length : 17)}...' ?? "")),
+      DataCell(Text(e.sadrzaj != null && e.sadrzaj!.length > 17 ? '${e.sadrzaj!.substring(0, 17)}...' : (e.sadrzaj ?? ''))),
       DataCell(Text('${e.datumObavijesti!.substring(0,e.datumObavijesti!.indexOf("T"))} ${e.datumObavijesti!.
       substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
       DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{

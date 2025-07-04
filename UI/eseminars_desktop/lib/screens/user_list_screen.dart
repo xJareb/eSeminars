@@ -104,6 +104,8 @@ class _UserListScreenState extends State<UserListScreen> {
                 ),
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
+              _userController.clear();
+              await _loadData();
               final result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen()));
               if(result == true){
                 await _loadData();
@@ -134,6 +136,7 @@ class _UserListScreenState extends State<UserListScreen> {
       ], rows: result?.result.map((e) =>
           DataRow(
             onSelectChanged: (selected) async{
+              _userController.clear();
               if(selected == true){
                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: e,)));
                  await _loadData();

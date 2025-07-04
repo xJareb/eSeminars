@@ -97,6 +97,7 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
                 ),
             SizedBox(width: 10,),
             ElevatedButton(onPressed: () async{
+              _categoryName.clear();
               await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen()));
               await _filterData(_categoryName.text);
             }, child: Text("Add",style: TextStyle(fontSize: 15),))
@@ -117,6 +118,8 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
           DataColumn(label: Text("Description")),
           DataColumn(label: Text(""))
         ], rows: result?.result.map((e) => DataRow(onSelectChanged: (selected) async{
+          _categoryName.clear();
+          await _loadData();
           if(selected == true){
             var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
             if(result == true){
@@ -125,7 +128,7 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
           }
         },cells: [
           DataCell(Text(e.naziv ?? "")),
-          DataCell(Text('${e.opis!.substring(0,50 > e.opis!.length ? e.opis!.length : 50)}...' ?? "")),
+          DataCell(Text(e.opis != null && e.opis!.length > 50 ? '${e.opis!.substring(0, 50)}...' : (e.opis ?? ''))),
           DataCell(ElevatedButton(onPressed: () async{
             await buildAlertDiagram(context: context, onConfirmDelete: () async{
               try {
