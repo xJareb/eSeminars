@@ -12,7 +12,7 @@ using eSeminars.Services.Database;
 namespace eSeminars.Services.Migrations
 {
     [DbContext(typeof(ESeminarsContext))]
-    [Migration("20250704163013_InitialCreateSeed")]
+    [Migration("20250704165135_InitialCreateSeed")]
     partial class InitialCreateSeed
     {
         /// <inheritdoc />
@@ -64,7 +64,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             DojamId = 1,
-                            DatumKreiranjaDojma = new DateTime(2025, 6, 14, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1041),
+                            DatumKreiranjaDojma = new DateTime(2025, 6, 14, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6670),
                             IsDeleted = false,
                             KorisnikId = 3,
                             Ocjena = 5,
@@ -73,7 +73,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             DojamId = 2,
-                            DatumKreiranjaDojma = new DateTime(2025, 6, 16, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1099),
+                            DatumKreiranjaDojma = new DateTime(2025, 6, 16, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6720),
                             IsDeleted = false,
                             KorisnikId = 3,
                             Ocjena = 4,
@@ -81,21 +81,12 @@ namespace eSeminars.Services.Migrations
                         },
                         new
                         {
-                            DojamId = 3,
-                            DatumKreiranjaDojma = new DateTime(2025, 6, 19, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1101),
-                            IsDeleted = false,
-                            KorisnikId = 3,
-                            Ocjena = 3,
-                            SeminarId = 3
-                        },
-                        new
-                        {
-                            DojamId = 5,
-                            DatumKreiranjaDojma = new DateTime(2025, 6, 29, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1104),
+                            DojamId = 4,
+                            DatumKreiranjaDojma = new DateTime(2025, 6, 29, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6724),
                             IsDeleted = false,
                             KorisnikId = 3,
                             Ocjena = 4,
-                            SeminarId = 5
+                            SeminarId = 4
                         });
                 });
 
@@ -311,7 +302,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 1,
-                            DatumDodavanja = new DateTime(2025, 6, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8248),
+                            DatumDodavanja = new DateTime(2025, 6, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4164),
                             IsDeleted = false,
                             Naziv = "Web Development Basics Slides",
                             Putanja = "materials/web_dev_basics.pdf",
@@ -320,7 +311,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 2,
-                            DatumDodavanja = new DateTime(2025, 6, 9, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8297),
+                            DatumDodavanja = new DateTime(2025, 6, 9, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4214),
                             IsDeleted = false,
                             Naziv = "Startup Fundamentals Workbook",
                             Putanja = "materials/startup_fundamentals.docx",
@@ -329,7 +320,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 3,
-                            DatumDodavanja = new DateTime(2025, 6, 14, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8300),
+                            DatumDodavanja = new DateTime(2025, 6, 14, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4217),
                             IsDeleted = false,
                             Naziv = "Nutrition & Mental Health Research",
                             Putanja = "materials/nutrition_mental_health.pdf",
@@ -338,7 +329,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 4,
-                            DatumDodavanja = new DateTime(2025, 6, 19, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8302),
+                            DatumDodavanja = new DateTime(2025, 6, 19, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4219),
                             IsDeleted = false,
                             Naziv = "Innovative Teaching Methods Guide",
                             Putanja = "materials/teaching_methods_guide.pdf",
@@ -347,7 +338,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 5,
-                            DatumDodavanja = new DateTime(2025, 6, 24, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8305),
+                            DatumDodavanja = new DateTime(2025, 6, 24, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4222),
                             IsDeleted = false,
                             Naziv = "Communication Skills Exercises",
                             Putanja = "materials/communication_skills.zip",
@@ -356,7 +347,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 6,
-                            DatumDodavanja = new DateTime(2025, 6, 29, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8307),
+                            DatumDodavanja = new DateTime(2025, 6, 29, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4224),
                             IsDeleted = false,
                             Naziv = "Advanced JavaScript Examples",
                             Putanja = "materials/advanced_js_examples.zip",
@@ -365,7 +356,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 7,
-                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8310),
+                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4226),
                             IsDeleted = false,
                             Naziv = "Funding Strategies Presentation",
                             Putanja = "materials/funding_strategies.pptx",
@@ -374,7 +365,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 8,
-                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8312),
+                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4229),
                             IsDeleted = false,
                             Naziv = "Mindfulness Exercises",
                             Putanja = "materials/mindfulness_exercises.pdf",
@@ -383,7 +374,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             MaterijalId = 9,
-                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8314),
+                            DatumDodavanja = new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4231),
                             IsDeleted = false,
                             Naziv = "Blended Learning Resources",
                             Putanja = "materials/blended_learning_resources.pdf",
@@ -436,7 +427,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             ObavijestId = 1,
-                            DatumObavijesti = new DateTime(2025, 7, 1, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2562),
+                            DatumObavijesti = new DateTime(2025, 7, 1, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7283),
                             IsDeleted = false,
                             KorisnikId = 1,
                             Naslov = "Seminar Schedule Update",
@@ -445,7 +436,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             ObavijestId = 2,
-                            DatumObavijesti = new DateTime(2025, 7, 3, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2604),
+                            DatumObavijesti = new DateTime(2025, 7, 3, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7301),
                             IsDeleted = false,
                             KorisnikId = 1,
                             Naslov = "New Seminar Available",
@@ -454,7 +445,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             ObavijestId = 3,
-                            DatumObavijesti = new DateTime(2025, 6, 27, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2608),
+                            DatumObavijesti = new DateTime(2025, 6, 27, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7304),
                             IsDeleted = false,
                             KorisnikId = 1,
                             Naslov = "Maintenance Downtime",
@@ -463,7 +454,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             ObavijestId = 4,
-                            DatumObavijesti = new DateTime(2025, 7, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2612),
+                            DatumObavijesti = new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7307),
                             IsDeleted = false,
                             KorisnikId = 1,
                             Naslov = "Feedback Request",
@@ -618,7 +609,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 1,
-                            DatumRezervacije = new DateTime(2025, 5, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9314),
+                            DatumRezervacije = new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 1,
@@ -627,7 +618,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 2,
-                            DatumRezervacije = new DateTime(2025, 5, 25, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9349),
+                            DatumRezervacije = new DateTime(2025, 5, 25, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3474),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 2,
@@ -636,7 +627,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 3,
-                            DatumRezervacije = new DateTime(2025, 6, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9354),
+                            DatumRezervacije = new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 3,
@@ -645,7 +636,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 4,
-                            DatumRezervacije = new DateTime(2025, 6, 29, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9357),
+                            DatumRezervacije = new DateTime(2025, 6, 29, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3484),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 7,
@@ -654,7 +645,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 5,
-                            DatumRezervacije = new DateTime(2025, 7, 1, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9359),
+                            DatumRezervacije = new DateTime(2025, 7, 1, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3487),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 8,
@@ -663,7 +654,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             RezervacijaId = 6,
-                            DatumRezervacije = new DateTime(2025, 7, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9362),
+                            DatumRezervacije = new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3489),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 10,
@@ -707,7 +698,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SacuvaniSeminarId = 1,
-                            DatumSacuvanja = new DateTime(2025, 6, 24, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2298),
+                            DatumSacuvanja = new DateTime(2025, 6, 24, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6421),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 2
@@ -715,7 +706,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SacuvaniSeminarId = 2,
-                            DatumSacuvanja = new DateTime(2025, 6, 29, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2314),
+                            DatumSacuvanja = new DateTime(2025, 6, 29, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6438),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 5
@@ -723,7 +714,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SacuvaniSeminarId = 3,
-                            DatumSacuvanja = new DateTime(2025, 7, 4, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2316),
+                            DatumSacuvanja = new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6440),
                             IsDeleted = false,
                             KorisnikId = 3,
                             SeminarId = 8
@@ -807,7 +798,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 1,
-                            DatumKreiranja = new DateTime(2025, 1, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1508),
+                            DatumKreiranja = new DateTime(2025, 1, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5726),
                             DatumVrijeme = new DateTime(2024, 12, 10, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 50,
@@ -823,7 +814,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 2,
-                            DatumKreiranja = new DateTime(2025, 2, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1536),
+                            DatumKreiranja = new DateTime(2025, 2, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5748),
                             DatumVrijeme = new DateTime(2025, 1, 15, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 40,
@@ -839,7 +830,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 3,
-                            DatumKreiranja = new DateTime(2025, 3, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1541),
+                            DatumKreiranja = new DateTime(2025, 3, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5752),
                             DatumVrijeme = new DateTime(2025, 3, 20, 9, 30, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 60,
@@ -855,7 +846,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 4,
-                            DatumKreiranja = new DateTime(2025, 4, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1545),
+                            DatumKreiranja = new DateTime(2025, 4, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5756),
                             DatumVrijeme = new DateTime(2025, 4, 22, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 30,
@@ -871,7 +862,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 5,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1549),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5760),
                             DatumVrijeme = new DateTime(2025, 12, 25, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 45,
@@ -887,7 +878,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 6,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1553),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5765),
                             DatumVrijeme = new DateTime(2025, 12, 30, 10, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 50,
@@ -903,7 +894,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 7,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1557),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5769),
                             DatumVrijeme = new DateTime(2026, 1, 3, 14, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 40,
@@ -919,7 +910,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 8,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1560),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5803),
                             DatumVrijeme = new DateTime(2026, 1, 5, 9, 30, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 60,
@@ -935,7 +926,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 9,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1564),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5808),
                             DatumVrijeme = new DateTime(2026, 1, 7, 13, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 30,
@@ -951,7 +942,7 @@ namespace eSeminars.Services.Migrations
                         new
                         {
                             SeminarId = 10,
-                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1568),
+                            DatumKreiranja = new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5811),
                             DatumVrijeme = new DateTime(2026, 1, 10, 11, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             Kapacitet = 45,

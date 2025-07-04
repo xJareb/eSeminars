@@ -34,10 +34,10 @@ namespace eSeminars.Services.Migrations
                 {
                     PredavacID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Ime = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
-                    Prezime = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Ime = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Prezime = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     Biografija = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
-                    Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "varchar(70)", unicode: false, maxLength: 70, nullable: false),
                     Telefon = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
                 },
@@ -53,9 +53,9 @@ namespace eSeminars.Services.Migrations
                     SponzorID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Naziv = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
-                    Email = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    Email = table.Column<string>(type: "varchar(70)", unicode: false, maxLength: 70, nullable: false),
                     Telefon = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
-                    KontaktOsoba = table.Column<string>(type: "varchar(100)", unicode: false, maxLength: 100, nullable: false),
+                    KontaktOsoba = table.Column<string>(type: "varchar(70)", unicode: false, maxLength: 70, nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
                 },
                 constraints: table =>
@@ -196,7 +196,7 @@ namespace eSeminars.Services.Migrations
                     MaterijalID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     SeminarID = table.Column<int>(type: "int", nullable: true),
-                    Naziv = table.Column<string>(type: "varchar(50)", unicode: false, maxLength: 50, nullable: false),
+                    Naziv = table.Column<string>(type: "varchar(70)", unicode: false, maxLength: 70, nullable: false),
                     Putanja = table.Column<string>(type: "varchar(200)", unicode: false, maxLength: 200, nullable: false),
                     DatumDodavanja = table.Column<DateTime>(type: "datetime", nullable: false),
                     isDeleted = table.Column<bool>(type: "bit", nullable: true, defaultValueSql: "((0))")
@@ -350,10 +350,10 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "ObavijestID", "DatumObavijesti", "isDeleted", "KorisnikID", "Naslov", "Sadrzaj" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 7, 1, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2562), false, 1, "Seminar Schedule Update", "The schedule for the upcoming seminars has been updated. Please check your email for details." },
-                    { 2, new DateTime(2025, 7, 3, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2604), false, 1, "New Seminar Available", "A new seminar on 'Advanced JavaScript Concepts' has been added to the schedule." },
-                    { 3, new DateTime(2025, 6, 27, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2608), false, 1, "Maintenance Downtime", "The system will undergo maintenance on July 10th from 1 AM to 3 AM. Services may be temporarily unavailable." },
-                    { 4, new DateTime(2025, 7, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(2612), false, 1, "Feedback Request", "Please provide your feedback for the seminar you attended last week." }
+                    { 1, new DateTime(2025, 7, 1, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7283), false, 1, "Seminar Schedule Update", "The schedule for the upcoming seminars has been updated. Please check your email for details." },
+                    { 2, new DateTime(2025, 7, 3, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7301), false, 1, "New Seminar Available", "A new seminar on 'Advanced JavaScript Concepts' has been added to the schedule." },
+                    { 3, new DateTime(2025, 6, 27, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7304), false, 1, "Maintenance Downtime", "The system will undergo maintenance on July 10th from 1 AM to 3 AM. Services may be temporarily unavailable." },
+                    { 4, new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(7307), false, 1, "Feedback Request", "Please provide your feedback for the seminar you attended last week." }
                 });
 
             migrationBuilder.InsertData(
@@ -361,16 +361,16 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "SeminarID", "DatumKreiranja", "DatumVrijeme", "isDeleted", "Kapacitet", "KategorijaID", "KorisnikID", "Lokacija", "Naslov", "Opis", "PredavacID", "StateMachine", "Zauzeti" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 1, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1508), new DateTime(2024, 12, 10, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Introduction to Modern Web Development", "Learn the basics of HTML, CSS, and JavaScript.", 1, "active", 0 },
-                    { 2, new DateTime(2025, 2, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1536), new DateTime(2025, 1, 15, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Startup Fundamentals", "Essential knowledge for launching your own business.", 2, "active", 0 },
-                    { 3, new DateTime(2025, 3, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1541), new DateTime(2025, 3, 20, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Nutrition and Mental Health", "Discover how diet affects your mind and body.", 3, "active", 0 },
-                    { 4, new DateTime(2025, 4, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1545), new DateTime(2025, 4, 22, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Innovative Teaching Techniques", "Improve your teaching skills with new methods.", 4, "active", 0 },
-                    { 5, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1549), new DateTime(2025, 12, 25, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Effective Communication Skills", "Learn how to communicate clearly and confidently.", 5, "active", 0 },
-                    { 6, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1553), new DateTime(2025, 12, 30, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Advanced JavaScript Concepts", "Deep dive into closures, prototypes, and async programming.", 1, "active", 0 },
-                    { 7, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1557), new DateTime(2026, 1, 3, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Funding Your Startup", "Explore strategies for raising capital.", 2, "active", 0 },
-                    { 8, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1560), new DateTime(2026, 1, 5, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Mindfulness and Stress Reduction", "Techniques to improve mental wellness.", 3, "active", 0 },
-                    { 9, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1564), new DateTime(2026, 1, 7, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Blended Learning Models", "Combine online and in-person teaching effectively.", 4, "active", 0 },
-                    { 10, new DateTime(2025, 7, 4, 18, 30, 12, 908, DateTimeKind.Local).AddTicks(1568), new DateTime(2026, 1, 10, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Time Management Strategies", "Boost productivity with smart planning.", 5, "active", 0 }
+                    { 1, new DateTime(2025, 1, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5726), new DateTime(2024, 12, 10, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Introduction to Modern Web Development", "Learn the basics of HTML, CSS, and JavaScript.", 1, "active", 0 },
+                    { 2, new DateTime(2025, 2, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5748), new DateTime(2025, 1, 15, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Startup Fundamentals", "Essential knowledge for launching your own business.", 2, "active", 0 },
+                    { 3, new DateTime(2025, 3, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5752), new DateTime(2025, 3, 20, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Nutrition and Mental Health", "Discover how diet affects your mind and body.", 3, "active", 0 },
+                    { 4, new DateTime(2025, 4, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5756), new DateTime(2025, 4, 22, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Innovative Teaching Techniques", "Improve your teaching skills with new methods.", 4, "active", 0 },
+                    { 5, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5760), new DateTime(2025, 12, 25, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Effective Communication Skills", "Learn how to communicate clearly and confidently.", 5, "active", 0 },
+                    { 6, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5765), new DateTime(2025, 12, 30, 10, 0, 0, 0, DateTimeKind.Unspecified), false, 50, 1, 2, "Conference Room A", "Advanced JavaScript Concepts", "Deep dive into closures, prototypes, and async programming.", 1, "active", 0 },
+                    { 7, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5769), new DateTime(2026, 1, 3, 14, 0, 0, 0, DateTimeKind.Unspecified), false, 40, 2, 2, "Conference Room B", "Funding Your Startup", "Explore strategies for raising capital.", 2, "active", 0 },
+                    { 8, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5803), new DateTime(2026, 1, 5, 9, 30, 0, 0, DateTimeKind.Unspecified), false, 60, 3, 2, "Conference Room C", "Mindfulness and Stress Reduction", "Techniques to improve mental wellness.", 3, "active", 0 },
+                    { 9, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5808), new DateTime(2026, 1, 7, 13, 0, 0, 0, DateTimeKind.Unspecified), false, 30, 4, 2, "Conference Room D", "Blended Learning Models", "Combine online and in-person teaching effectively.", 4, "active", 0 },
+                    { 10, new DateTime(2025, 7, 4, 18, 51, 35, 727, DateTimeKind.Local).AddTicks(5811), new DateTime(2026, 1, 10, 11, 0, 0, 0, DateTimeKind.Unspecified), false, 45, 5, 2, "Conference Room E", "Time Management Strategies", "Boost productivity with smart planning.", 5, "active", 0 }
                 });
 
             migrationBuilder.InsertData(
@@ -378,10 +378,9 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "DojamID", "DatumKreiranjaDojma", "IsDeleted", "KorisnikID", "Ocjena", "SeminarID" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 6, 14, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1041), false, 3, 5, 1 },
-                    { 2, new DateTime(2025, 6, 16, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1099), false, 3, 4, 2 },
-                    { 3, new DateTime(2025, 6, 19, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1101), false, 3, 3, 3 },
-                    { 5, new DateTime(2025, 6, 29, 18, 30, 12, 904, DateTimeKind.Local).AddTicks(1104), false, 3, 4, 5 }
+                    { 1, new DateTime(2025, 6, 14, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6670), false, 3, 5, 1 },
+                    { 2, new DateTime(2025, 6, 16, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6720), false, 3, 4, 2 },
+                    { 4, new DateTime(2025, 6, 29, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6724), false, 3, 4, 4 }
                 });
 
             migrationBuilder.InsertData(
@@ -389,15 +388,15 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "MaterijalID", "DatumDodavanja", "isDeleted", "Naziv", "Putanja", "SeminarID" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 6, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8248), false, "Web Development Basics Slides", "materials/web_dev_basics.pdf", 1 },
-                    { 2, new DateTime(2025, 6, 9, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8297), false, "Startup Fundamentals Workbook", "materials/startup_fundamentals.docx", 2 },
-                    { 3, new DateTime(2025, 6, 14, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8300), false, "Nutrition & Mental Health Research", "materials/nutrition_mental_health.pdf", 3 },
-                    { 4, new DateTime(2025, 6, 19, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8302), false, "Innovative Teaching Methods Guide", "materials/teaching_methods_guide.pdf", 4 },
-                    { 5, new DateTime(2025, 6, 24, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8305), false, "Communication Skills Exercises", "materials/communication_skills.zip", 5 },
-                    { 6, new DateTime(2025, 6, 29, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8307), false, "Advanced JavaScript Examples", "materials/advanced_js_examples.zip", 6 },
-                    { 7, new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8310), false, "Funding Strategies Presentation", "materials/funding_strategies.pptx", 7 },
-                    { 8, new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8312), false, "Mindfulness Exercises", "materials/mindfulness_exercises.pdf", 8 },
-                    { 9, new DateTime(2025, 7, 4, 18, 30, 12, 905, DateTimeKind.Local).AddTicks(8314), false, "Blended Learning Resources", "materials/blended_learning_resources.pdf", 9 }
+                    { 1, new DateTime(2025, 6, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4164), false, "Web Development Basics Slides", "materials/web_dev_basics.pdf", 1 },
+                    { 2, new DateTime(2025, 6, 9, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4214), false, "Startup Fundamentals Workbook", "materials/startup_fundamentals.docx", 2 },
+                    { 3, new DateTime(2025, 6, 14, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4217), false, "Nutrition & Mental Health Research", "materials/nutrition_mental_health.pdf", 3 },
+                    { 4, new DateTime(2025, 6, 19, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4219), false, "Innovative Teaching Methods Guide", "materials/teaching_methods_guide.pdf", 4 },
+                    { 5, new DateTime(2025, 6, 24, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4222), false, "Communication Skills Exercises", "materials/communication_skills.zip", 5 },
+                    { 6, new DateTime(2025, 6, 29, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4224), false, "Advanced JavaScript Examples", "materials/advanced_js_examples.zip", 6 },
+                    { 7, new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4226), false, "Funding Strategies Presentation", "materials/funding_strategies.pptx", 7 },
+                    { 8, new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4229), false, "Mindfulness Exercises", "materials/mindfulness_exercises.pdf", 8 },
+                    { 9, new DateTime(2025, 7, 4, 18, 51, 35, 725, DateTimeKind.Local).AddTicks(4231), false, "Blended Learning Resources", "materials/blended_learning_resources.pdf", 9 }
                 });
 
             migrationBuilder.InsertData(
@@ -405,12 +404,12 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "RezervacijaID", "DatumRezervacije", "isDeleted", "KorisnikID", "SeminarID", "StateMachine" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 5, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9314), false, 3, 1, "approved" },
-                    { 2, new DateTime(2025, 5, 25, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9349), false, 3, 2, "approved" },
-                    { 3, new DateTime(2025, 6, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9354), false, 3, 3, "approved" },
-                    { 4, new DateTime(2025, 6, 29, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9357), false, 3, 7, "pending" },
-                    { 5, new DateTime(2025, 7, 1, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9359), false, 3, 8, "pending" },
-                    { 6, new DateTime(2025, 7, 4, 18, 30, 12, 906, DateTimeKind.Local).AddTicks(9362), false, 3, 10, "pending" }
+                    { 1, new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453), false, 3, 1, "approved" },
+                    { 2, new DateTime(2025, 5, 25, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3474), false, 3, 2, "approved" },
+                    { 3, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 3, 3, "approved" },
+                    { 4, new DateTime(2025, 6, 29, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3484), false, 3, 7, "pending" },
+                    { 5, new DateTime(2025, 7, 1, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3487), false, 3, 8, "pending" },
+                    { 6, new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3489), false, 3, 10, "pending" }
                 });
 
             migrationBuilder.InsertData(
@@ -418,9 +417,9 @@ namespace eSeminars.Services.Migrations
                 columns: new[] { "SacuvaniSeminarID", "DatumSacuvanja", "IsDeleted", "KorisnikID", "SeminarID" },
                 values: new object[,]
                 {
-                    { 1, new DateTime(2025, 6, 24, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2298), false, 3, 2 },
-                    { 2, new DateTime(2025, 6, 29, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2314), false, 3, 5 },
-                    { 3, new DateTime(2025, 7, 4, 18, 30, 12, 907, DateTimeKind.Local).AddTicks(2316), false, 3, 8 }
+                    { 1, new DateTime(2025, 6, 24, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6421), false, 3, 2 },
+                    { 2, new DateTime(2025, 6, 29, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6438), false, 3, 5 },
+                    { 3, new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(6440), false, 3, 8 }
                 });
 
             migrationBuilder.InsertData(

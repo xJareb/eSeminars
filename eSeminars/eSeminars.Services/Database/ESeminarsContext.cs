@@ -69,7 +69,7 @@ public partial class ESeminarsContext : DbContext
                 new Dojmovi
                 {
                     DojamId = 1,
-                    SeminarId = 1,  // past seminar
+                    SeminarId = 1,
                     KorisnikId = 3,
                     Ocjena = 5,
                     IsDeleted = false,
@@ -78,7 +78,7 @@ public partial class ESeminarsContext : DbContext
                 new Dojmovi
                 {
                     DojamId = 2,
-                    SeminarId = 2,  // past seminar
+                    SeminarId = 2,
                     KorisnikId = 3,
                     Ocjena = 4,
                     IsDeleted = false,
@@ -86,17 +86,8 @@ public partial class ESeminarsContext : DbContext
                 },
                 new Dojmovi
                 {
-                    DojamId = 3,
-                    SeminarId = 3,  // past seminar
-                    KorisnikId = 3,
-                    Ocjena = 3,
-                    IsDeleted = false,
-                    DatumKreiranjaDojma = DateTime.Now.AddDays(-15)
-                },
-                new Dojmovi
-                {
-                    DojamId = 5,
-                    SeminarId = 5,  // past seminar
+                    DojamId = 4,
+                    SeminarId = 4,
                     KorisnikId = 3,
                     Ocjena = 4,
                     IsDeleted = false,
