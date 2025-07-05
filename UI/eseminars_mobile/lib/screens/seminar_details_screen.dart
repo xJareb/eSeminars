@@ -81,12 +81,13 @@ class _SeminarDetailsScreenState extends State<SeminarDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          _buildUpperContainer(),
-          _buildSeminarDetails()
-
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            _buildUpperContainer(),
+            _buildSeminarDetails(),
+          ],
+        ),
       ),
     );
   }
