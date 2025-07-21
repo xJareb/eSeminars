@@ -29,7 +29,9 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
 
   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
   final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  RegExp phoneExp = RegExp( r'^\d{9,10}$');
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formLecturerKey = GlobalKey<FormBuilderState>();
   SearchResult<Lecturers>? lecturersResult;
   SearchResult<Categories>? categoriesResult;
   SearchResult<Seminars>? seminarResult = null;
@@ -41,6 +43,8 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
   bool isOnWait = false;
   int _selectedIndex = 0;
   int pageSize = 3;
+
+  bool isOpenedLecturer = false;
 
   @override
   void didChangeDependencies() {
@@ -86,7 +90,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
         const SizedBox(height: 25,),
         _buildControls(),
         const SizedBox(height: 15,),
-        isLoading ? Center(child: CircularProgressIndicator(),):_buildContentSeminars(),
+        Expanded(child:isLoading ? Center(child: CircularProgressIndicator(),):_buildContentSeminars()),
         _buildPagination()
 
       ],
@@ -366,14 +370,25 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
               icon: Icons.category,
             ),
             const SizedBox(height: 10),
-            _buildFormDropDownMenu<Lecturers>(
-              "Lecturer",
-              "predavacId",
-              lecturersResult?.result,
-              (l) => "${l.ime} ${l.prezime}",
-              (l) => l.predavacId,
-              icon: Icons.person,
-            ),
+            Row(children: [
+              Expanded(
+                child: _buildFormDropDownMenu<Lecturers>(
+                "Lecturer",
+                "predavacId",
+                lecturersResult?.result,
+                (l) => "${l.ime} ${l.prezime}",
+                (l) => l.predavacId,
+                icon: Icons.person,
+                            ),
+              ),
+              const SizedBox(width: 10,),
+              IconButton(onPressed: ()async{
+                Navigator.of(context).pop();
+                await showDialog(context: context, builder: (context){
+                  return _buildLecturerForm();
+                });
+              }, icon: Icon(Icons.add))
+            ],),
             const SizedBox(height: 10),
             _buildFormButtons(),
             const SizedBox(height: 10),
@@ -401,6 +416,9 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ElevatedButton(onPressed: (){
+            setState(() {
+              isOpenedLecturer = false;
+            });
             Navigator.pop(context);
           }, child: Text("Cancel"),style: 
           ElevatedButton.styleFrom(
@@ -421,6 +439,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
                 setState(() {
                   isActive = true;
                   isOnWait = false;
+                  isOpenedLecturer = false;
                   _selectedIndex = 0;
                 });
                 await ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Successfully added seminar"),duration: Duration(seconds: 3),backgroundColor: Colors.green,));
@@ -480,4 +499,83 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
     validator: FormBuilderValidators.required(errorText: "Please pick a date and time"),
   );
 }
+
+Widget _buildLecturerForm(){
+  return AlertDialog(
+    title: Text("New lecturer"),
+    content: SingleChildScrollView(
+      child: FormBuilder(
+        key: _formLecturerKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+        children: [
+          _buildFormControls('ime', 'Name', Icons.person,extraValidators: [
+            FormBuilderValidators.required(errorText: "This field is required"),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+          ]),
+          const SizedBox(height: 10,),
+          _buildFormControls('prezime', 'Surname', Icons.person,extraValidators: [
+            FormBuilderValidators.required(errorText: "This field is required"),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+          ]),
+          const SizedBox(height: 10,),
+          _buildFormControls('biografija', 'Biography', Icons.description,extraValidators: [
+            FormBuilderValidators.required(errorText: "This field is required"),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+          ]),
+          const SizedBox(height: 10,),
+          _buildFormControls('email', 'Email', Icons.email,extraValidators: [
+            FormBuilderValidators.required(errorText: "This field is required"),
+            FormBuilderValidators.email(errorText: 'This field requires an email format.')
+          ]),
+          const SizedBox(height: 10,),
+          _buildFormControls('telefon', 'Phone number', Icons.phone,extraValidators: [
+            FormBuilderValidators.required(errorText: "This field is required"),
+            FormBuilderValidators.match(phoneExp,errorText: "The phone number must contain 9 or 10 digits")
+          ]),
+          const SizedBox(height: 10,),
+          _buildLecturersControl()
+        ],
+      )),
+    ),
+  );
+}
+  Widget _buildLecturersControl(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+      ElevatedButton(onPressed: ()async{
+        Navigator.of(context).pop();
+        await showDialog(context: context, builder: (context){
+          return _buildForm();
+        });
+      }, child: Text("Cancel"),style: 
+          ElevatedButton.styleFrom(
+            backgroundColor: Colors.grey[400],
+            foregroundColor: Colors.black,
+          )),
+      const SizedBox(width: 15,),
+      ElevatedButton(onPressed: ()async{
+        if(_formLecturerKey.currentState?.saveAndValidate() == true){
+          try {
+          await lecturersProvider.insert(_formLecturerKey.currentState?.value);
+          await MyDialogs.showSuccessDialog(context, 'Lecturer successfully added');
+          _formLecturerKey.currentState?.reset();
+          Navigator.of(context).pop();
+          await showDialog(context: context, builder: (context){
+            return _buildForm();
+          });
+          await _loadLectures();
+          } catch (e) {
+            await MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
+          }
+        }
+      }, child: Text("Add")),
+    ],);
+  }
 }

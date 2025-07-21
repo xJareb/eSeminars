@@ -112,13 +112,24 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
   Widget _buildCarouselNotifications(){
-    if(result == null || result!.result.isEmpty){
-      return const Center(child: CircularProgressIndicator(),);
+    if (result == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (result!.result.isEmpty) {
+      return Center(
+      child: Text("No notifications found.",
+        style: GoogleFonts.poppins(fontSize: 16)),
+      );
     }
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: CarouselSlider(
-        options: CarouselOptions(height: 200.0,viewportFraction: 1.0),
+        options: CarouselOptions(height: 220.0,
+        viewportFraction: 1.0,
+        enableInfiniteScroll: result!.result.length > 1,
+        enlargeCenterPage: true
+        ),
         items: result!.result.map((i) {
       return Builder(
         builder: (BuildContext context) {
@@ -138,7 +149,11 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     const SizedBox(height: 10,),
                     Text(i.naslov ?? "No title",style: GoogleFonts.poppins(fontSize: 27),),
                     const SizedBox(height: 10,),
-                    Text(i.sadrzaj ?? "No content",style: GoogleFonts.poppins(fontSize: 18),),
+                    Padding(
+                      padding: const EdgeInsets.all(9.0),
+                      child: Text(i.sadrzaj ?? "No content",style: GoogleFonts.poppins(fontSize: 18),maxLines: 3,
+  overflow: TextOverflow.ellipsis,),
+                    ),
                     
                   ],
                 ),

@@ -9,6 +9,7 @@ import 'package:eseminars_mobile/providers/seminar_provider.dart';
 import 'package:eseminars_mobile/providers/sponsorsSeminars_provider.dart';
 import 'package:eseminars_mobile/providers/sponsors_provider.dart';
 import 'package:eseminars_mobile/utils/custom_dialogs.dart';
+import 'package:eseminars_mobile/utils/custom_form_builder_text_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -33,6 +34,10 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
   bool isLoadingSponsors = true;
   int? seminarId;
   final _formKey = GlobalKey<FormBuilderState>();
+  final _formKeySponsor = GlobalKey<FormBuilderState>();
+  final RegExp capitalLetter = RegExp(r'^[A-Z].*');
+  final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  RegExp phoneExp = RegExp( r'^\d{9,10}$');
 
 
 
@@ -115,7 +120,6 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
           onChanged: (value) async{
             if(value is int){
               seminarId = value;
-              print(seminarId);
               await _loadSponsorsBySeminar(seminarId: seminarId);
               setState(() {
                 
@@ -126,7 +130,15 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
           const SizedBox(width: 10,),
           Expanded(flex: 1,child: IconButton(onPressed: () async{
             showDialog(context: context, builder: (context){
-              return AlertDialog(
+              return _buildDialog();
+            });
+          }, icon: Icon(Icons.add)))
+        ],
+      ),
+    );
+  }
+  Widget _buildDialog(){
+    return AlertDialog(
                 title: const Text("New sponsor"),
                 content: SingleChildScrollView(
                   child: FormBuilder(
@@ -142,23 +154,95 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
                           (s)=>s.seminarId,
                           icon: CupertinoIcons.book),
                           const SizedBox(height: 10,),
-                        _buildFormDropDownMenu(
+                        Row(children: [
+                          Expanded(child: _buildFormDropDownMenu(
                         "Sponsors",
                         'sponzorId', 
                         sponsorsForFormResult?.result,
                         (sp) => sp.naziv ?? "",
                         (sp) => sp.sponzorId,
-                        icon: CupertinoIcons.money_dollar),
+                        icon: CupertinoIcons.money_dollar)),
+                        const SizedBox(width: 10,),
+                        IconButton(onPressed: ()async{
+                          Navigator.of(context).pop();
+                          await showDialog(context: context, builder: (context){
+                            return _buildSponsorsDialog();
+                          });
+                        }, icon: Icon(Icons.add))
+                        ],),
                          const SizedBox(height: 10,),
                         _buildControls()
                       ],
                   )),
                 ),
               );
-            });
-          }, icon: Icon(Icons.add)))
-        ],
+  }
+  Widget _buildSponsorsDialog(){
+    return AlertDialog(
+      title: Text("New sponsor"),
+      content: SingleChildScrollView(
+        child: FormBuilder(
+          key: _formKeySponsor,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildFormControls('naziv', 'Company', CupertinoIcons.building_2_fill,extraValidators: [
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            ]),
+            const SizedBox(height: 10,),
+            _buildFormControls('email', 'Email', Icons.email, extraValidators: [
+              FormBuilderValidators.email(errorText: "Please enter a valid email format."),
+            ]),
+            const SizedBox(height: 10,),
+            _buildFormControls('telefon', 'Phone number', Icons.phone,extraValidators: [
+              FormBuilderValidators.match(phoneExp,errorText: "The phone number must contain 9 or 10 digits")
+            ]),
+            const SizedBox(height: 10,),
+            _buildFormControls('kontaktOsoba', 'Representative person', Icons.person, extraValidators: [
+              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            ]),
+            const SizedBox(height: 10,),
+            _buildSponsorControls()
+        
+          ],
+        )),
       ),
+    );
+  }
+  Widget _buildSponsorControls(){
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ElevatedButton(onPressed: ()async{
+          Navigator.of(context).pop();
+          await showDialog(context: context, builder: (context){
+            return _buildDialog();
+          });
+        }, child: Text("Cancel"),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.grey[300],
+          foregroundColor: Colors.black
+        ),),
+        const SizedBox(width: 15,),
+        ElevatedButton(onPressed: ()async{
+          if(_formKeySponsor.currentState?.saveAndValidate() == true){
+            try {
+              await sponsorsProvider.insert(_formKeySponsor.currentState?.value);
+              await MyDialogs.showSuccessDialog(context, "New sponsor successfully added");
+              Navigator.of(context).pop();
+              await _loadSponsors();
+              await showDialog(context: context, builder: (context){
+              return _buildDialog();
+            });
+
+            } catch (e) {
+              await MyDialogs.showErrorDialog(context, e.toString().replaceFirst("Exception: ", ''));
+            }
+          }
+        }, child: Text("Add"))
+      ],
     );
   }
   Widget _buildControls(){
@@ -285,4 +369,17 @@ Widget _buildFormDropDownMenu<T>(
         [],validator: FormBuilderValidators.required(errorText: "This field is required"),
   );
 }
+ Widget _buildFormControls(String name, String label, IconData iconData,{List<FormFieldValidator<String>>? extraValidators}) {
+    return CustomFormBuilderTextField(
+    name: name,
+    label: label,
+    suffixIcon: Icon(iconData, color: Colors.grey[700]),
+    filled: true,
+    fillColor: Colors.grey[100],
+    validators: [
+      FormBuilderValidators.required(errorText: "This field is required"),
+      ...?extraValidators
+    ],
+  );
+  }
 }

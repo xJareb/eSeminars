@@ -14,7 +14,7 @@ namespace eSeminars.API.Controllers
         {
         }
 
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Organizator")]
         public override Sponzori Insert(SponzoriInsertRequest request)
         {
             return base.Insert(request);

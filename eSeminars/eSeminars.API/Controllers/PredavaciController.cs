@@ -22,7 +22,7 @@ namespace eSeminars.API.Controllers
         {
             return base.GetList(searchObject);
         }
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Organizator")]
         public override Predavaci Insert(PredavaciInsertRequest request)
         {
             return base.Insert(request);
