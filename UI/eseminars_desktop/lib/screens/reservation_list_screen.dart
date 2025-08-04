@@ -7,6 +7,7 @@ import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/models/seminars.dart';
 import 'package:eseminars_desktop/providers/reservations_provider.dart';
 import 'package:eseminars_desktop/providers/seminars_provider.dart';
+import 'package:eseminars_desktop/screens/reservation_details_screen.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
@@ -144,6 +145,9 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
       DataCell(Text(e.korisnik?.ime ?? "")),
       DataCell(Text(e.korisnik?.prezime ?? "")),
       DataCell(Text(e.datumRezervacije!.substring(0, e.datumRezervacije!.indexOf("T")))),
+      DataCell(ElevatedButton(onPressed: () async{
+        await Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReservationDetailsScreen(user: e.korisnik,SeminarId: e.seminarId,)));
+      },child: Text("Details"),)),
       if (currentReservationState == reservationStates[0])
         DataCell(Row(
           children: [
@@ -189,6 +193,7 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
               DataColumn(label: Text("Name")),
               DataColumn(label: Text("Surname")),
               DataColumn(label: Text("Date")),
+              DataColumn(label: Text("")),
               if (currentReservationState == reservationStates[0])
                 DataColumn(label: Text("")),
             ],

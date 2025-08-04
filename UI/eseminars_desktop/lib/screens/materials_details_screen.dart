@@ -1,4 +1,5 @@
 import 'package:eseminars_desktop/layouts/master_screen.dart';
+import 'package:eseminars_desktop/models/materials.dart';
 import 'package:eseminars_desktop/models/search_result.dart';
 import 'package:eseminars_desktop/models/seminars.dart';
 import 'package:eseminars_desktop/providers/materials_provider.dart';
@@ -11,7 +12,8 @@ import 'package:form_builder_validators/form_builder_validators.dart';
 import 'package:provider/provider.dart';
 
 class MaterialsDetailsScreen extends StatefulWidget {
-  const MaterialsDetailsScreen({super.key});
+  Materials? materials;
+  MaterialsDetailsScreen({super.key,this.materials});
 
   @override
   State<MaterialsDetailsScreen> createState() => _MaterialsDetailsScreenState();
@@ -26,6 +28,7 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
   bool isLoading = true;
   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
   final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  Map<String, dynamic> _initialValue = {};
 
   @override
   void didChangeDependencies() {
@@ -34,6 +37,15 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
     seminarsProvider = context.read<SeminarsProvider>();
     materialsProvider = context.read<MaterialsProvider>();
     _loadSeminars();
+  }
+  @override
+  void initState() {
+    super.initState();
+    _initialValue = {
+      'seminarId': widget.materials?.seminarId,
+      'naziv' : widget.materials?.naziv,
+      'putanja':widget.materials?.putanja
+    };
   }
 
   Future<void> _loadSeminars()async{
@@ -61,6 +73,7 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
   Widget _buildForm(){
     return FormBuilder(
       key: _formKey,
+      initialValue: _initialValue,
       child: Column(
       children: [
         Row(children: [
@@ -108,9 +121,17 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
       ElevatedButton(onPressed: ()async{
         if(_formKey.currentState?.saveAndValidate() == true){
           try {
-            await materialsProvider.insert(_formKey.currentState?.value);
-            showSuccessMessage(context, "Material successfully added");
-            Navigator.pop(context,true);
+            if(widget.materials == null){
+              await materialsProvider.insert(_formKey.currentState?.value);
+              _formKey.currentState?.reset();
+              showSuccessMessage(context, "Material successfully added");
+              Navigator.pop(context,true);
+            }else{
+              await materialsProvider.update(widget.materials!.materijalId!,_formKey.currentState?.value);
+              _formKey.currentState?.reset();
+              showSuccessMessage(context, "Material successfully edited");
+              Navigator.pop(context,true);
+            }
           } catch (e) {
             showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
           }

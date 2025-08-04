@@ -7,6 +7,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
   final String label;
   final bool obscureText;
   final List<String? Function(String?)>? validators;
+  final int? maxLines;
 
   const CustomFormBuilderTextField({
     Key? key,
@@ -14,6 +15,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
     required this.label,
     this.obscureText = false,
     this.validators,
+    this.maxLines
   }) : super(key: key);
 
   @override
@@ -21,6 +23,7 @@ class CustomFormBuilderTextField extends StatelessWidget {
     return FormBuilderTextField(
       name: name,
       obscureText: obscureText,
+      maxLines: maxLines,
       decoration: InputDecoration(labelText: label,border: OutlineInputBorder()),
       validator: validators != null
           ? FormBuilderValidators.compose(validators!)

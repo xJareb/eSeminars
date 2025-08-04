@@ -134,13 +134,18 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
 
   return Expanded(
     child: SingleChildScrollView(
-      child: DataTable(
+      child: DataTable(showCheckboxColumn: false,
         columns: const [
           DataColumn(label: Text("Name")),
           DataColumn(label: Text("Link")),
           DataColumn(label: Text("")),
         ],
-        rows: materialsResult!.result.map((e) => DataRow(cells: [
+        rows: materialsResult!.result.map((e) => DataRow(onSelectChanged: (selected) async{
+          if(selected == true){
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => MaterialsDetailsScreen(materials: e,)));
+            await _loadMaterials();
+          }
+        },cells: [
           DataCell(Text(e.naziv ?? "")),
           DataCell(Text(e.putanja ?? "")),
           DataCell(ElevatedButton(

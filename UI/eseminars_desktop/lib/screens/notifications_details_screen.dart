@@ -50,26 +50,34 @@ class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen>
     ));
   }
   Widget _buildForm(){
-    return FormBuilder(key: _formKey,initialValue: _initialValue,
-      child: Column(
-        children: [
-          Row(
-            children: [
-              Expanded(child: CustomFormBuilderTextField(name: 'naslov', label: "Title",validators: [
-                FormBuilderValidators.required(errorText: "This field is required."),
-                FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              ],)),
-              const SizedBox(width: 40,),
-              Expanded(child: CustomFormBuilderTextField(name: 'sadrzaj', label: "Content",validators: [
-                FormBuilderValidators.required(errorText: "This field is required."),
-                FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              ],))
-            ],
-          )
-        ],
-      ),
-    );
-  }
+  return FormBuilder(
+    key: _formKey,
+    initialValue: _initialValue,
+    child: Column(
+      children: [
+        CustomFormBuilderTextField(
+          name: 'naslov',
+          label: "Title",
+          validators: [
+            FormBuilderValidators.required(errorText: "This field is required."),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+          ],
+        ),
+        const SizedBox(height: 20),
+        CustomFormBuilderTextField(
+          name: 'sadrzaj',
+          label: "Content",
+          maxLines: 5,
+          validators: [
+            FormBuilderValidators.required(errorText: "This field is required."),
+            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+          ],
+        ),
+      ],
+    ),
+  );
+}
+
   Widget _buildControls(){
     return Center(
       child: Row(
