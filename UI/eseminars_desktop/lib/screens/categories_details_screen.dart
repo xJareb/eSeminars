@@ -55,7 +55,7 @@ class _CategoriesDetailsScreenState extends State<CategoriesDetailsScreen> {
         const SizedBox(height: 30,),
         _buildControls()
       ],
-    ));
+    ),showBackButton: true,);
   }
 
   Widget _buildForm(){

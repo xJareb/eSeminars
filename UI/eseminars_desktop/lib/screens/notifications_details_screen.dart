@@ -47,7 +47,7 @@ class _NotificationsDetailsScreenState extends State<NotificationsDetailsScreen>
         const SizedBox(height: 20,),
         _buildControls()
       ],
-    ));
+    ),showBackButton: true,);
   }
   Widget _buildForm(){
   return FormBuilder(

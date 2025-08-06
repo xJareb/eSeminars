@@ -12,6 +12,7 @@ import 'package:eseminars_desktop/providers/seminars_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_provider.dart';
 import 'package:eseminars_desktop/providers/sponsors_seminars_provider.dart';
 import 'package:eseminars_desktop/screens/seminars_details_screen.dart';
+import 'package:eseminars_desktop/screens/seminars_info_screen.dart';
 import 'package:eseminars_desktop/utils/custom_dialogs.dart';
 import 'package:eseminars_desktop/utils/pagination_controls.dart';
 import 'package:flutter/material.dart';
@@ -351,7 +352,6 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
         DataColumn(label: Text("Date")),
         DataColumn(label: Text("Location")),
         DataColumn(label: Text("Capacity")),
-        DataColumn(label: Text("Reserved")),
         DataColumn(label: Text(""))
       ], rows: result?.result.map((e) =>
           DataRow(onSelectChanged: (selected) async{
@@ -376,7 +376,6 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
           DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
           DataCell(Text(e.lokacija ?? "")),
           DataCell(Text(e.kapacitet.toString() ?? "")),
-          DataCell(Text(e.zauzeti.toString() ?? "")),
           DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
             FutureBuilder<List<String>>(
               future: seminarsProvider.allowedActions(e.seminarId!),
@@ -451,7 +450,10 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
             ),
             ElevatedButton(onPressed: (){
               generatePdfReport(e);
-            }, child: Text("Report"))
+            }, child: Text("Report")),
+            ElevatedButton(onPressed: ()async{
+              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsInfoScreen(seminar: e,)));
+            }, child: Text("Details"))
           ],))
       ])
       ).toList().cast<DataRow>() ?? [])

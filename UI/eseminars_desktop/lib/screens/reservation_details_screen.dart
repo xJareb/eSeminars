@@ -64,7 +64,7 @@ class _ReservationDetailsScreenState extends State<ReservationDetailsScreen> {
             ],
           ),
         ),
-      ),
+      ),showBackButton: true,
     );
   }
 

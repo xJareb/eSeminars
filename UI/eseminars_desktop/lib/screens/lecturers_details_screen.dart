@@ -51,7 +51,7 @@ class _LecturersDetailsScreenState extends State<LecturersDetailsScreen> {
           _buildForm(),
           const SizedBox(height: 30,),
           _buildControls()
-    ],));
+    ],),showBackButton: true,);
   }
 
 

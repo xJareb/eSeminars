@@ -67,7 +67,7 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
         const SizedBox(height: 20,),
         _buildControls()
       ],
-    ));
+    ),showBackButton: true,);
   }
 
   Widget _buildForm(){

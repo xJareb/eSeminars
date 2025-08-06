@@ -11,9 +11,11 @@ import 'package:eseminars_desktop/screens/user_list_screen.dart';
 import 'package:flutter/material.dart';
 
 class MasterScreen extends StatefulWidget {
-  MasterScreen(this.title,this.child,{super.key});
+  final bool showBackButton;
+  MasterScreen(this.title,this.child,{this.showBackButton = false,super.key});
   String title;
   Widget child;
+  
 
   @override
   State<MasterScreen> createState() => _MasterScreenState();
@@ -24,8 +26,12 @@ class _MasterScreenState extends State<MasterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(backgroundColor: Color.fromRGBO(255, 246, 230, 1),elevation: 4,title: Text(widget.title), leading: IconButton(onPressed: () async{
-        await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()),(route) => false);
-      }, icon: Icon(Icons.logout)),),
+        if(widget.showBackButton){
+          Navigator.of(context).pop();
+        }else{
+          await Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => LoginPage()),(route) => false);
+        }
+      }, icon: Icon(widget.showBackButton ? Icons.arrow_back : Icons.logout)),),
       body: Row(
         children: [
           Expanded(flex: 1,child: Container(

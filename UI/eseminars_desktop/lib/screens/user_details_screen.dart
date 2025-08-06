@@ -66,7 +66,7 @@ class _UserDetailsScreenState extends State<UserDetailsScreen> {
         const SizedBox(height: 25,),
         _buildControls()
       ],
-    ));
+    ),showBackButton: true,);
   }
   Widget _buildForm(){
     return FormBuilder(key: _formKey,initialValue: _initialValue,child: 

@@ -91,7 +91,7 @@ class _SeminarsDetailsScreenState extends State<SeminarsDetailsScreen> {
         const SizedBox(height: 20,),
         _buildControls()
       ],
-    ));
+    ),showBackButton: true,);
   }
 
   Widget _buildForm(){
