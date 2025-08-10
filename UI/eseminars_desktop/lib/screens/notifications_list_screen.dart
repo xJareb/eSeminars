@@ -108,42 +108,51 @@ class _NotificationsListScreenState extends State<NotificationsListScreen> {
       return Center(child: CircularProgressIndicator(),);
     }
     return Expanded(child: 
-    SingleChildScrollView(child: 
-    DataTable(
-      showCheckboxColumn: false,
-      columns: [
-      DataColumn(label: Text("Title")),
-      DataColumn(label: Text("Content")),
-      DataColumn(label: Text("Publication date")),
-      DataColumn(label: Text("")),
-    ], 
-    rows: result?.result.map((e)=>
-    DataRow(onSelectChanged: (selected) async{
-      if(selected == true){
-        _searchTitle.clear();
-        await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsDetailsScreen(notifications: e,)));
-        await _loadData();
-      }
-    },cells: [
-      DataCell(Text(e.naslov ?? "")),
-      DataCell(Text(e.sadrzaj != null && e.sadrzaj!.length > 17 ? '${e.sadrzaj!.substring(0, 17)}...' : (e.sadrzaj ?? ''))),
-      DataCell(Text('${e.datumObavijesti!.substring(0,e.datumObavijesti!.indexOf("T"))} ${e.datumObavijesti!.
-      substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
-      DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-        await buildAlertDiagram(context: context, onConfirmDelete: () async{
-          try {
-            await provider.softDelete(e.obavijestId!);
-            showSuccessMessage(context, "Notification successfully removed");
-          } catch (e) {
-            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+    LayoutBuilder(
+      builder: (context,constraints){
+      return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: 
+      Container(
+        width: constraints.maxWidth * 0.9,
+        child: DataTable(
+          showCheckboxColumn: false,
+          columns: [
+          DataColumn(label: Text("Title")),
+          DataColumn(label: Text("Content")),
+          DataColumn(label: Text("Publication date")),
+          DataColumn(label: Text("")),
+        ], 
+        rows: result?.result.map((e)=>
+        DataRow(onSelectChanged: (selected) async{
+          if(selected == true){
+            _searchTitle.clear();
+            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsDetailsScreen(notifications: e,)));
+            await _loadData();
           }
-        });
-        await _loadData();
-        setState(() {
-        });
-      },))
-    ])).toList().cast<DataRow>() ?? []
-    ),
+        },cells: [
+          DataCell(Text(e.naslov ?? "")),
+          DataCell(Text(e.sadrzaj != null && e.sadrzaj!.length > 17 ? '${e.sadrzaj!.substring(0, 17)}...' : (e.sadrzaj ?? ''))),
+          DataCell(Text('${e.datumObavijesti!.substring(0,e.datumObavijesti!.indexOf("T"))} ${e.datumObavijesti!.
+          substring(e.datumObavijesti!.indexOf("T") + 1,e.datumObavijesti!.indexOf("."))}' ?? "")),
+          DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
+            await buildAlertDiagram(context: context, onConfirmDelete: () async{
+              try {
+                await provider.softDelete(e.obavijestId!);
+                showSuccessMessage(context, "Notification successfully removed");
+              } catch (e) {
+                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+              }
+            });
+            await _loadData();
+            setState(() {
+            });
+          },))
+        ])).toList().cast<DataRow>() ?? []
+        ),
+      ),
+      );
+      }
     )
     );
   }

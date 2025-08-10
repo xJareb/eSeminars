@@ -133,48 +133,56 @@ class _LecturersListScreenState extends State<LecturersListScreen> {
       return Center(child: CircularProgressIndicator(),);
     }
     return Expanded(
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: DataTable(
-          showCheckboxColumn: false,
-          columns: [
-            DataColumn(label: Text("Name")),
-            DataColumn(label: Text("Surname")),
-            DataColumn(label: Text("Biography")),
-            DataColumn(label: Text("Email")),
-            DataColumn(label: Text("Phone number")),
-            DataColumn(label: Text(""))
-          ], rows: result?.result.map((e) =>
-              DataRow(onSelectChanged: (seleceted) async{
-                if(seleceted == true){
-                  _emailEqual.clear();
-                  _nameSurnameGTE.clear();
-                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen(lecturers: e,)));
-                  await _loadData();
-                }
-              },
-              cells: [
-                DataCell(Text(e.ime ?? "")),
-                DataCell(Text(e.prezime ?? "")),
-                DataCell(Text(e.biografija != null && e.biografija!.length > 17 ? '${e.biografija!.substring(0, 17)}...' : (e.biografija ?? ''))),
-                DataCell(Container(width: 100,child: Text(e.email ?? "",),)),
-                DataCell(Text('${e.telefon}' ?? "")),
-                DataCell(ElevatedButton(onPressed: () async{
-                  await buildAlertDiagram(context: context, onConfirmDelete: () async{
-                    try {
-                    await provider.softDelete(e.predavacId!);
-                    showSuccessMessage(context, "Lecturer successfully removed");
-                    } catch (e) {
-                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+      child: LayoutBuilder(
+        builder: (context,constraints){
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            width: constraints.maxWidth * 0.9,
+            child: DataTable(
+              showCheckboxColumn: false,
+              columnSpacing: 14,
+              columns: [
+                DataColumn(label: Text("Name")),
+                DataColumn(label: Text("Surname")),
+                DataColumn(label: Text("Biography")),
+                DataColumn(label: Text("Email")),
+                DataColumn(label: Text("Phone number")),
+                DataColumn(label: Text(""))
+              ], rows: result?.result.map((e) =>
+                  DataRow(onSelectChanged: (seleceted) async{
+                    if(seleceted == true){
+                      _emailEqual.clear();
+                      _nameSurnameGTE.clear();
+                      await Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersDetailsScreen(lecturers: e,)));
+                      await _loadData();
                     }
-                  });
-                  await _loadData();
-                  setState(() {});
-                },child: Text("Remove"),))
-              ]
-              )
-          ).toList().cast<DataRow>() ?? [],
+                  },
+                  cells: [
+                    DataCell(Text(e.ime ?? "")),
+                    DataCell(Text(e.prezime ?? "")),
+                    DataCell(Text(e.biografija != null && e.biografija!.length > 17 ? '${e.biografija!.substring(0, 17)}...' : (e.biografija ?? ''))),
+                    DataCell(Container(width: 100,child: Text(e.email ?? "",),)),
+                    DataCell(Text('${e.telefon}' ?? "")),
+                    DataCell(ElevatedButton(onPressed: () async{
+                      await buildAlertDiagram(context: context, onConfirmDelete: () async{
+                        try {
+                        await provider.softDelete(e.predavacId!);
+                        showSuccessMessage(context, "Lecturer successfully removed");
+                        } catch (e) {
+                          showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                        }
+                      });
+                      await _loadData();
+                      setState(() {});
+                    },child: Text("Remove"),))
+                  ]
+                  )
+              ).toList().cast<DataRow>() ?? [],
+              ),
           ),
+        );
+        }
       ),
     );
   }

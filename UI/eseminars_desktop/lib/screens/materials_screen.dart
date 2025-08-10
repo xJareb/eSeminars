@@ -133,38 +133,46 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
   }
 
   return Expanded(
-    child: SingleChildScrollView(
-      child: DataTable(showCheckboxColumn: false,
-        columns: const [
-          DataColumn(label: Text("Name")),
-          DataColumn(label: Text("Link")),
-          DataColumn(label: Text("")),
-        ],
-        rows: materialsResult!.result.map((e) => DataRow(onSelectChanged: (selected) async{
-          if(selected == true){
-            await Navigator.of(context).push(MaterialPageRoute(builder: (context) => MaterialsDetailsScreen(materials: e,)));
-            await _loadMaterials();
-          }
-        },cells: [
-          DataCell(Text(e.naziv ?? "")),
-          DataCell(Text(e.putanja ?? "")),
-          DataCell(ElevatedButton(
-            onPressed: () async {
-              try {
-                await buildAlertDiagram(context: context, onConfirmDelete: () async {
-                  await materialsProvider.softDelete(e.materijalId!);
-                  showSuccessMessage(context, "Material successfully removed");
-                });
-              } catch (e) {
-                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+    child: LayoutBuilder(
+      builder: (context,constraints){
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: constraints.maxWidth * 0.9,
+          child: DataTable(showCheckboxColumn: false,
+            columns: const [
+              DataColumn(label: Text("Name")),
+              DataColumn(label: Text("Link")),
+              DataColumn(label: Text("")),
+            ],
+            rows: materialsResult!.result.map((e) => DataRow(onSelectChanged: (selected) async{
+              if(selected == true){
+                await Navigator.of(context).push(MaterialPageRoute(builder: (context) => MaterialsDetailsScreen(materials: e,)));
+                await _loadMaterials();
               }
-              await _loadMaterials();
-              setState(() {});
-            },
-            child: const Text("Remove"),
-          )),
-        ])).toList(),
-      ),
+            },cells: [
+              DataCell(Text(e.naziv ?? "")),
+              DataCell(Text(e.putanja ?? "")),
+              DataCell(ElevatedButton(
+                onPressed: () async {
+                  try {
+                    await buildAlertDiagram(context: context, onConfirmDelete: () async {
+                      await materialsProvider.softDelete(e.materijalId!);
+                      showSuccessMessage(context, "Material successfully removed");
+                    });
+                  } catch (e) {
+                    showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                  }
+                  await _loadMaterials();
+                  setState(() {});
+                },
+                child: const Text("Remove"),
+              )),
+            ])).toList(),
+          ),
+        ),
+      );
+      }
     ),
   );
 }

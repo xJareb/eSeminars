@@ -129,33 +129,41 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
   }
 
   return Expanded(
-    child: SingleChildScrollView(
-      child: DataTable(
-        columns: const [
-          DataColumn(label: Text('User')),
-          DataColumn(label: Text('Rating')),
-          DataColumn(label: Text('')),
-        ],
-        rows: result!.result.map((e) => DataRow(cells: [
-          DataCell(Text(e.korisnik?.ime ?? "")),
-          DataCell(buildStars(e.ocjena ?? 0)),
-          DataCell(ElevatedButton(
-            child: const Text("Remove"),
-            onPressed: () async {
-              await buildAlertDiagram(context: context, onConfirmDelete: () async {
-                try {
-                  await feedbacksProvider.softDelete(e.dojamId!);
-                  showSuccessMessage(context, "Feedback successfully removed");
-                } catch (e) {
-                  showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                }
-              });
-              await _filterData("");
-              setState(() {});
-            },
-          )),
-        ])).toList(),
-      ),
+    child: LayoutBuilder(
+      builder: (context,constraints){
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: constraints.maxWidth * 0.9,
+          child: DataTable(
+            columns: const [
+              DataColumn(label: Text('User')),
+              DataColumn(label: Text('Rating')),
+              DataColumn(label: Text('')),
+            ],
+            rows: result!.result.map((e) => DataRow(cells: [
+              DataCell(Text(e.korisnik?.ime ?? "")),
+              DataCell(buildStars(e.ocjena ?? 0)),
+              DataCell(ElevatedButton(
+                child: const Text("Remove"),
+                onPressed: () async {
+                  await buildAlertDiagram(context: context, onConfirmDelete: () async {
+                    try {
+                      await feedbacksProvider.softDelete(e.dojamId!);
+                      showSuccessMessage(context, "Feedback successfully removed");
+                    } catch (e) {
+                      showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                    }
+                  });
+                  await _filterData("");
+                  setState(() {});
+                },
+              )),
+            ])).toList(),
+          ),
+        ),
+      );
+      }
     ),
   );
 }

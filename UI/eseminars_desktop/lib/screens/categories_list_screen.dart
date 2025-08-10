@@ -110,42 +110,50 @@ class _CategoriesListScreenState extends State<CategoriesListScreen> {
 
   Widget _buildForm(){
     return Expanded(
-      child: SingleChildScrollView(
-        child: DataTable(
-          showCheckboxColumn: false,
-          columns: [
-          DataColumn(label: Text("Title")),
-          DataColumn(label: Text("Description")),
-          DataColumn(label: Text(""))
-        ], rows: result?.result.map((e) => DataRow(onSelectChanged: (selected) async{
-          _categoryName.clear();
-          await _loadData();
-          if(selected == true){
-            var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
-            if(result == true){
+      child: LayoutBuilder(
+        builder: (context,constraints){
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            width: constraints.maxWidth * 0.9,
+            child: DataTable(
+              showCheckboxColumn: false,
+              columns: [
+              DataColumn(label: Text("Title")),
+              DataColumn(label: Text("Description")),
+              DataColumn(label: Text(""))
+            ], rows: result?.result.map((e) => DataRow(onSelectChanged: (selected) async{
+              _categoryName.clear();
               await _loadData();
-            }
-          }
-        },cells: [
-          DataCell(Text(e.naziv ?? "")),
-          DataCell(Text(e.opis != null && e.opis!.length > 50 ? '${e.opis!.substring(0, 50)}...' : (e.opis ?? ''))),
-          DataCell(ElevatedButton(onPressed: () async{
-            await buildAlertDiagram(context: context, onConfirmDelete: () async{
-              try {
-                await provider.softDelete(e.kategorijaId!);
-                showSuccessMessage(context, "Category successfully removed");
-                
-              } catch (e) {
-                showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-              }finally {
-          }
-            });
-
-            await _loadData();
-            setState(() {});
-          },child: Text("Remove"),))
-        ])).toList().cast<DataRow>() ?? []
-        ),
+              if(selected == true){
+                var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesDetailsScreen(categories: e,)));
+                if(result == true){
+                  await _loadData();
+                }
+              }
+            },cells: [
+              DataCell(Text(e.naziv ?? "")),
+              DataCell(Text(e.opis != null && e.opis!.length > 50 ? '${e.opis!.substring(0, 50)}...' : (e.opis ?? ''))),
+              DataCell(ElevatedButton(onPressed: () async{
+                await buildAlertDiagram(context: context, onConfirmDelete: () async{
+                  try {
+                    await provider.softDelete(e.kategorijaId!);
+                    showSuccessMessage(context, "Category successfully removed");
+                    
+                  } catch (e) {
+                    showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                  }finally {
+              }
+                });
+                    
+                await _loadData();
+                setState(() {});
+              },child: Text("Remove"),))
+            ])).toList().cast<DataRow>() ?? []
+            ),
+          ),
+        );
+        }
       )
     );
   }

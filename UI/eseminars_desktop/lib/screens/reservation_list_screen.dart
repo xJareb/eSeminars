@@ -187,18 +187,26 @@ class _ReservationListScreenState extends State<ReservationListScreen> {
   ),
 )
     : Expanded(
-        child: SingleChildScrollView(
-          child: DataTable(
-            columns: [
-              DataColumn(label: Text("Name")),
-              DataColumn(label: Text("Surname")),
-              DataColumn(label: Text("Date")),
-              DataColumn(label: Text("")),
-              if (currentReservationState == reservationStates[0])
-                DataColumn(label: Text("")),
-            ],
-            rows: rows,
-          ),
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+          return SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Container(
+              width: constraints.maxWidth * 0.9,
+              child: DataTable(
+                columns: [
+                  DataColumn(label: Text("Name")),
+                  DataColumn(label: Text("Surname")),
+                  DataColumn(label: Text("Date")),
+                  DataColumn(label: Text("")),
+                  if (currentReservationState == reservationStates[0])
+                    DataColumn(label: Text("")),
+                ],
+                rows: rows,
+              ),
+            ),
+          );
+          }
         ),
       );
 }

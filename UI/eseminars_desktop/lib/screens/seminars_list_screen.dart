@@ -313,151 +313,166 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
     );
     }
     return Expanded(child: 
-    SingleChildScrollView(
-      child: DataTable(columns: [
-        DataColumn(label: Text("Name")),
-        DataColumn(label: Text("Email")),
-        DataColumn(label: Text("Phone")),
-        DataColumn(label: Text(""))
-      ], rows: sponsorsSeminarsResult?.result.map((e) => 
-      DataRow(cells: [
-        DataCell(Text(e.sponzor?.naziv ?? "")),
-        DataCell(Text(e.sponzor?.email ?? "")),
-        DataCell(Text(e.sponzor?.telefon ?? "")),
-        DataCell(ElevatedButton(onPressed: ()async{
-          await buildAlertDiagram(context: context, onConfirmDelete: ()async{
-            try {
-              await sponsorsSeminarsProvider.softDelete(e.sponzoriSeminariId!);
-              showSuccessMessage(context, "Sponsor successfully removed");
-            } catch (e) {
-              showErrorMessage(context, e.toString().replaceFirst('Exception: ', ''));
-            }
-            await _loadSponsorsBySeminar();
-            setState(() {});
-          });
-        },child: Text("Remove"),))
-      ])).toList().cast<DataRow>() ?? []),
+    LayoutBuilder(
+      builder: (context,constraints){
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: constraints.maxWidth * 0.9,
+          child: DataTable(columns: [
+            DataColumn(label: Text("Name")),
+            DataColumn(label: Text("Email")),
+            DataColumn(label: Text("Phone")),
+            DataColumn(label: Text(""))
+          ], rows: sponsorsSeminarsResult?.result.map((e) => 
+          DataRow(cells: [
+            DataCell(Text(e.sponzor?.naziv ?? "")),
+            DataCell(Text(e.sponzor?.email ?? "")),
+            DataCell(Text(e.sponzor?.telefon ?? "")),
+            DataCell(ElevatedButton(onPressed: ()async{
+              await buildAlertDiagram(context: context, onConfirmDelete: ()async{
+                try {
+                  await sponsorsSeminarsProvider.softDelete(e.sponzoriSeminariId!);
+                  showSuccessMessage(context, "Sponsor successfully removed");
+                } catch (e) {
+                  showErrorMessage(context, e.toString().replaceFirst('Exception: ', ''));
+                }
+                await _loadSponsorsBySeminar();
+                setState(() {});
+              });
+            },child: Text("Remove"),))
+          ])).toList().cast<DataRow>() ?? []),
+        ),
+      );
+      }
     ));
   }
   Widget _buildForm(){
     return Expanded(
-      child: SingleChildScrollView(
-      scrollDirection: Axis.vertical,
-      child: 
-      DataTable(
-      showCheckboxColumn: false,
-      columnSpacing: 14,
-      columns: [
-        DataColumn(label: Text("Seminar")),
-        DataColumn(label: Text("Date")),
-        DataColumn(label: Text("Location")),
-        DataColumn(label: Text("Capacity")),
-        DataColumn(label: Text(""))
-      ], rows: result?.result.map((e) =>
-          DataRow(onSelectChanged: (selected) async{
-            if(selected == true){
-              try {
-                List<String> actions = await seminarsProvider.allowedActions(e.seminarId!);
-                if(actions.contains('Update')){
-                  _searchSeminar.clear();
-                  _filterData();
-                  var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen(seminars: e,)));
-                  if(result == true){
-                  _filterData();
-                }
-                }
-              } catch (e) {
-                print(e.toString());
-              }
-            }
-            
-          },cells: [
-          DataCell(Text(e.naslov ?? "")),
-          DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
-          DataCell(Text(e.lokacija ?? "")),
-          DataCell(Text(e.kapacitet.toString() ?? "")),
-          DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
-            FutureBuilder<List<String>>(
-              future: seminarsProvider.allowedActions(e.seminarId!),
-              builder: (context,snapshot){
-                if (snapshot.hasError) {
-                    return Text("Error");
+      child: LayoutBuilder(
+        builder: (context,constraints){
+        return SingleChildScrollView(
+        scrollDirection: Axis.vertical,
+        child: 
+        Container(
+          width: constraints.maxWidth * 0.9,
+          child: DataTable(
+          showCheckboxColumn: false,
+          columnSpacing: 14,
+          columns: [
+            DataColumn(label: Text("Seminar")),
+            DataColumn(label: Text("Date")),
+            DataColumn(label: Text("Location")),
+            DataColumn(label: Text("Capacity")),
+            DataColumn(label: Text(""))
+          ], rows: result?.result.map((e) =>
+              DataRow(onSelectChanged: (selected) async{
+                if(selected == true){
+                  try {
+                    List<String> actions = await seminarsProvider.allowedActions(e.seminarId!);
+                    if(actions.contains('Update')){
+                      _searchSeminar.clear();
+                      _filterData();
+                      var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen(seminars: e,)));
+                      if(result == true){
+                      _filterData();
+                    }
+                    }
+                  } catch (e) {
+                    print(e.toString());
                   }
-                final actions = snapshot.data ?? [];
-      
-                return Row(
-                  children: [
-                    if(actions.contains('Activate'))
-                    ElevatedButton(onPressed: isProcessing ? null : () async{
-                      setState(() => isProcessing = true);
-                      try {
-                        await seminarsProvider.activateSeminar(e.seminarId!);
-                        await _filterData();
-                        showSuccessMessage(context, "Seminar successfully activated");
-                        await _loadSeminarsDropDown();
-                        setState(() {
-                          seminarId = seminarsDropdown?.result.first.seminarId;
-                        });
-                        await Future.delayed(Duration(seconds: 3));
-                      } catch (e) {
-                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                        await Future.delayed(Duration(seconds: 3));
-                      } finally{
-                        setState(() => isProcessing = false);
+                }
+                
+              },cells: [
+              DataCell(Text(e.naslov ?? "")),
+              DataCell(Text('${e.datumVrijeme!.substring(0,e.datumVrijeme!.indexOf("T"))} ${e.datumVrijeme!.substring(e.datumVrijeme!.indexOf("T") + 1,e.datumVrijeme!.indexOf(":") + 3)}' )),
+              DataCell(Text(e.lokacija ?? "")),
+              DataCell(Text(e.kapacitet.toString() ?? "")),
+              DataCell(Row(mainAxisAlignment: MainAxisAlignment.end,children: [
+                FutureBuilder<List<String>>(
+                  future: seminarsProvider.allowedActions(e.seminarId!),
+                  builder: (context,snapshot){
+                    if (snapshot.hasError) {
+                        return Text("Error");
                       }
-                    }, child: Text("Activate")),
-                    if(actions.contains('Hide'))
-                    ElevatedButton(onPressed: isProcessing ? null : () async{
-                      setState(() => isProcessing = true);
-                      try {
-                        await seminarsProvider.hideSeminar(e.seminarId!);
-                        await _filterData();
-                        showSuccessMessage(context, "Seminar successfully hidden");
-                        await _loadSeminarsDropDown();
-                        setState(() {
-                          seminarId = seminarsDropdown?.result.first.seminarId;
-                        });
-                        await Future.delayed(Duration(seconds: 3));
-                      } catch (e) {
-                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                        await Future.delayed(Duration(seconds: 3));
-                      } finally{
-                        setState(() => isProcessing = false);
-                      }
-                    }, child: Text("Hide")),
-                    if(actions.contains('Edit'))
-                    ElevatedButton(onPressed: isProcessing ? null: () async{
-                      setState(() => isProcessing = true);
-                      try {
-                        await seminarsProvider.editSeminar(e.seminarId!);
-                        await _filterData();
-                        showSuccessMessage(context, "Seminar successfully edited");
-                        await _loadSeminarsDropDown();
-                        setState(() {
-                          seminarId = seminarsDropdown?.result.first.seminarId;
-                        });
-                        await Future.delayed(Duration(seconds: 3));
-                      } catch (e) {
-                        showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
-                        await Future.delayed(Duration(seconds: 3));
-                      } finally{
-                        setState(() => isProcessing = false);
-                      }
-                    }, child: Text("Edit")),
-                  ],
-                );
-              }
-            ),
-            ElevatedButton(onPressed: (){
-              generatePdfReport(e);
-            }, child: Text("Report")),
-            ElevatedButton(onPressed: ()async{
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsInfoScreen(seminar: e,)));
-            }, child: Text("Details"))
-          ],))
-      ])
-      ).toList().cast<DataRow>() ?? [])
-      ,),
+                    final actions = snapshot.data ?? [];
+          
+                    return Row(
+                      children: [
+                        if(actions.contains('Activate'))
+                        ElevatedButton(onPressed: isProcessing ? null : () async{
+                          setState(() => isProcessing = true);
+                          try {
+                            await seminarsProvider.activateSeminar(e.seminarId!);
+                            await _filterData();
+                            showSuccessMessage(context, "Seminar successfully activated");
+                            await _loadSeminarsDropDown();
+                            setState(() {
+                              seminarId = seminarsDropdown?.result.first.seminarId;
+                            });
+                            await Future.delayed(Duration(seconds: 3));
+                          } catch (e) {
+                            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                            await Future.delayed(Duration(seconds: 3));
+                          } finally{
+                            setState(() => isProcessing = false);
+                          }
+                        }, child: Text("Activate")),
+                        if(actions.contains('Hide'))
+                        ElevatedButton(onPressed: isProcessing ? null : () async{
+                          setState(() => isProcessing = true);
+                          try {
+                            await seminarsProvider.hideSeminar(e.seminarId!);
+                            await _filterData();
+                            showSuccessMessage(context, "Seminar successfully hidden");
+                            await _loadSeminarsDropDown();
+                            setState(() {
+                              seminarId = seminarsDropdown?.result.first.seminarId;
+                            });
+                            await Future.delayed(Duration(seconds: 3));
+                          } catch (e) {
+                            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                            await Future.delayed(Duration(seconds: 3));
+                          } finally{
+                            setState(() => isProcessing = false);
+                          }
+                        }, child: Text("Hide")),
+                        if(actions.contains('Edit'))
+                        ElevatedButton(onPressed: isProcessing ? null: () async{
+                          setState(() => isProcessing = true);
+                          try {
+                            await seminarsProvider.editSeminar(e.seminarId!);
+                            await _filterData();
+                            showSuccessMessage(context, "Seminar successfully edited");
+                            await _loadSeminarsDropDown();
+                            setState(() {
+                              seminarId = seminarsDropdown?.result.first.seminarId;
+                            });
+                            await Future.delayed(Duration(seconds: 3));
+                          } catch (e) {
+                            showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                            await Future.delayed(Duration(seconds: 3));
+                          } finally{
+                            setState(() => isProcessing = false);
+                          }
+                        }, child: Text("Edit")),
+                      ],
+                    );
+                  }
+                ),
+                ElevatedButton(onPressed: (){
+                  generatePdfReport(e);
+                }, child: Text("Report")),
+                ElevatedButton(onPressed: ()async{
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsInfoScreen(seminar: e,)));
+                }, child: Text("Details"))
+              ],))
+          ])
+          ).toList().cast<DataRow>() ?? []),
+        )
+        ,);
+        }
+      ),
     );
   }
   Widget _buildPaging() {

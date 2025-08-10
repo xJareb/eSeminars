@@ -111,41 +111,49 @@ class _SponsorsListScreenState extends State<SponsorsListScreen> {
     );
   }
   Widget _buildForm(){
-    return Expanded(child: SingleChildScrollView(
-      child: DataTable(showCheckboxColumn: false,columnSpacing: 15,columns: [
-        DataColumn(label: Text("Company")),
-        DataColumn(label: Text("Email")),
-        DataColumn(label: Text("Phone number")),
-        DataColumn(label: Text("Representative")),
-        DataColumn(label: Text(""))
-      ], rows: result?.result.map((e) => 
-          DataRow(onSelectChanged: (selected) async{
-            if(selected == true){
-              _filterSponsor.clear();
-              await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen(sponsors: e,)));
-              await _loadData();
-            }
-          },cells: [
-            DataCell(Text(e.naziv ?? "")),
-            DataCell(Text(e.email ?? "")),
-            DataCell(Text(e.telefon ?? "")),
-            DataCell(Text(e.kontaktOsoba ?? "")),
-            DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-              await buildAlertDiagram(context: context, onConfirmDelete: () async{
-                try {
-                  await provider.softDelete(e.sponzorId!);
-                  showSuccessMessage(context, "Sponsor successfully removed");
-                } catch (e) {
-                   showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+    return Expanded(child: LayoutBuilder(
+      builder: (context,constraints){
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Container(
+          width: constraints.maxWidth * 0.9,
+          child: DataTable(showCheckboxColumn: false,columnSpacing: 15,columns: [
+            DataColumn(label: Text("Company")),
+            DataColumn(label: Text("Email")),
+            DataColumn(label: Text("Phone number")),
+            DataColumn(label: Text("Representative")),
+            DataColumn(label: Text(""))
+          ], rows: result?.result.map((e) => 
+              DataRow(onSelectChanged: (selected) async{
+                if(selected == true){
+                  _filterSponsor.clear();
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsDetailsScreen(sponsors: e,)));
+                  await _loadData();
                 }
-              });
-              await _loadData();
-              setState(() {
-              });
-            },))
-          ])
-      ).toList().cast<DataRow>() ?? []
-      ),
+              },cells: [
+                DataCell(Text(e.naziv ?? "")),
+                DataCell(Text(e.email ?? "")),
+                DataCell(Text(e.telefon ?? "")),
+                DataCell(Text(e.kontaktOsoba ?? "")),
+                DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
+                  await buildAlertDiagram(context: context, onConfirmDelete: () async{
+                    try {
+                      await provider.softDelete(e.sponzorId!);
+                      showSuccessMessage(context, "Sponsor successfully removed");
+                    } catch (e) {
+                       showErrorMessage(context, e.toString().replaceFirst("Exception: ", ''));
+                    }
+                  });
+                  await _loadData();
+                  setState(() {
+                  });
+                },))
+              ])
+          ).toList().cast<DataRow>() ?? []
+          ),
+        ),
+      );
+      }
     ));
   }
 

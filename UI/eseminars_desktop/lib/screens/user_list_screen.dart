@@ -120,52 +120,76 @@ class _UserListScreenState extends State<UserListScreen> {
   }
 
   Widget _buildResultView() {
-    if(result == null){
-      return Center(child: CircularProgressIndicator(),);
-    }
+  if (result == null) {
+    return Center(child: CircularProgressIndicator());
+  }
+
   return Expanded(
-    child: SingleChildScrollView(
-      child: DataTable(
-        showCheckboxColumn: false,
-        columns: [
-        DataColumn(label: Text("Name")),
-        DataColumn(label: Text("Surname")),
-        DataColumn(label: Text("Email")),
-        DataColumn(label: Text("Date of Birth")),
-        DataColumn(label: Text(""))
-      ], rows: result?.result.map((e) =>
-          DataRow(
-            onSelectChanged: (selected) async{
-              _userController.clear();
-              if(selected == true){
-                 await Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserDetailsScreen(user: e,)));
-                 await _loadData();
-              }
-            },
-            cells: [
-            DataCell(Text(e.ime ?? "")),
-            DataCell(Text(e.prezime ?? "")),
-            DataCell(Text(e.email ?? "")),
-            DataCell(Text((e.datumRodjenja!).substring(0,(e.datumRodjenja!).indexOf("T")) ?? "")),
-            DataCell(ElevatedButton(child: Text("Remove"),onPressed: () async{
-              await buildAlertDiagram(context: context, onConfirmDelete: () async{
-              try{
-                await provider.softDelete(e.korisnikId!);
-                showSuccessMessage(context, "Record successfully removed");
-              } on Exception catch(e){
-                showErrorMessage(context,e.toString());
-              }
-              }
-              );
-              await _loadData();
-              setState(() {});
-            },))
-          ])
-      ).toList().cast<DataRow>() ?? [],
-      ),
+    child: LayoutBuilder(
+      builder: (context, constraints) {
+        return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Container(
+            width: constraints.maxWidth * 0.9, // 90% širine ekrana
+            child: DataTable(
+              showCheckboxColumn: false,
+              columns: const [
+                DataColumn(label: Text("Name")),
+                DataColumn(label: Text("Surname")),
+                DataColumn(label: Text("Email")),
+                DataColumn(label: Text("Date of Birth")),
+                DataColumn(label: Text("")),
+              ],
+              rows: result?.result.map((e) {
+                return DataRow(
+                  onSelectChanged: (selected) async {
+                    _userController.clear();
+                    if (selected == true) {
+                      await Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => UserDetailsScreen(user: e),
+                        ),
+                      );
+                      await _loadData();
+                    }
+                  },
+                  cells: [
+                    DataCell(Text(e.ime ?? "")),
+                    DataCell(Text(e.prezime ?? "")),
+                    DataCell(Text(e.email ?? "")),
+                    DataCell(Text((e.datumRodjenja ?? "").split("T").first)),
+                    DataCell(
+                      ElevatedButton(
+                        onPressed: () async {
+                          await buildAlertDiagram(
+                            context: context,
+                            onConfirmDelete: () async {
+                              try {
+                                await provider.softDelete(e.korisnikId!);
+                                showSuccessMessage(context, "Record successfully removed");
+                              } on Exception catch (e) {
+                                showErrorMessage(context, e.toString());
+                              }
+                            },
+                          );
+                          await _loadData();
+                          setState(() {});
+                        },
+                        child: const Text("Remove"),
+                      ),
+                    ),
+                  ],
+                );
+              }).toList() ?? [],
+            ),
+          ),
+        );
+      },
     ),
   );
 }
+
+
   Widget _buildPaging() {
   return PaginationControls(
     currentPage: _selectedIndex,
