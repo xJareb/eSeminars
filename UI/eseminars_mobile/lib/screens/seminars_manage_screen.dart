@@ -29,6 +29,7 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
 
   final RegExp capitalLetter = RegExp(r'^[A-Z].*');
   final RegExp noNumber = RegExp(r'^[^0-9]*$');
+  final RegExp onlyNumbers = RegExp(r'^[0-9]+$');
   RegExp phoneExp = RegExp( r'^\d{9,10}$');
   final _formKey = GlobalKey<FormBuilderState>();
   final _formLecturerKey = GlobalKey<FormBuilderState>();
@@ -353,11 +354,13 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
             ]),
             const SizedBox(height: 10),
             _buildFormControls("lokacija", "Location", Icons.location_on,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
             FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
             ]),
             const SizedBox(height: 10),
-            _buildFormControls("kapacitet", "Seats", Icons.event_seat),
+            _buildFormControls("kapacitet", "Seats", Icons.event_seat,extraValidators: [
+              FormBuilderValidators.match(onlyNumbers,errorText: "Must be digits only.")
+            ]),
             const SizedBox(height: 10),
             _buildFormDateTimePicker(),
             const SizedBox(height: 10),
@@ -560,17 +563,18 @@ Widget _buildLecturerForm(){
             foregroundColor: Colors.black,
           )),
       const SizedBox(width: 15,),
-      ElevatedButton(onPressed: ()async{
+      ElevatedButton(onPressed: () async{
         if(_formLecturerKey.currentState?.saveAndValidate() == true){
           try {
           await lecturersProvider.insert(_formLecturerKey.currentState?.value);
           await MyDialogs.showSuccessDialog(context, 'Lecturer successfully added');
           _formLecturerKey.currentState?.reset();
           Navigator.of(context).pop();
+
+          await _loadLectures();
           await showDialog(context: context, builder: (context){
             return _buildForm();
           });
-          await _loadLectures();
           } catch (e) {
             await MyDialogs.showErrorDialog(context, e.toString().replaceFirst('Exception: ', ''));
           }
