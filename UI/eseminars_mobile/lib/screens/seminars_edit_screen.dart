@@ -104,23 +104,23 @@ class _SeminarsEditScreenState extends State<SeminarsEditScreen> {
           children: [
             _buildInputField("Title", "naslov", isEnabled,extraValidators: [
               FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+              FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+              FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
             ]),
             const SizedBox(height: 15,),
             _buildInputField("Description", "opis", isEnabled,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
+              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
             ]),
             const SizedBox(height: 15,),
             _buildInputDateTime("Date", "datumVrijeme", isEnabled),
             const SizedBox(height: 15,),
             _buildInputField("Location", "lokacija", isEnabled,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+              FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
             ]),
             const SizedBox(height: 15,),
             _buildInputField("Capacity", "kapacitet", isEnabled,extraValidators: [
-              FormBuilderValidators.match(numbers, errorText: "This field must contains only numbers"),
+              FormBuilderValidators.match(numbers, errorText: "Use numbers only."),
             ]),
             const SizedBox(height: 15,),
             _buildFormDropDownMenu<Lecturers>("Lecturers", "predavacId", lecturersResult?.result, (l)=>"${l.ime} ${l.prezime}" ?? "", (l)=>l.predavacId),

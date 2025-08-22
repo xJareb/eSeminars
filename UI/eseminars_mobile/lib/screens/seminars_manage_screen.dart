@@ -341,20 +341,20 @@ class _SeminarsManageScreenState extends State<SeminarsManageScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildFormControls("naslov", "Title", Icons.title,extraValidators: [
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
             ]),
             const SizedBox(height: 10),
             _buildFormControls("opis", "Description", Icons.description,extraValidators: [
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
             ]),
             const SizedBox(height: 10),
             _buildFormControls("lokacija", "Location", Icons.location_on,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
             ]),
             const SizedBox(height: 10),
             _buildFormControls("kapacitet", "Seats", Icons.event_seat),
@@ -511,22 +511,22 @@ Widget _buildLecturerForm(){
         children: [
           _buildFormControls('ime', 'Name', Icons.person,extraValidators: [
             FormBuilderValidators.required(errorText: "This field is required"),
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
           ]),
           const SizedBox(height: 10,),
           _buildFormControls('prezime', 'Surname', Icons.person,extraValidators: [
             FormBuilderValidators.required(errorText: "This field is required"),
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
           ]),
           const SizedBox(height: 10,),
           _buildFormControls('biografija', 'Biography', Icons.description,extraValidators: [
             FormBuilderValidators.required(errorText: "This field is required"),
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
           ]),
           const SizedBox(height: 10,),
           _buildFormControls('email', 'Email', Icons.email,extraValidators: [
@@ -536,7 +536,7 @@ Widget _buildLecturerForm(){
           const SizedBox(height: 10,),
           _buildFormControls('telefon', 'Phone number', Icons.phone,extraValidators: [
             FormBuilderValidators.required(errorText: "This field is required"),
-            FormBuilderValidators.match(phoneExp,errorText: "The phone number must contain 9 or 10 digits")
+            FormBuilderValidators.match(phoneExp,errorText: "Must be 9–10 digits.")
           ]),
           const SizedBox(height: 10,),
           _buildLecturersControl()

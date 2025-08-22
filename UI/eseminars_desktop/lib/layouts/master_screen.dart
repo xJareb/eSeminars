@@ -44,62 +44,62 @@ class _MasterScreenState extends State<MasterScreen> {
                   leading: Icon(Icons.person),
                   title: Text("Users"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.calendar_month),
                   title: Text("Reservations"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => ReservationListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => ReservationListScreen()));
                   } ,
                 ),
                 ListTile(
                   leading: Icon(Icons.cast_for_education),
                   title: Text("Seminars"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> SeminarsListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> SeminarsListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.person_pin),
                   title: Text("Lecturers"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => LecturersListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => LecturersListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.category),
                   title: Text("Categories"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => CategoriesListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => CategoriesListScreen()));
                   },),
                 ListTile(
                   leading: Icon(Icons.notifications),
                   title: Text("Notifications"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => NotificationsListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => NotificationsListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.attach_money),
                   title: Text("Sponsors"),
                   onTap: () {
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => SponsorsListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => SponsorsListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.feedback),
                   title: Text("Feedbacks"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context) => FeedbacksListScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => FeedbacksListScreen()));
                   },
                 ),
                 ListTile(
                   leading: Icon(Icons.book_outlined),
                   title: Text("Materials"),
                   onTap: (){
-                    Navigator.of(context).push(MaterialPageRoute(builder: (context)=> MaterialsScreen()));
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=> MaterialsScreen()));
                   },
                 )
               ],

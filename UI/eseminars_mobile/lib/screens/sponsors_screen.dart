@@ -187,8 +187,8 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
             mainAxisSize: MainAxisSize.min,
           children: [
             _buildFormControls('naziv', 'Company', CupertinoIcons.building_2_fill,extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+              FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
             ]),
             const SizedBox(height: 10,),
             _buildFormControls('email', 'Email', Icons.email, extraValidators: [
@@ -196,12 +196,12 @@ class _SponsorsScreenState extends State<SponsorsScreen> {
             ]),
             const SizedBox(height: 10,),
             _buildFormControls('telefon', 'Phone number', Icons.phone,extraValidators: [
-              FormBuilderValidators.match(phoneExp,errorText: "The phone number must contain 9 or 10 digits")
+              FormBuilderValidators.match(phoneExp,errorText: "Must be 9–10 digits.")
             ]),
             const SizedBox(height: 10,),
             _buildFormControls('kontaktOsoba', 'Representative person', Icons.person, extraValidators: [
-              FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-              FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+              FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+              FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
             ]),
             const SizedBox(height: 10,),
             _buildSponsorControls()

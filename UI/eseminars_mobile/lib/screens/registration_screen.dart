@@ -54,8 +54,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     suffixIcon: Icon(CupertinoIcons.person),
                     validators: [
                       FormBuilderValidators.required(errorText: "This field is required"),
-                      FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-                      FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter.")
+                      FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+                      FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase.")
                     ],
                   ),
                   ),
@@ -67,8 +67,8 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     suffixIcon: Icon(CupertinoIcons.person),
                     validators: [
                       FormBuilderValidators.required(errorText: "This field is required"),
-                      FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-                      FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter.")
+                      FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+                      FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase.")
                     ],
                   ),
                   )
@@ -111,9 +111,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   suffixIcon: Icon(Icons.password),
                   validators: [
                     FormBuilderValidators.required(errorText: "This field is required."),
-                    FormBuilderValidators.minLength(7, errorText: "This field must contain at least 7 characters."),
-                    FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "This field must contain numeric characters."),
-                    FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "This field must contain an uppercase letter."),
+                    FormBuilderValidators.minLength(7, errorText: "At least 7 characters required."),
+                    FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "Must contain numeric characters."),
+                    FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "Must contain an uppercase letter."),
                   ],
                 ),
               ),

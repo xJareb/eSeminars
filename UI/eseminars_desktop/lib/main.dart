@@ -118,7 +118,7 @@ class LoginPage extends StatelessWidget {
                     AuthProvider.password = _passwordController.text;
                     try{
                       var data=await provider.get();
-                      Navigator.of(context).push(MaterialPageRoute(builder: (context) => UserListScreen()));
+                      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context) => UserListScreen()));
                     } on Exception catch (e){
                       showDialog(context: context, builder: (context) => AlertDialog(title: Text("Error"),actions: [TextButton(onPressed: () => Navigator.pop(context), child: Text("OK"))], content: Text("Invalid email or password"),));
                     }

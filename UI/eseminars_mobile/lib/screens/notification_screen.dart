@@ -125,7 +125,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.9,
       child: CarouselSlider(
-        options: CarouselOptions(height: 220.0,
+        options: CarouselOptions(height: 250.0,
         viewportFraction: 1.0,
         enableInfiniteScroll: result!.result.length > 1,
         enlargeCenterPage: true
@@ -151,7 +151,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     const SizedBox(height: 10,),
                     Padding(
                       padding: const EdgeInsets.all(9.0),
-                      child: Text(i.sadrzaj ?? "No content",style: GoogleFonts.poppins(fontSize: 18),maxLines: 3,
+                      child: Text(i.sadrzaj ?? "No content",style: GoogleFonts.poppins(fontSize: 18),maxLines: 5,
   overflow: TextOverflow.ellipsis,),
                     ),
                     

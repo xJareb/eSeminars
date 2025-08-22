@@ -159,8 +159,8 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
                   icon: CupertinoIcons.book),
                   const SizedBox(height: 10,),
                   _buildFormControls('naziv', "Name", Icons.abc,extraValidators: [
-                    FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-                    FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+                    FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+                    FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
                   ]),
                   const SizedBox(height: 10,),
                   _buildFormControls('putanja', "Link", Icons.link),

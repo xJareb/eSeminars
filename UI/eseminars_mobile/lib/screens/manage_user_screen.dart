@@ -104,16 +104,16 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
       child: Column(
         children: [
           _buildInputField("Name", 'ime',isEnabled, extraValidators:[
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
 
           ] ),
           const SizedBox(height: 15,),
           _buildInputField("Surname", 'prezime',isEnabled, extraValidators: [
-            FormBuilderValidators.match(capitalLetter, errorText: "This field must start with a capital letter."),
-            FormBuilderValidators.minLength(3, errorText: "This field must contain at least three characters."),
-            FormBuilderValidators.match(noNumber, errorText: "This field must contain only letters"),
+            FormBuilderValidators.match(capitalLetter, errorText: "First letter must be uppercase."),
+            FormBuilderValidators.minLength(3, errorText: "At least 3 characters required."),
+            FormBuilderValidators.match(noNumber, errorText: "Use letters only."),
           ]),
           const SizedBox(height: 15,),
           _buildInputField("Email", 'email',false),
@@ -257,9 +257,9 @@ class _ManageUserScreenState extends State<ManageUserScreen> {
           ),),
           const SizedBox(height: 10,),
           _buildInputField('Password', "lozinka", true,obscureText: true,extraValidators: [
-            FormBuilderValidators.minLength(7, errorText: "This field must contain at least 7 characters."),
-            FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "This field must contain numeric characters."),
-            FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "This field must contain an uppercase letter.")
+            FormBuilderValidators.minLength(7, errorText: "At least 7 characters required."),
+            FormBuilderValidators.hasNumericChars(atLeast: 1, errorText: "Must contain numeric characters."),
+            FormBuilderValidators.hasUppercaseChars(atLeast: 1, errorText: "Must contain an uppercase letter.")
           ]),
           const SizedBox(height: 15),
           _buildInputField('Confirm password', "lozinkaPotvrda", true,obscureText: true,extraValidators: [
