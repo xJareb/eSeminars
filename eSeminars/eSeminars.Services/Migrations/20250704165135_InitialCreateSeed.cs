@@ -342,7 +342,10 @@ namespace eSeminars.Services.Migrations
                 {
                     { 1, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "admin@gmail.com", "Admin", false, "uDJQzltg1+w1Hjhdktk4XbhuCrE=", "VBZIM52NwnqBQqr+Z84P9Q==", "Admin", 1 },
                     { 2, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "organizator@gmail.com", "Organizator", false, "NVG/++BM466+Da6OgKZyptEKQP4=", "6ZA2IamCnGv7wLPfY3roQw==", "Organizator", 3 },
-                    { 3, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "korisnik@gmail.com", "Korisnik", false, "IYQP04iyzp/PgO854mbEzcUB+bE=", "+nykRTSHxp8hfVWKYjFt4w==", "Korisnik", 2 }
+                    { 3, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "korisnik@gmail.com", "Korisnik", false, "IYQP04iyzp/PgO854mbEzcUB+bE=", "+nykRTSHxp8hfVWKYjFt4w==", "Korisnik", 2 },
+                    { 4, new DateTime(1995, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "leon.savic@gmail.com", "Leon", false, "Hash4=", "Salt4==", "Savić", 2 },
+                    { 5, new DateTime(1997, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "marija.kovacevic@gmail.com", "Marija", false, "Hash5=", "Salt5==", "Kovačević", 2 },
+                    { 6, new DateTime(2000, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "nemanja.jovanovic@gmail.com", "Nemanja", false, "Hash6=", "Salt6==", "Jovanović", 2 }
                 });
 
             migrationBuilder.InsertData(
@@ -379,8 +382,10 @@ namespace eSeminars.Services.Migrations
                 values: new object[,]
                 {
                     { 1, new DateTime(2025, 6, 14, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6670), false, 3, 5, 1 },
-                    { 2, new DateTime(2025, 6, 16, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6720), false, 3, 4, 2 },
-                    { 4, new DateTime(2025, 6, 29, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6724), false, 3, 4, 4 }
+                    { 2, new DateTime(2025, 6, 16, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6720), false, 4, 4, 1 },
+                    { 3, new DateTime(2025, 6, 18, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6725), false, 5, 5, 2 },
+                    { 4, new DateTime(2025, 6, 20, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6730), false, 5, 4, 4 },
+                    { 5, new DateTime(2025, 6, 22, 18, 51, 35, 723, DateTimeKind.Local).AddTicks(6735), false, 6, 5, 4 } 
                 });
 
             migrationBuilder.InsertData(
@@ -406,10 +411,38 @@ namespace eSeminars.Services.Migrations
                 {
                     { 1, new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453), false, 3, 1, "approved" },
                     { 2, new DateTime(2025, 5, 25, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3474), false, 3, 2, "approved" },
-                    { 3, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 3, 3, "approved" },
+                    { 3, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 3, 3, "rejected" },
                     { 4, new DateTime(2025, 6, 29, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3484), false, 3, 7, "pending" },
                     { 5, new DateTime(2025, 7, 1, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3487), false, 3, 8, "pending" },
-                    { 6, new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3489), false, 3, 10, "pending" }
+                    { 6, new DateTime(2025, 7, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3489), false, 3, 10, "pending" },
+
+                    { 7, new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453), false, 4, 1, "approved" },
+                    { 8, new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453), false, 5, 1, "rejected" },
+                    { 9, new DateTime(2025, 5, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3453), false, 6, 1, "rejected" },
+
+                    { 10, new DateTime(2025, 5, 25, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3474), false, 5, 2, "approved" },
+                    { 11, new DateTime(2025, 5, 25, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3474), false, 4, 2, "rejected" },
+
+                    { 12, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 4, 3, "rejected" },
+                    { 13, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 6, 3, "approved" },
+
+                    { 14, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 5, 4, "approved" },
+                    { 15, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 6, 4, "approved" },
+                    { 16, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 3, 4, "rejected" },
+
+                    { 17, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 4, 5, "pending" },
+                    { 18, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 5, 5, "rejected" },
+                    { 19, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 6, 5, "pending" },
+
+                    { 20, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 4, 6, "rejected" },
+                    { 21, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 5, 6, "rejected" },
+                    { 22, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 6, 6, "approved" },
+
+                    { 23, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 4, 9, "pending" },
+                    { 24, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 5, 9, "pending" },
+                    { 25, new DateTime(2025, 6, 4, 18, 51, 35, 726, DateTimeKind.Local).AddTicks(3478), false, 6, 9, "pending" },
+
+
                 });
 
             migrationBuilder.InsertData(

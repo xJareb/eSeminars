@@ -142,7 +142,7 @@ class _FeedbacksListScreenState extends State<FeedbacksListScreen> {
               DataColumn(label: Text('')),
             ],
             rows: result!.result.map((e) => DataRow(cells: [
-              DataCell(Text(e.korisnik?.ime ?? "")),
+              DataCell(Text("${e.korisnik?.ime} ${e.korisnik?.prezime}")),
               DataCell(buildStars(e.ocjena ?? 0)),
               DataCell(ElevatedButton(
                 child: const Text("Remove"),

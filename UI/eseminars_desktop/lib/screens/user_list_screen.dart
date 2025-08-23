@@ -132,6 +132,7 @@ class _UserListScreenState extends State<UserListScreen> {
           child: Container(
             width: constraints.maxWidth * 0.9, // 90% širine ekrana
             child: DataTable(
+              columnSpacing: 20,
               showCheckboxColumn: false,
               columns: const [
                 DataColumn(label: Text("Name")),

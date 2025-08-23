@@ -29,7 +29,7 @@ namespace eSeminars.Services.Obavijesti
 
             if (!string.IsNullOrWhiteSpace(search?.NaslovLIKE))
             {
-                filteredQuerry = filteredQuerry.Where(x => x.Naslov.ToLower().StartsWith(search.NaslovLIKE.ToLower()));
+                filteredQuerry = filteredQuerry.Where(x => x.Naslov.ToLower().Contains(search.NaslovLIKE.ToLower()));
             }
             return filteredQuerry;
         }
