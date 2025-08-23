@@ -344,8 +344,8 @@ namespace eSeminars.Services.Migrations
                     { 2, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "organizator@gmail.com", "Organizator", false, "NVG/++BM466+Da6OgKZyptEKQP4=", "6ZA2IamCnGv7wLPfY3roQw==", "Organizator", 3 },
                     { 3, new DateTime(2024, 5, 15, 0, 0, 0, 0, DateTimeKind.Unspecified), "korisnik@gmail.com", "Korisnik", false, "IYQP04iyzp/PgO854mbEzcUB+bE=", "+nykRTSHxp8hfVWKYjFt4w==", "Korisnik", 2 },
                     { 4, new DateTime(1995, 6, 12, 0, 0, 0, 0, DateTimeKind.Unspecified), "leon.savic@gmail.com", "Leon", false, "Hash4=", "Salt4==", "Savić", 2 },
-                    { 5, new DateTime(1997, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "marija.kovacevic@gmail.com", "Marija", false, "Hash5=", "Salt5==", "Kovačević", 2 },
-                    { 6, new DateTime(2000, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "nemanja.jovanovic@gmail.com", "Nemanja", false, "Hash6=", "Salt6==", "Jovanović", 2 }
+                    { 5, new DateTime(1997, 11, 3, 0, 0, 0, 0, DateTimeKind.Unspecified), "marija.kova@gmail.com", "Marija", false, "Hash5=", "Salt5==", "Kovačević", 2 },
+                    { 6, new DateTime(2000, 2, 28, 0, 0, 0, 0, DateTimeKind.Unspecified), "nemanja.jox@gmail.com", "Nemanja", false, "Hash6=", "Salt6==", "Jovanović", 2 }
                 });
 
             migrationBuilder.InsertData(

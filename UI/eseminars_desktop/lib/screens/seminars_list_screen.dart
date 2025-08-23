@@ -69,6 +69,11 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
 
     _filterData();
   }
+  Future<void> _refreshSeminarsLists() async {
+  typeOfSeminarsResult = await seminarsProvider.get();
+  await _loadSeminarsDropDown();
+  setState(() {});
+  }
   Future<void> initForm() async{
     typeOfSeminarsResult = await seminarsProvider.get();
     typeOfSponsorsResult = await sponsorsProvider.get();
@@ -89,7 +94,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
   }
   Future<void> _loadSeminarsDropDown()async{
     var filter = {
-      'isActive' : true
+      
     };
     seminarsDropdown = await seminarsProvider.get(filter: filter);
     setState(() {
@@ -222,6 +227,7 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
               var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => SeminarsDetailsScreen()));
               if(result == true){
                 await _filterData();
+                await _refreshSeminarsLists();
               }
             }, child: Text("Add")),
             ]
@@ -230,7 +236,8 @@ class _SeminarsListScreenState extends State<SeminarsListScreen> {
       ],
     );
   }
-  void showCustomDialog(BuildContext context){
+  void showCustomDialog(BuildContext context) async{
+    await _refreshSeminarsLists();
     showGeneralDialog(context: context, pageBuilder: (context,animation1,animation2){
       return Container();
     },transitionBuilder: (context,a1,a2,widget){
