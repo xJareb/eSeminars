@@ -29,6 +29,10 @@ docker-compose up --build
 
 • Historija seminara za organizatora predstavlja seminare čiji je datum prošao, a oni su bili kreatori istih. Za korisnika znači da su datumi seminara prosli,a prisustvovali su.
 
+• Administrator može dodavati materijale i sponzore seminarima bez obzira da li je aktivan ili neaktivan, dok organizator može samo za aktivne seminare
+
+• Globalno back dugme je implementirano na način da se kroz glavne forme (Users, Lecturers, Reservations i druge) kreće pomoću navigacije, a otvaranjem detalja ili forme u gornjem lijevom uglu je implementirana korak nazad funkcionalnost
+
 # Podaci za prijavu
 ## Desktop
 ### Administrator
