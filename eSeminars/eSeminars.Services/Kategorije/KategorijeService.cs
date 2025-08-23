@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using eSeminars.Model;
 using eSeminars.Model.Models;
 using eSeminars.Model.Requests;
 using eSeminars.Model.SearchObjects;
@@ -30,6 +31,24 @@ namespace eSeminars.Services.Kategorije
             }
 
             return filteredQuerry;
+        }
+        public override void BeforeInsert(KategorijeInsertRequest request, Database.Kategorije entity)
+        {
+            var checkDuplicates = Context.Kategorijes.Where(k=>k.Naziv == entity.Naziv && k.IsDeleted == false).ToList();
+            if (checkDuplicates != null)
+            {
+                throw new UserException("Category with this name already exists.");
+            }
+            base.BeforeInsert(request, entity);
+        }
+        public override void BeforeUpdate(KategorijeUpdateRequest request, Database.Kategorije entity)
+        {
+            var checkDuplicates = Context.Kategorijes.Where(k => k.Naziv == entity.Naziv && k.IsDeleted == false).ToList();
+            if (checkDuplicates != null)
+            {
+                throw new UserException("Category with this name already exists.");
+            }
+            base.BeforeUpdate(request, entity);
         }
     }
 }

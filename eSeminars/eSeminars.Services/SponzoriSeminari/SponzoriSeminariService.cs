@@ -35,7 +35,7 @@ namespace eSeminars.Services.SponzoriSeminari
         public override void BeforeInsert(SponzoriSeminariInsertRequest request, Database.SponzoriSeminari entity)
         {
             var checkDuplicates = Context.SponzoriSeminaris
-                .Where(ss => ss.SponzorId == request.SponzorId && ss.SeminarId == request.SeminarId).FirstOrDefault();
+                .Where(ss => ss.SponzorId == request.SponzorId && ss.SeminarId == request.SeminarId && ss.IsDeleted == false).FirstOrDefault();
             if (checkDuplicates != null)
             {
                 throw new UserException("Sponsor already exists in seminar.");

@@ -65,6 +65,11 @@ namespace eSeminars.Services.Rezervacije
             {
                 throw new UserException("You already have an approved reservation.");
             }
+            var checkRejectedDuplicates = Context.Rezervacijes.Where(r => r.KorisnikId == request.KorisnikId && r.SeminarId == request.SeminarId && r.StateMachine == "rejected").FirstOrDefault();
+            if (checkRejectedDuplicates != null)
+            {
+                throw new UserException("Your reservation has already been rejected.");
+            }
             var state = BaseRezervacijeState.CreateState("initial");
             return state.Insert(request);
         }

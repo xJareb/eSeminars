@@ -9,6 +9,7 @@ using eSeminars.Services.Database;
 using MapsterMapper;
 using Predavaci = eSeminars.Model.Models.Predavaci;
 using System.Linq.Dynamic;
+using eSeminars.Model;
 
 
 namespace eSeminars.Services.Predavaci
@@ -37,6 +38,15 @@ namespace eSeminars.Services.Predavaci
             }
 
             return filteredQuerry;
+        }
+        public override void BeforeInsert(PredavaciInsertRequest request, Database.Predavaci entity)
+        {
+            var checkDuplicates = Context.Predavacis.FirstOrDefault(p=>p.Email == request.Email);
+            if (checkDuplicates != null)
+            {
+                throw new UserException($"Lecturer with {checkDuplicates.Email} already exist ");
+            }
+            base.BeforeInsert(request, entity);
         }
     }
 }

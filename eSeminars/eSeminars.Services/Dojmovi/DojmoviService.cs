@@ -30,7 +30,7 @@ namespace eSeminars.Services.Dojmovi
         public override void BeforeInsert(DojmoviInsertRequest request, Database.Dojmovi entity)
         {
             var checkDuplicates = Context.Dojmovis?
-                .Where(d => d.KorisnikId == request.KorisnikId && d.SeminarId == request.SeminarId).FirstOrDefault();
+                .Where(d => d.KorisnikId == request.KorisnikId && d.SeminarId == request.SeminarId && d.IsDeleted == false).FirstOrDefault();
             if (checkDuplicates != null)
             {
                 throw new UserException("The user has already submitted feedback.");
@@ -42,7 +42,6 @@ namespace eSeminars.Services.Dojmovi
 
         public override void BeforeUpdate(DojmoviUpdateRequest request, Database.Dojmovi entity)
         {
-            
             entity.DatumKreiranjaDojma = DateTime.Now;
             base.BeforeUpdate(request, entity);
         }

@@ -37,7 +37,7 @@ namespace eSeminars.Services.Sponzori
 
         public override void BeforeInsert(SponzoriInsertRequest request, Database.Sponzori entity)
         {
-            var checkDuplicates = Context.Sponzoris.FirstOrDefault(s => s.Email == request.Email);
+            var checkDuplicates = Context.Sponzoris.FirstOrDefault(s => s.Email == request.Email && s.IsDeleted == false);
             if (checkDuplicates != null)
             {
                 throw new UserException($"Sponsor with {checkDuplicates.Email} already exists");
