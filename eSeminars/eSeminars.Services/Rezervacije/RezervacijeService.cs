@@ -31,6 +31,11 @@ namespace eSeminars.Services.Rezervacije
 
             filteredQuery = filteredQuery.Include(r => r.Korisnik).Where(s => (s.SeminarId == search.SeminarId) && (s.StateMachine == search.StateMachine));
 
+            if(search.StateMachine == "pending")
+            {
+                filteredQuery = filteredQuery.Where(s => s.Korisnik.IsDeleted == false);
+            }
+
             return filteredQuery;
         }
 

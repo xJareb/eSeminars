@@ -116,7 +116,7 @@ namespace eSeminars.Services.Korisnici
 
         public Model.Models.Korisnici Login(string username, string password)
         {
-            var entity = Context.Korisnicis.Include(y=>y.UlogaNavigation).FirstOrDefault(x => x.Email == username);
+            var entity = Context.Korisnicis.Include(y=>y.UlogaNavigation).FirstOrDefault(x => x.Email == username && x.IsDeleted == false);
             if (entity == null)
             {
                 return null;
