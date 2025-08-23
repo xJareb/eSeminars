@@ -50,7 +50,7 @@ class _MaterialsDetailsScreenState extends State<MaterialsDetailsScreen> {
 
   Future<void> _loadSeminars()async{
     var filter = {
-      'isActive' : true
+
     };
     seminarsResult = await seminarsProvider.get(filter: filter);
     setState(() {

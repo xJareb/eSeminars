@@ -62,7 +62,6 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
 
   Future<void> _loadSeminars()async{
     var filter = {
-      'isActive' : true
     };
     seminarsResult = await seminarsProvider.get(filter: filter);
 
@@ -106,7 +105,10 @@ class _MaterialsScreenState extends State<MaterialsScreen> {
             items: seminarsResult?.result.map((item)=> DropdownMenuItem(value: item.seminarId,child: Text("${item.naslov ?? ""}"))).toList() ?? [] )),
             const SizedBox(width: 10,),
             ElevatedButton(onPressed: ()async{
-              Navigator.of(context).push(MaterialPageRoute(builder: (context) => MaterialsDetailsScreen()));
+             var result = await Navigator.of(context).push(MaterialPageRoute(builder: (context) => MaterialsDetailsScreen()));
+             if(result == true){
+              await _loadMaterials();
+             }
             }, child: Text("Add")),
             
           ],
